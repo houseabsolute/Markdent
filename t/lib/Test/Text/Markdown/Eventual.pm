@@ -17,9 +17,12 @@ sub parse_ok {
     my $desc        = shift;
 
     my $tree = Text::Markdown::Eventual::parse($text);
+
     use Data::Dumper;
-    warn Dumper $tree;
+
     cmp_deeply( $tree, $expect_tree, $desc );
 }
+
+
 
 1;

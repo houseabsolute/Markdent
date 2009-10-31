@@ -3,6 +3,8 @@ package Text::Markdown::Eventual;
 use strict;
 use warnings;
 
+use Data::Visitor::Callback;
+
 use re 'eval';
 
 our $VERSION = '0.01';
@@ -32,8 +34,6 @@ my $grammar = do {
     }x;
 
     my $grammar_text = q{
-<logfile: ->
-<debug:on>
 
 <[Markdown]>*
 
@@ -49,29 +49,32 @@ my $grammar = do {
   <OrderedListItem>
   |
   <Paragraph>
+  |
+  <EmptyLine>
 
 <token: Header>
   (?:
-   <two_line_header>
+   <atx_header>
    |
-   ^<atx_header>$
+   <two_line_header>
   )
     <MATCH=(?{ $MATCH{two_line_header} ? $MATCH{two_line_header} : $MATCH{atx_header} })>
 
 <token: two_line_header>
-  ^ <text=NonBlockLineOnly> $
-  ^ <level=( [-=]+ )> $
+  ^ <[NonBlockLineOnly]>+ \n
+  ^ <level=( [-=]+ )> \n
       (?{ $MATCH{level} = substr( $MATCH{level}, 0, 1 ) eq '=' ? 1 : 2 })
 
 <token: atx_header>
-    <level=(\#{1,6})>
-    <text=NonBlockLineOnly>\n
+  ^ <level=(\#{1,6})> [ ]+
+    <[NonBlockLineOnly]>+ \n
       (?{ $MATCH{level} = length $MATCH{level} })
 
 <token: Blockquote>
-  ^>\s+<Header=atx_header>$
-  |
-  ^>\s+<MATCH=NonBlock>
+  ^>[ ]+
+  (?: <Header=atx_header>
+      |
+      <[NonBlockLineOnly]>+ \n )
 
 <token: UnorderedListItem>
   ^[\*\-\+] <MATCH=NonBlockLineOnly>$
@@ -82,6 +85,9 @@ my $grammar = do {
 <token: Paragraph>
   <[NonBlock]>
   \n\n+
+
+<token: EmptyLine>
+  ^[ ]*\n
 
 <token: Link>
   \b
@@ -113,7 +119,7 @@ my $grammar = do {
    )
 
 <token: TextLineOnly>
-  [^\n]+ (?>= \n | \z )
+  <MATCH=( [^\n]+ )>
 
 # repeat-no-newline
 <token: NonBlock> #nl
@@ -157,16 +163,16 @@ my $grammar = do {
     $repeated =~ s/ \#nl//g;
     $grammar_text .= "\n" . $repeated;
 
-    warn $grammar_text;
-
     use Regexp::Grammars;
-    qr{$grammar_text};
+    qr{
+       $grammar_text
+      }xms;
 };
 
 sub _no_nl_variant {
     my $line = shift;
 
-    $line =~ s/<(token|rule): (.+)>/<$1 ${2}LineOnly>/g;
+    $line =~ s/<(token|rule): (.+)>/<$1: ${2}LineOnly>/g;
 
     $line =~ s/\.\*/(?-s:.*)/g;
 
@@ -177,16 +183,25 @@ sub _no_nl_variant {
     return $line;
 }
 
-sub parse {
-    my $text = shift;
 
-    $text =~ s/\r\n?/\n/g;
-    $text .= "\n"
-        unless substr( $text, -1, 1 ) eq "\n";
+{
+    my $Visitor = Data::Visitor::Callback->new(
+        hash => sub { delete $_->{q{}}; return $_ } );
 
-    $text =~ $grammar;
+    sub parse {
+        my $text = shift;
 
-    return $/{Markdown};
+        $text =~ s/\r\n?/\n/g;
+        $text .= "\n"
+            unless substr( $text, -1, 1 ) eq "\n";
+
+        $text =~ $grammar;
+
+        my $tree = $/{Markdown};
+        $Visitor->visit($tree);
+
+        return $tree;
+    }
 }
 
 1;

@@ -30,35 +30,63 @@ Header 2
 ###### Header 6
 EOF
 
-    my $expect = {
-        Header => [
-            {
-                'level' => 1,
-                'text'  => 'Header 1'
-            }, {
-                'level' => 2,
-                'text'  => 'Header 2'
-            }, {
-                'level' => 1,
-                'text'  => 'Header 1A'
-            }, {
-                'level' => 2,
-                'text'  => 'Header 2A'
-            }, {
-                'level' => 3,
-                'text'  => 'Header 3'
-            }, {
-                'level' => 4,
-                'text'  => 'Header 4'
-            }, {
-                'level' => 5,
-                'text'  => 'Header 5'
-            }, {
-                'level' => 6,
-                'text'  => 'Header 6'
+    my $expect = [
+        {
+            'Header' => {
+                'level'            => 1,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 1' } ]
             }
-        ],
-    };
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 2,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 2' } ]
+            }
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 1,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 1A' } ]
+            }
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 2,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 2A' } ]
+            }
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 3,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 3' } ]
+            }
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 4,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 4' } ]
+            }
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 5,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 5' } ]
+            }
+        },
+        { 'EmptyLine' => "\n" },
+        {
+            'Header' => {
+                'level'            => 6,
+                'NonBlockLineOnly' => [ { 'TextLineOnly' => 'Header 6' } ]
+            }
+        }
+    ];
 
     parse_ok( $text, $expect, 'all possible header types' );
 }
