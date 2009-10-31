@@ -34,7 +34,7 @@ my $grammar = do {
     }x;
 
     my $grammar_text = q{
-
+<debug: on>
 <[Markdown]>*
 
 ####
@@ -74,7 +74,8 @@ my $grammar = do {
   ^>[ ]+
   (?: <Header=atx_header>
       |
-      <[NonBlockLineOnly]>+ \n )
+      ( <[NonBlock]>+ ** <EmptyLine> )
+  )
 
 <token: UnorderedListItem>
   ^[\*\-\+] <MATCH=NonBlockLineOnly>$
@@ -109,6 +110,8 @@ my $grammar = do {
 <token: Text>
   .*?
   (?>=
+    <.Header>
+    |
     <.SpanMarkup>
     |
     \n>[ ]        # start of a blockquote
@@ -119,7 +122,14 @@ my $grammar = do {
    )
 
 <token: TextLineOnly>
-  <MATCH=( [^\n]+ )>
+  <MATCH=( [^\n]*? )>
+  (?>=
+    <.SpanMarkupLineOnly>
+    |
+    \n
+    |
+    \z
+  )
 
 # repeat-no-newline
 <token: NonBlock> #nl
