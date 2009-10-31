@@ -3,6 +3,7 @@ package Test::Text::Markdown::Eventual;
 use strict;
 use warnings;
 
+use Data::Dumper;
 use Test::Deep;
 use Test::More;
 use Text::Markdown::Eventual;
@@ -18,7 +19,8 @@ sub parse_ok {
 
     my $tree = Text::Markdown::Eventual::parse($text);
 
-    use Data::Dumper;
+    warn( Dumper $tree )
+        if $ENV{TME_VERBOSE};
 
     cmp_deeply( $tree, $expect_tree, $desc );
 }
