@@ -4,7 +4,7 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new
-    ( module_name        => 'Text::Markdown::Eventual',
+    ( module_name        => 'Markdent',
       license            => 'perl',
       requires           => { },
       build_requires     => { 'Test::More' => '0',
