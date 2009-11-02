@@ -162,7 +162,10 @@ sub image {
 }
 
 sub hr {
+    my $self = shift;
 
+    my $hr_node = Tree::Simple->new( { type => 'hr' } );
+    $self->_current_node()->addChild($hr_node);
 }
 
 sub _start_markup_node {
