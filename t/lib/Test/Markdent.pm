@@ -32,7 +32,7 @@ sub parse_ok {
     # containing the document contents.
     my $results = $visitor->getResults()->[0];
     warn Dumper($results)
-        if $ENV{MARKDENT_VERBOSE};
+        if $ENV{MARKDENT_TEST_VERBOSE};
 
     cmp_deeply( $results, $expect_tree, $desc );
 }
