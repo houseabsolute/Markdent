@@ -23,6 +23,8 @@ subtype BlockParserClass,
 
 subtype SpanParserClass,
     as ClassName,
-    where { warn "$_\n";$_->can('does') && $_->does('Markdent::Role::SpanParser') };
+    where { $_->can('does') && $_->does('Markdent::Role::SpanParser') };
+
+
 
 1;
