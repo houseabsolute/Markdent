@@ -7,7 +7,7 @@ use Data::Dumper;
 use Tree::Simple::Visitor::ToNestedArray;
 use Test::Deep;
 use Test::More;
-use Markdent;
+use Markdent::Parser;
 use Markdent::Handler::MinimalTree;
 
 use Exporter qw( import );
@@ -21,7 +21,7 @@ sub parse_ok {
 
     my $handler = Markdent::Handler::MinimalTree->new();
 
-    my $parser = Markdent->new( handler => $handler );
+    my $parser = Markdent::Parser->new( handler => $handler );
 
     $parser->parse( text => $text );
 
