@@ -10,20 +10,21 @@ use MooseX::Params::Validate qw( validated_list );
 
 use namespace::autoclean;
 use Moose;
+use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
 with 'Markdent::Role::SpanParser';
 
-has __current_spans => (
+has __pending_events => (
     traits   => ['Array'],
-    is       => 'ro',
-    isa      => ArrayRef[Str],
+    is       => 'rw',
+    isa      => ArrayRef['Markdent::Event'],
     default  => sub { [] },
     init_arg => undef,
     handles  => {
-        _current_spans       => 'elements',
-        _add_current_span    => 'push',
-        _remove_current_span => 'shift',
+        _pending_events       => 'elements',
+        _add_pending_event    => 'push',
+        _clear_pending_events => 'clear',
     },
 );
 
@@ -66,6 +67,15 @@ sub parse_markup {
 
         $self->_match_plain_text( \$text );
     }
+
+    $self->_convert_invalid_events_to_text();
+
+    $self->handler()->handle_event($_)
+        for $self->_pending_events();
+
+    $self->_clear_pending_events();
+
+    return;
 }
 
 sub _possible_span_matches {
@@ -74,7 +84,7 @@ sub _possible_span_matches {
     my @look_for;
 
     for my $type ( qw( strong emphasis  ) ) {
-        if ( $self->_current_span_includes($type) ) {
+        if ( $self->_in_span($type) ) {
             push @look_for, $type . '_end';
         }
         else {
@@ -88,11 +98,21 @@ sub _possible_span_matches {
     return @look_for;
 }
 
-sub _current_span_includes {
+sub _in_span {
     my $self = shift;
-    my $span = shift;
+    my $type = shift;
 
-    return grep { $_ eq $span } $self->_current_spans();
+    my $in = 0;
+
+    for my $event ( $self->_pending_events() ) {
+        $in = 1
+            if $event->event_name eq 'start_' . $type;
+
+        $in = 0
+            if $event->event_name eq 'end_' . $type;
+    }
+
+    return $in;
 }
 
 sub _match_strong_start {
@@ -102,9 +122,13 @@ sub _match_strong_start {
     my ($delim) = $self->_match_delimiter_start( $text, qr/(?:\*\*|__)/ )
         or return;
 
-    $self->_markup_event('start_strong');
+    my $event = Markdent::Event->new(
+        type       => 'start',
+        name       => 'strong',
+        attributes => { delimiter => $delim },
+    );
 
-    $self->_add_current_span('strong');
+    $self->_markup_event($event);
 
     return 1;
 }
@@ -116,9 +140,12 @@ sub _match_strong_end {
     my ($delim) = $self->_match_delimiter_end( $text, qr/(?:\*\*|__)/ )
         or return;
 
-    $self->_markup_event('end_strong');
+    my $event = Markdent::Event->new(
+        type => 'end',
+        name => 'strong',
+    );
 
-    $self->_remove_current_span();
+    $self->_markup_event($event);
 
     return 1;
 }
@@ -130,9 +157,13 @@ sub _match_emphasis_start {
     my ($delim) = $self->_match_delimiter_start( $text, qr/(?:\*|_)/ )
         or return;
 
-    $self->_markup_event('start_emphasis');
+    my $event = Markdent::Event->new(
+        type       => 'start',
+        name       => 'emphasis',
+        attributes => { delimiter => $delim },
+    );
 
-    $self->_add_current_span('emphasis');
+    $self->_markup_event($event);
 
     return 1;
 }
@@ -144,9 +175,12 @@ sub _match_emphasis_end {
     $self->_match_delimiter_end( $text, qr/(?:\*|_)/ )
         or return;
 
-    $self->_markup_event('end_emphasis');
+    my $event = Markdent::Event->new(
+        type => 'end',
+        name => 'emphasis',
+    );
 
-    $self->_remove_current_span();
+    $self->_markup_event($event);
 
     return 1;
 }
@@ -211,13 +245,13 @@ sub _unescape_plain_text {
 
 sub _markup_event {
     my $self = shift;
-    my $meth = shift;
+    my $event = shift;
 
     $self->_event_for_text_buffer();
 
-    $self->_print_debug( "Found markup: $meth\n" );
+    $self->_print_debug( 'Found markup: ' . $event->event_name() . "\n" );
 
-    $self->handler()->$meth(@_);
+    $self->_add_pending_event($event);
 }
 
 sub _event_for_text_buffer {
@@ -225,8 +259,65 @@ sub _event_for_text_buffer {
 
     return unless $self->_has_span_text_buffer();
 
-    $self->handler()->text( text => $self->_span_text_buffer() );
+    my $event = Markdent::Event->new(
+        type       => 'inline',
+        name       => 'text',
+        attributes => { content => $self->_span_text_buffer() },
+    );
+
+    $self->_add_pending_event($event);
+
     $self->_clear_span_text_buffer();
+}
+
+sub _convert_invalid_events_to_text {
+    my $self = shift;
+
+    my @events = $self->_pending_events();
+
+    my @starts;
+EVENT:
+    for my $i ( 0 .. $#events ) {
+        my $event = $events[$i];
+
+        if ( $event->type eq 'start' ) {
+            push @starts, [ $i, $event ];
+        }
+        elsif ( $event->type() eq 'end' ) {
+
+            # This really shouldn't happen, since the parser should never
+            # match an end before its seen a valid start
+            die 'WTF, we have an end event without any start events'
+                unless @starts;
+
+            while ( my $start = pop @starts ) {
+                next EVENT
+                    if $start->[1]->name() eq $event->name();
+
+                $events[ $start->[0] ]
+                    = $self->_convert_event_to_text( $start->[1] );
+            }
+        }
+    }
+
+    for my $start (@starts) {
+        $events[ $start->[0] ] = $self->_convert_event_to_text( $start->[1] );
+    }
+
+    $self->_set__pending_events( \@events );
+}
+
+sub _convert_event_to_text {
+    my $self  = shift;
+    my $event = shift;
+
+    Markdent::Event->new(
+        type       => 'inline',
+        name       => 'text',
+        attributes => {
+            content => $event->attributes()->{delimiter}
+        },
+    );
 }
 
 use re 'eval';

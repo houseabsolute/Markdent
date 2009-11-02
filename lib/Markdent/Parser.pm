@@ -114,14 +114,20 @@ sub parse {
 
     $self->_clean_text(\$text);
 
-    $self->handler()->start_document();
+    $self->handler()->handle_event(
+        type => 'start',
+        name => 'document',
+    );
 
     for my $line ( split /\n/, $text ) {
         chomp $line;
         $self->_block_parser()->parse_line($line);
     }
 
-    $self->handler()->end_document();
+    $self->handler()->handle_event(
+        type => 'end',
+        name => 'document',
+    );
 
     return;
 }

@@ -13,7 +13,7 @@ use namespace::autoclean;
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 
-with 'Markdent::Role::Handler';
+with 'Markdent::Role::EventsAsMethods';
 
 has tree => (
     is      => 'ro',
@@ -135,7 +135,7 @@ sub end_code {
 sub text {
     my $self = shift;
     my ($text) = validated_list( \@_,
-                                  text => { isa => Str },
+                                  content => { isa => Str },
                                 );
 
     my $text_node = Tree::Simple->new( { type => 'text', text => $text } );

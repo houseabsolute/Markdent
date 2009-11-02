@@ -78,9 +78,19 @@ sub _header {
     my $level = shift;
     my $text  = shift;
 
-    $self->handler()->start_header( level => $level );
+    $self->handler()->handle_event(
+        type       => 'start',
+        name       => 'header',
+        attributes => { level => $level },
+    );
+
     $self->span_parser()->parse_markup($text);
-    $self->handler()->end_header();
+
+    $self->handler()->handle_event(
+        type       => 'end',
+        name       => 'header',
+        attributes => { level => $level },
+    );
 }
 
 __PACKAGE__->meta()->make_immutable();

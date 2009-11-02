@@ -1,29 +1,22 @@
 package Markdent::Role::Handler;
 
+use strict;
+use warnings;
+
+use Markdent::Event;
+
 use namespace::autoclean;
 use Moose::Role;
 
-my @requires =
-    map { ( 'start_' . $_, 'end_' . $_ ) }
-    qw( document
-        header
-        blockquote
-        ordered_list
-        unordered_list
-        preformatted
-        paragraph
-        emphasis
-        strong
-        code
-      );
+requires 'handle_event';
 
-push @requires,
-    qw( text
-        link
-        image
-        hr
-      );
+around handle_event => sub {
+    my $orig = shift;
+    my $self = shift;
 
-requires @requires;
+    my $event = @_ > 1 ? Markdent::Event->new(@_) : shift;
+
+    return $self->$orig($event);
+};
 
 1;
