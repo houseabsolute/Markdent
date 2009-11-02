@@ -46,7 +46,7 @@ sub parse_line {
     }
     elsif ( $line =~ /^\s*$/ ) {
         $self->_paragraph( $self->_buffered_lines() )
-            if $self->has_buffer;
+            if $self->_has_buffer;
 
         $self->_clear_buffer();
     }
@@ -56,7 +56,7 @@ sub parse_line {
         my $header_text = pop @buffer;
 
         if (@buffer) {
-            $self->_paragraph(@buffer);
+            $self->_paragraph(\@buffer);
         }
 
         my $level = substr( $1, 0, 1 ) eq '=' ? 1 : 2;
@@ -74,9 +74,14 @@ sub parse_line {
     else {
         $self->_push_buffer($line);
     }
+}
 
-    $self->_paragraph( $self->_buffered_lines() )
-        if $self->_has_buffer();
+sub _finalize_document {
+    my $self = shift;
+
+    return unless $self->_has_buffer;
+
+    $self->_paragraph( $self->_buffered_lines() );
 
     $self->_clear_buffer();
 }

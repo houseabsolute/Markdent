@@ -124,6 +124,8 @@ sub parse {
         $self->_block_parser()->parse_line($line);
     }
 
+    $self->_block_parser()->_finalize_document();
+
     $self->handler()->handle_event(
         type => 'end',
         name => 'document',
