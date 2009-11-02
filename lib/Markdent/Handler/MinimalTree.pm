@@ -132,11 +132,15 @@ sub end_strong {
 }
 
 sub start_code {
+    my $self = shift;
 
+    $self->_start_markup_node('code')
 }
 
 sub end_code {
+    my $self = shift;
 
+    $self->_set_current_up_one_level();
 }
 
 sub text {

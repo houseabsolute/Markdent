@@ -30,7 +30,7 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'valid strong containing invalid emphasis' );
+    parse_ok( $text, $expect, 'good strong containing bad emphasis' );
 }
 
 {
@@ -55,5 +55,122 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'bad strong start containing valid emphasis' );
+    parse_ok( $text, $expect, 'bad strong start containing good emphasis' );
+}
+
+{
+    my $text = <<'EOF';
+**bad strong with ``bad code and *good em*
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => '**bad strong with ``bad code and ',
+            },
+            { type => 'emphasis' },
+            [
+                {
+                    type => 'text',
+                    text => 'good em',
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'bad strong and code start containing good emphasis' );
+}
+
+{
+    my $text = <<'EOF';
+**bad strong with *good em* and ``bad code
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => '**bad strong with ',
+            },
+            { type => 'emphasis' },
+            [
+                {
+                    type => 'text',
+                    text => 'good em',
+                },
+            ], {
+                type => 'text',
+                text => ' and ``bad code',
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'bad strong start, good emphasis, then bad code start' );
+}
+
+{
+    my $text = <<'EOF';
+**bad strong with *good em and ``good code``*
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => '**bad strong with ',
+            },
+            { type => 'emphasis' },
+            [
+                {
+                    type => 'text',
+                    text => 'good em and ',
+                },
+                { type => 'code' },
+                [
+                    {
+                        type => 'text',
+                        text => 'good code',
+                    },
+                ],
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'bad strong start, good emphasis containing good code' );
+}
+
+{
+    my $text = <<'EOF';
+**good strong with *good ``em and bad* code``**
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            { type => 'strong' },
+            [
+                {
+                    type => 'text',
+                    text => 'good strong with ',
+                },
+
+                { type => 'emphasis' },
+                [
+                    {
+                        type => 'text',
+                        text => 'good ``em and bad',
+                    },
+                ], {
+                    type => 'text',
+                    text => ' code``',
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'good strong start, good emphasis interleaving bad code' );
 }

@@ -72,7 +72,7 @@ sub parse_markup {
 
     # This catches any bad start events that were found after the last end
     # event, or if there were _no_ end events at all.
-    $self->_convert_invalid_start_events_to_text();
+    $self->_convert_invalid_start_events_to_text('is done');
 
     $self->_debug_pending_events('before text merging');
 
@@ -148,8 +148,7 @@ sub _match_strong_end {
     my $text  = shift;
     my $delim = shift;
 
-    $self->_match_delimiter_end( $text, qr/\Q$delim/ )
-        or return;
+    $self->_match_delimiter_end( $text, qr/\Q$delim/ ) or return;
 
     my $event = Markdent::Event->new(
         type => 'end',
@@ -244,11 +243,11 @@ sub _match_delimiter_start {
 }
 
 sub _match_delimiter_end {
-    my $self  = shift;
-    my $text  = shift;
-    my $delim = shift;
+    my $self        = shift;
+    my $text        = shift;
+    my $delim       = shift;
 
-    return unless ${$text} =~ /[^\s\\] \G $delim (?= \s | \z ) /xgc;
+    return unless ${$text} =~ /[^\s\\] \G $delim (?= \P{Letter} | \z ) /xgc;
 
     return 1;
 }
@@ -324,7 +323,8 @@ sub _event_for_text_buffer {
 }
 
 sub _convert_invalid_start_events_to_text {
-    my $self = shift;
+    my $self    = shift;
+    my $is_done = shift;
 
     # We want to operate directly on the reference so we can convert
     # individual events in place
@@ -343,30 +343,32 @@ EVENT:
                 next EVENT
                     if $start->[1]->name() eq $event->name();
 
-                $self->_print_debug( 'Found bad start event for '
-                        . $start->[1]->name()
-                        . q{ with "}
-                        . $start->[1]->attributes()->{delimiter}
-                        . q{" as the delimiter}
-                        . "\n" )
-                    if $self->debug();
-
                 $events->[ $start->[0] ]
-                    = $self->_convert_event_to_text( $start->[1] );
+                    = $self->_convert_start_event_to_text( $start->[1] );
             }
         }
     }
 
+    return unless $is_done;
+
     for my $start (@starts) {
-        $events->[ $start->[0] ] = $self->_convert_event_to_text( $start->[1] );
+        $events->[ $start->[0] ] = $self->_convert_start_event_to_text( $start->[1] );
     }
 }
 
-sub _convert_event_to_text {
+sub _convert_start_event_to_text {
     my $self  = shift;
     my $event = shift;
 
-    Markdent::Event->new(
+    $self->_print_debug( 'Found bad start event for '
+            . $event->name()
+            . q{ with "}
+            . $event->attributes()->{delimiter}
+            . q{" as the delimiter}
+            . "\n" )
+        if $self->debug();
+
+    return Markdent::Event->new(
         type       => 'inline',
         name       => 'text',
         attributes => {
@@ -393,14 +395,25 @@ sub _merge_consecutive_text_events {
         }
         else {
             push @to_merge, [ $merge_start, $i - 1 ]
-                if defined $merge_start;
+                if defined $merge_start && $i - 1 > $merge_start;
 
             undef $merge_start;
         }
     }
 
-    for my $pair ( grep { $_->[1] > $_->[0] } @to_merge ) {
+    # If $merge_start is still defined, then the last event was a text event
+    # which may need to be merged.
+    push @to_merge, [ $merge_start, $#{$events} ]
+        if defined $merge_start && $#{$events} > $merge_start;
+
+    my $already_merged = 0;
+    for my $pair (@to_merge) {
+        $pair->[0] -= $already_merged;
+        $pair->[1] -= $already_merged;
+
         $self->_splice_merged_text_event( $events, @{$pair} );
+
+        $already_merged += $pair->[1] - $pair->[0];
     }
 }
 
