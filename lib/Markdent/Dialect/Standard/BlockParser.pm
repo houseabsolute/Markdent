@@ -23,6 +23,7 @@ has __buffered_lines => (
     handles  => {
         _push_buffer    => 'push',
         _buffered_lines => 'elements',
+        _has_buffer     => 'count',
         _clear_buffer   => 'clear',
     },
 );
@@ -44,8 +45,10 @@ sub parse_line {
         $self->_header( $level, $header_text );
     }
     elsif ( $line =~ /^\s*$/ ) {
+        $self->_paragraph( $self->_buffered_lines() )
+            if $self->has_buffer;
 
-        # empty line
+        $self->_clear_buffer();
     }
     elsif ( $line =~ /^(=+|-+)$/ ) {
         my @buffer = $self->_buffered_lines();
@@ -71,6 +74,11 @@ sub parse_line {
     else {
         $self->_push_buffer($line);
     }
+
+    $self->_paragraph( $self->_buffered_lines() )
+        if $self->_has_buffer();
+
+    $self->_clear_buffer();
 }
 
 sub _header {
@@ -90,6 +98,29 @@ sub _header {
         type       => 'end',
         name       => 'header',
         attributes => { level => $level },
+    );
+}
+
+sub _paragraph {
+    my $self  = shift;
+    my @lines = @_;
+
+    $self->_debug_parse_result(
+        \@lines,
+        'paragraph',
+    ) if $self->debug();
+
+    $self->handler()->handle_event(
+        type => 'start',
+        name => 'paragraph',
+    );
+
+    my $text = join q{ }, @lines;
+    $self->span_parser()->parse_markup($text);
+
+    $self->handler()->handle_event(
+        type => 'end',
+        name => 'paragraph',
     );
 }
 

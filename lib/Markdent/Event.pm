@@ -23,12 +23,6 @@ has name => (
     required => 1,
 );
 
-has markup => (
-    is      => 'ro',
-    isa     => Maybe[Str],
-    default => undef,
-);
-
 has attributes => (
     is      => 'ro',
     isa     => HashRef,
@@ -50,6 +44,34 @@ sub _build_event_name {
     push @parts, $self->name();
 
     return join q{_}, @parts;
+}
+
+sub debug_dump {
+    my $self = shift;
+
+    my $dump = '  - ' . $self->event_name() . "\n";
+
+    my $attr = $self->attributes();
+
+    for my $key ( sort keys %{$attr} ) {
+        my $val = $attr->{$key};
+
+        if ( ref $val ) {
+            $dump .= sprintf( '    %-16s: |%s|', $key, $val->[0] );
+            $dump .= "\n";
+
+            for my $v ( @{$val}[ 1 .. $#{$val} ] ) {
+                $dump .= q{ } x 22;
+                $dump .= "|$v|\n";
+            }
+        }
+        else {
+            $dump .= sprintf( '    %-16s: %s', $key, $val );
+            $dump .= "\n";
+        }
+    }
+
+    return $dump;
 }
 
 __PACKAGE__->meta()->make_immutable();

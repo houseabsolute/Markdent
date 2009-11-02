@@ -58,9 +58,11 @@ sub parse_markup {
         }
 
         for my $span ( $self->_possible_span_matches() ) {
-            my $meth = '_match_' . $span;
+            my ( $markup, @args ) = ref $span ? @{$span} : $span;
 
-            if ( $self->$meth( \$text ) ) {
+            my $meth = '_match_' . $markup;
+
+            if ( $self->$meth( \$text, @args ) ) {
                 next PARSE_MARKUP;
             }
         }
@@ -68,7 +70,15 @@ sub parse_markup {
         $self->_match_plain_text( \$text );
     }
 
-    $self->_convert_invalid_events_to_text();
+    # This catches any bad start events that were found after the last end
+    # event, or if there were _no_ end events at all.
+    $self->_convert_invalid_start_events_to_text();
+
+    $self->_debug_pending_events('before text merging');
+
+    $self->_merge_consecutive_text_events();
+
+    $self->_debug_pending_events('after text merging');
 
     $self->handler()->handle_event($_)
         for $self->_pending_events();
@@ -83,9 +93,10 @@ sub _possible_span_matches {
 
     my @look_for;
 
-    for my $type ( qw( strong emphasis  ) ) {
-        if ( $self->_in_span($type) ) {
-            push @look_for, $type . '_end';
+    for my $type (qw( strong emphasis code )) {
+        if ( my $event = $self->_start_event_for_span($type) ) {
+            push @look_for,
+                [ $type . '_end', $event->attributes()->{delimiter} ];
         }
         else {
             push @look_for, $type . '_start';
@@ -98,17 +109,16 @@ sub _possible_span_matches {
     return @look_for;
 }
 
-sub _in_span {
+sub _start_event_for_span {
     my $self = shift;
     my $type = shift;
 
-    my $in = 0;
-
+    my $in;
     for my $event ( $self->_pending_events() ) {
-        $in = 1
+        $in = $event
             if $event->event_name eq 'start_' . $type;
 
-        $in = 0
+        undef $in
             if $event->event_name eq 'end_' . $type;
     }
 
@@ -134,10 +144,11 @@ sub _match_strong_start {
 }
 
 sub _match_strong_end {
-    my $self = shift;
-    my $text = shift;
+    my $self  = shift;
+    my $text  = shift;
+    my $delim = shift;
 
-    my ($delim) = $self->_match_delimiter_end( $text, qr/(?:\*\*|__)/ )
+    $self->_match_delimiter_end( $text, qr/\Q$delim/ )
         or return;
 
     my $event = Markdent::Event->new(
@@ -169,15 +180,52 @@ sub _match_emphasis_start {
 }
 
 sub _match_emphasis_end {
-    my $self = shift;
-    my $text = shift;
+    my $self  = shift;
+    my $text  = shift;
+    my $delim = shift;
 
-    $self->_match_delimiter_end( $text, qr/(?:\*|_)/ )
+    $self->_match_delimiter_end( $text, qr/\Q$delim/ )
         or return;
 
     my $event = Markdent::Event->new(
         type => 'end',
         name => 'emphasis',
+    );
+
+    $self->_markup_event($event);
+
+    return 1;
+}
+
+sub _match_code_start {
+    my $self = shift;
+    my $text = shift;
+
+    my ($delim) = $self->_match_delimiter_start( $text, qr/\`+/ )
+        or return;
+
+    my $event = Markdent::Event->new(
+        type       => 'start',
+        name       => 'code',
+        attributes => { delimiter => $delim },
+    );
+
+    $self->_markup_event($event);
+
+    return 1;
+}
+
+sub _match_code_end {
+    my $self  = shift;
+    my $text  = shift;
+    my $delim = shift;
+
+    $self->_match_delimiter_end( $text, qr/\Q$delim/ )
+        or return;
+
+    my $event = Markdent::Event->new(
+        type => 'end',
+        name => 'code',
     );
 
     $self->_markup_event($event);
@@ -225,7 +273,8 @@ sub _match_plain_text {
                      )
                     /xgc;
 
-    $self->_print_debug( "Interpreting as plain text\n\n[$1]\n" );
+    $self->_print_debug( "Interpreting as plain text\n\n[$1]\n" )
+        if $self->debug();
 
     my $plain = $self->_unescape_plain_text($1);
 
@@ -249,9 +298,13 @@ sub _markup_event {
 
     $self->_event_for_text_buffer();
 
-    $self->_print_debug( 'Found markup: ' . $event->event_name() . "\n" );
+    $self->_print_debug( 'Found markup: ' . $event->event_name() . "\n" )
+        if $self->debug();
 
     $self->_add_pending_event($event);
+
+    $self->_convert_invalid_start_events_to_text()
+        if $event->type() eq 'end';
 }
 
 sub _event_for_text_buffer {
@@ -270,41 +323,43 @@ sub _event_for_text_buffer {
     $self->_clear_span_text_buffer();
 }
 
-sub _convert_invalid_events_to_text {
+sub _convert_invalid_start_events_to_text {
     my $self = shift;
 
-    my @events = $self->_pending_events();
+    # We want to operate directly on the reference so we can convert
+    # individual events in place
+    my $events = $self->__pending_events();
 
     my @starts;
 EVENT:
-    for my $i ( 0 .. $#events ) {
-        my $event = $events[$i];
+    for my $i ( 0 .. $#{$events} ) {
+        my $event = $events->[$i];
 
         if ( $event->type eq 'start' ) {
             push @starts, [ $i, $event ];
         }
         elsif ( $event->type() eq 'end' ) {
-
-            # This really shouldn't happen, since the parser should never
-            # match an end before its seen a valid start
-            die 'WTF, we have an end event without any start events'
-                unless @starts;
-
             while ( my $start = pop @starts ) {
                 next EVENT
                     if $start->[1]->name() eq $event->name();
 
-                $events[ $start->[0] ]
+                $self->_print_debug( 'Found bad start event for '
+                        . $start->[1]->name()
+                        . q{ with "}
+                        . $start->[1]->attributes()->{delimiter}
+                        . q{" as the delimiter}
+                        . "\n" )
+                    if $self->debug();
+
+                $events->[ $start->[0] ]
                     = $self->_convert_event_to_text( $start->[1] );
             }
         }
     }
 
     for my $start (@starts) {
-        $events[ $start->[0] ] = $self->_convert_event_to_text( $start->[1] );
+        $events->[ $start->[0] ] = $self->_convert_event_to_text( $start->[1] );
     }
-
-    $self->_set__pending_events( \@events );
 }
 
 sub _convert_event_to_text {
@@ -315,9 +370,79 @@ sub _convert_event_to_text {
         type       => 'inline',
         name       => 'text',
         attributes => {
-            content => $event->attributes()->{delimiter}
+            content           => $event->attributes()->{delimiter},
+            '!converted_from' => $event->event_name(),
         },
     );
+}
+
+sub _merge_consecutive_text_events {
+    my $self = shift;
+
+    my $events = $self->__pending_events();
+
+    my $merge_start;
+
+    my @to_merge;
+    for my $i ( 0 .. $#{$events} ) {
+        my $event = $events->[$i];
+
+        if ( $event->name eq 'text' ) {
+            $merge_start = $i
+                unless defined $merge_start;
+        }
+        else {
+            push @to_merge, [ $merge_start, $i - 1 ]
+                if defined $merge_start;
+
+            undef $merge_start;
+        }
+    }
+
+    for my $pair ( grep { $_->[1] > $_->[0] } @to_merge ) {
+        $self->_splice_merged_text_event( $events, @{$pair} );
+    }
+}
+
+sub _splice_merged_text_event {
+    my $self   = shift;
+    my $events = shift;
+    my $start  = shift;
+    my $end    = shift;
+
+    my @to_merge = map { $_->attributes()->{content} } @{$events}[ $start .. $end ];
+
+    $self->_print_debug( "Merging consecutive text events ($start-$end) for: \n"
+            . ( join q{}, map {"  - [$_]\n"} @to_merge ) )
+        if $self->debug();
+
+    my $merged_text = join q{}, @to_merge;
+
+    my $event = Markdent::Event->new(
+        type       => 'inline',
+        name       => 'text',
+        attributes => {
+            content        => $merged_text,
+            '!merged_from' => \@to_merge,
+        },
+    );
+
+    splice @{$events}, $start, ( $end - $start ) + 1, $event;
+}
+
+sub _debug_pending_events {
+    my $self = shift;
+    my $desc = shift;
+
+    return unless $self->debug();
+
+    my $msg = "Pending event stream $desc:\n";
+
+    for my $event ( $self->_pending_events() ) {
+        $msg .= $event->debug_dump() . "\n";
+    }
+
+    $self->_print_debug($msg);
 }
 
 use re 'eval';

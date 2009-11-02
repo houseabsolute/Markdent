@@ -93,11 +93,18 @@ sub end_preformatted {
 }
 
 sub start_paragraph {
+    my $self  = shift;
 
+    my $header = Tree::Simple->new( { type => 'paragraph' } );
+    $self->_current_node()->addChild($header);
+
+    $self->_set_current_node($header);
 }
 
 sub end_paragraph {
+    my $self  = shift;
 
+    $self->_set_current_up_one_level();
 }
 
 sub start_emphasis {

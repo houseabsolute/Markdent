@@ -11,7 +11,10 @@ sub handle_event {
 
     my $meth = $event->event_name();
 
-    $self->$meth( %{ $event->attributes() } );
+    my %p = %{ $event->attributes() };
+    delete @p{ grep {/^!/} keys %p };
+
+    $self->$meth(%p);
 }
 
 1;
