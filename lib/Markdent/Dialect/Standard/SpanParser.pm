@@ -204,7 +204,7 @@ sub _unescape_plain_text {
     my $self  = shift;
     my $plain = shift;
 
-    $plain =~ s/\\([\`*_{}[\]()#+-.!])/$1/g;
+    $plain =~ s/\\([\`*_{}[\]()#+\-.!])/$1/g;
 
     return $plain;
 }
