@@ -291,46 +291,44 @@ $nested_brackets = qr{
     )*
 }x;
 
+# For some inexplicable reason, if I put $nested_brackets in here right now,
+# the regex doesn't work properly. Presumably this has something to do with
+# using it in a subroutine's lexical scope (resetting the stack on each
+# invocation?)
+my $link = qr{
+              (?:
+                \(
+                   ( [^\s]+ )             # an inline URI
+                   (?:
+                     \s+
+                     ( ["'] )
+                     ([^\3]+)             # an optional quoted title
+                     \3
+                   )?
+                   \s*
+                \)
+                |
+                \s*
+                \[ ( [^]]* ) \]           # an id (can be empty)
+              )?                          # with no id or explicit uri, use text as id
+             }x;
+
 sub _match_link {
     my $self = shift;
     my $text = shift;
 
     return unless
-        ${$text} =~ /\G
-                     \[ ($nested_brackets) \]  # link text
-                     (?:
-                       \(
-                         ( [^\s]+ )            # an inline URI
-                         (?:
-                           \s+
-                           ( ["'] )
-                           ([^\3]+)            # an optional quoted title
-                           \3
-                         )?
-                         \s*
-                       \)
-                       |
-                       \s*
-                       \[ ( [^]]* ) \]         # an id (can be empty)
-                     )
+        ${$text} =~ / \G
+                      \[ ($nested_brackets) \]    # link or alt text
+                      $link
                     /xgc;
 
-    my $link_text = $1;
-
-    my %attr;
-    if ( defined $2 ) {
-        $attr{uri}   = $2;
-        $attr{title} = $4
-            if defined $4;
-    }
-    else {
-        $attr{id} = $5 || $1;
-    }
+    my ( $link_text, $attr ) = $self->_link_match_results();
 
     my $start = Markdent::Event->new(
         type       => 'start',
         name       => 'link',
-        attributes => \%attr,
+        attributes => $attr,
     );
 
     $self->_markup_event($start);
@@ -351,7 +349,48 @@ sub _match_image {
     my $self = shift;
     my $text = shift;
 
-    return;
+    return unless
+        ${$text} =~ / \G
+                      !
+                      \[ ($nested_brackets) \]    # link or alt text
+                      $link
+                    /xgc;
+
+    my ( $alt_text, $attr ) = $self->_link_match_results();
+
+    $attr->{alt_text} = $alt_text;
+
+    my $image = Markdent::Event->new(
+        type       => 'inline',
+        name       => 'image',
+        attributes => $attr,
+    );
+
+    $self->_markup_event($image);
+
+    return 1;
+}
+
+sub _link_match_results {
+    my $self = shift;
+
+    my $text = $1;
+
+    my %attr;
+    if ( defined $2 ) {
+        $attr{uri}   = $2;
+        $attr{title} = $4
+            if defined $4;
+    }
+    elsif ( defined $5 && length $5 ) {
+        $attr{id} = $5;
+    }
+    else {
+        $attr{id}          = $text;
+        $attr{implicit_id} = 1;
+    }
+
+    return ( $text, \%attr );
 }
 
 sub _match_plain_text {

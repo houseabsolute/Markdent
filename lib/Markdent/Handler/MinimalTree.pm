@@ -6,7 +6,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use MooseX::Params::Validate qw( validated_list validated_hash );
-use Markdent::Types qw( HeaderLevel Str );
+use Markdent::Types qw( HeaderLevel Str Bool );
 use Tree::Simple;
 
 use namespace::autoclean;
@@ -145,11 +145,12 @@ sub end_code {
 
 sub start_link {
     my $self = shift;
-    my %p = validated_hash(
+    my %p    = validated_hash(
         \@_,
-        uri   => { isa => Str, optional => 1 },
-        title => { isa => Str, optional => 1 },
-        id    => { isa => Str, optional => 1 },
+        uri         => { isa => Str,  optional => 1 },
+        title       => { isa => Str,  optional => 1 },
+        id          => { isa => Str,  optional => 1 },
+        implicit_id => { isa => Bool, optional => 1 },
     );
 
     die 'A link must have a uri or id'
@@ -191,7 +192,18 @@ sub html_block {
 }
 
 sub image {
+    my $self = shift;
+    my %p    = validated_hash(
+        \@_,
+        alt_text    => { isa => Str },
+        uri         => { isa => Str, optional => 1 },
+        title       => { isa => Str, optional => 1 },
+        id          => { isa => Str, optional => 1 },
+        implicit_id => { isa => Bool, optional => 1 },
+    );
 
+    my $hr_node = Tree::Simple->new( { type => 'image', %p } );
+    $self->_current_node()->addChild($hr_node);
 }
 
 sub hr {
