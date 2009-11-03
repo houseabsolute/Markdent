@@ -75,7 +75,7 @@ sub parse_document {
                            |
                            .+
                          )
-                         ^ </ \2 >
+                         ^ </ \g{-1} >
                        )
                      }xims;
 
@@ -83,7 +83,9 @@ sub parse_document {
         my $self = shift;
         my $text = shift;
 
-        ${$text} =~ s{$nested_tags}{ $self->_hash_and_save_html($1) }egs;
+        ${$text}
+            =~ s{ ( \A\n? | \n\n ) $nested_tags ( \n\n | \n?\z ) }
+                { ( $1 || q{} ) . $self->_hash_and_save_html($2) . ( $3 || q{} ) }egx;
 
         return;
     }

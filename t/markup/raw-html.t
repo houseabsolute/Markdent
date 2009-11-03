@@ -110,7 +110,7 @@ EOF
         },
     ];
 
-    parse_ok( $text, $expect, 'html in a block' );
+    parse_ok( $text, $expect, 'html in a block with nested <div> tags' );
 }
 
 {
@@ -126,9 +126,30 @@ EOF
 
     chomp $html;
 
+    my $text = $html;
+
+    my $expect = [
+        {
+            type => 'html_block',
+            html => $html,
+        },
+    ];
+
+    parse_ok( $text, $expect, 'html as sole content' );
+}
+
+
+{
+    my $html = <<'EOF';
+<div>
+An arbitrary chunk of html.
+</div>
+EOF
+
+    chomp $html;
+
     my $text = <<"EOF";
 Some text
-
 $html
 EOF
 
@@ -138,14 +159,58 @@ EOF
         },
         [
             {
-                type => 'text',
-                text => 'Some text',
-            },
-        ], {
-            type => 'html_block',
-            html => $html,
-        },
+                'text' => 'Some text ',
+                'type' => 'text'
+            }, {
+                'html' => '<div>',
+                'type' => 'html'
+            }, {
+                'text' => ' An arbitrary chunk of html. ',
+                'type' => 'text'
+            }, {
+                'html' => '</div>',
+                'type' => 'html'
+            }
+        ]
     ];
 
-    parse_ok( $text, $expect, 'html in a block' );
+    parse_ok( $text, $expect, 'html without preceding newline' );
+}
+
+{
+    my $html = <<'EOF';
+<div>
+An arbitrary chunk of html.
+</div>
+EOF
+
+    chomp $html;
+
+    my $text = <<"EOF";
+$html
+Some text
+EOF
+
+    my $expect = [
+        {
+            type => 'paragraph',
+        },
+        [
+            {
+                'html' => '<div>',
+                'type' => 'html'
+            }, {
+                'text' => ' An arbitrary chunk of html. ',
+                'type' => 'text'
+            }, {
+                'html' => '</div>',
+                'type' => 'html'
+            }, {
+                'text' => ' Some text',
+                'type' => 'text'
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'html without following newline' );
 }
