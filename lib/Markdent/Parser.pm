@@ -119,10 +119,7 @@ sub parse {
         name => 'document',
     );
 
-    for my $line ( split /\n/, $text ) {
-        chomp $line;
-        $self->_block_parser()->parse_line($line);
-    }
+    $self->_block_parser()->parse_document(\$text);
 
     $self->_block_parser()->_finalize_document();
 

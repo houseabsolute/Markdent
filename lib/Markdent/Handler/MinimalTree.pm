@@ -159,6 +159,14 @@ sub html {
     $self->_current_node()->addChild($html_node);
 }
 
+sub html_block {
+    my $self = shift;
+    my ($html) = validated_list( \@_, content => { isa => Str }, );
+
+    my $html_node = Tree::Simple->new( { type => 'html_block', html => $html } );
+    $self->_current_node()->addChild($html_node);
+}
+
 sub link {
 
 }

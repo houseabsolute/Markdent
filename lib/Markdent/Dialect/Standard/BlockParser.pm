@@ -5,8 +5,11 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Markdent::Types qw( Str ArrayRef );
+use Digest::SHA1 qw( sha1_hex );
+use Markdent::Types qw( Str ArrayRef HashRef );
 use MooseX::Params::Validate qw( validated_list );
+use re 'eval';
+use Text::Balanced qw( gen_extract_tagged );
 
 use namespace::autoclean;
 use Moose;
@@ -17,7 +20,7 @@ with 'Markdent::Role::BlockParser';
 has __buffered_lines => (
     traits   => ['Array'],
     is       => 'ro',
-    isa      => ArrayRef [Str],
+    isa      => ArrayRef[Str],
     default  => sub { [] },
     init_arg => undef,
     handles  => {
@@ -29,9 +32,79 @@ has __buffered_lines => (
     },
 );
 
-sub parse_line {
+has __html_blocks => (
+    traits   => ['Hash'],
+    is       => 'ro',
+    isa      => HashRef[Str],
+    default  => sub { {} },
+    init_arg => undef,
+    handles  => {
+        _save_html_block => 'set',
+        _get_html_block  => 'get',
+    },
+);
+
+sub parse_document {
+    my $self = shift;
+    my $text = shift;
+
+    $self->_hash_html_blocks($text);
+
+    for my $line ( split /\n/, ${$text} ) {
+        chomp $line;
+        $self->_parse_line($line);
+    }
+
+    $self->_finalize_document();
+}
+
+{
+    # Stolen from Text::Markdown, along with the whole "extract and replace with
+    # hash" concept.
+    my $blocks_re = qr{
+      p         |  div     |  h[1-6]  |  blockquote  |  pre       |  table  |
+      dl        |  ol      |  ul      |  script      |  noscript  |  form   |
+      fieldset  |  iframe  |  math    |  ins         |  del
+    }xi;
+
+    my $nested_tags;
+    $nested_tags = qr{ (
+                         ^ < ($blocks_re) [^>]* >
+                         (?:
+                           (?{{ $nested_tags }})
+                           |
+                           .+
+                         )
+                         ^ </ \2 >
+                       )
+                     }xims;
+
+    sub _hash_html_blocks {
+        my $self = shift;
+        my $text = shift;
+
+        ${$text} =~ s{$nested_tags}{ $self->_hash_and_save_html($1) }egs;
+
+        return;
+    }
+}
+
+sub _hash_and_save_html {
+    my $self = shift;
+    my $html = shift;
+
+    my $sha1 = sha1_hex($html);
+
+    $self->_save_html_block( $sha1 => $html );
+
+    return 'html:' . $sha1;
+}
+
+sub _parse_line {
     my $self = shift;
     my $line = shift;
+
+    $self->_match_hashed_html($line) and return;
 
     $self->_match_atx_header($line) and return;
 
@@ -42,6 +115,30 @@ sub parse_line {
     $self->_match_horizontal_rule($line) and return;
 
     $self->_add_line_to_buffer($line);
+}
+
+sub _match_hashed_html {
+    my $self = shift;
+    my $line = shift;
+
+    return unless $line =~ /html:(.{40})/;
+
+    my $html = $self->_get_html_block($1);
+
+    return unless defined $html;
+
+    $self->_debug_parse_result(
+        $line,
+        'hashed html',
+    ) if $self->debug();
+
+    $self->handler()->handle_event(
+        type       => 'inline',
+        name       => 'html_block',
+        attributes => { content => $html },
+    );
+
+    return 1;
 }
 
 sub _match_atx_header {

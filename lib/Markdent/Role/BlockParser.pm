@@ -7,7 +7,7 @@ use Moose::Role;
 
 with 'Markdent::Role::AnyParser';
 
-requires 'parse_line';
+requires 'parse_document';
 
 has span_parser => (
     is       => 'ro',
