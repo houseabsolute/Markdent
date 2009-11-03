@@ -61,17 +61,23 @@ sub debug_dump {
             $dump .= "\n";
 
             for my $v ( @{$val}[ 1 .. $#{$val} ] ) {
+                $self->_debug_value($v);
+
                 $dump .= q{ } x 22;
                 $dump .= "|$v|\n";
             }
         }
         else {
-            $dump .= sprintf( '    %-16s: %s', $key, $val );
+            $dump .= sprintf( '    %-16s: %s', $key, $self->_debug_value($val) );
             $dump .= "\n";
         }
     }
 
     return $dump;
+}
+
+sub _debug_value {
+    return defined $_[1] ? $_[1] : '<undef>';
 }
 
 __PACKAGE__->meta()->make_immutable();
