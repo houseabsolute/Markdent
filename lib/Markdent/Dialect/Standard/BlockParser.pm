@@ -117,9 +117,9 @@ sub _match_horizontal_rule {
 
     return
         unless ( $line =~ /^[\s\*]+$/
-                 && ( $line =~ tr/*/*/ ) >= 3 )
-            || ( $line =~ /^[\s\-]+$/
-                 && ( $line =~ tr/-/-/ ) >= 3 );
+        && ( $line =~ tr/*/*/ ) >= 3 )
+        || ( $line =~ /^[\s\-]+$/
+        && ( $line =~ tr/-/-/ ) >= 3 );
 
     return if $self->_has_buffer() && $self->_last_buffered_line() =~ /\S/;
 
@@ -164,8 +164,8 @@ sub _header {
 }
 
 sub _paragraph {
-    my $self  = shift;
-    my @lines = grep { /\S/ } @_;
+    my $self = shift;
+    my @lines = grep {/\S/} @_;
 
     return unless @lines;
 

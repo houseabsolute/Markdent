@@ -103,6 +103,8 @@ sub _possible_span_matches {
         }
     }
 
+    push @look_for, 'html';
+
     return @look_for;
     push @look_for, qw( link image );
 
@@ -252,6 +254,23 @@ sub _match_delimiter_end {
     return 1;
 }
 
+sub _match_html {
+    my $self = shift;
+    my $text = shift;
+
+    return unless ${$text} =~ /\G (< [^>]+ >)/xgc;
+
+    my $event = Markdent::Event->new(
+        type       => 'inline',
+        name       => 'html',
+        attributes => { content => $1 },
+    );
+
+    $self->_markup_event($event);
+
+    return 1;
+}
+
 sub _match_plain_text {
     my $self = shift;
     my $text = shift;
@@ -267,6 +286,8 @@ sub _match_plain_text {
                        (?= \* | _ | \` )  #   possible span markup
                        |
                        (?= !?\[ )         #   or a possible image or link
+                       |
+                       (?= < [^>]+ > )    #   an HTML tag
                        |
                        \z                 #   or the end of the string
                      )

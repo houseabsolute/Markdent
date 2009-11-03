@@ -145,12 +145,18 @@ sub end_code {
 
 sub text {
     my $self = shift;
-    my ($text) = validated_list( \@_,
-                                  content => { isa => Str },
-                                );
+    my ($text) = validated_list( \@_, content => { isa => Str }, );
 
     my $text_node = Tree::Simple->new( { type => 'text', text => $text } );
     $self->_current_node()->addChild($text_node);
+}
+
+sub html {
+    my $self = shift;
+    my ($html) = validated_list( \@_, content => { isa => Str }, );
+
+    my $html_node = Tree::Simple->new( { type => 'html', html => $html } );
+    $self->_current_node()->addChild($html_node);
 }
 
 sub link {
