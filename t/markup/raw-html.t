@@ -214,3 +214,32 @@ EOF
 
     parse_ok( $text, $expect, 'html without following newline' );
 }
+
+{
+    my $html = <<'EOF';
+<div>
+An arbitrary chunk of html.
+</div>
+EOF
+
+    chomp $html;
+
+    my $text = <<"EOF";
+$html
+
+$html
+EOF
+
+    my $expect = [
+        {
+            type => 'html_block',
+            html => $html,
+        },
+        {
+            type => 'html_block',
+            html => $html,
+        },
+    ];
+
+    parse_ok( $text, $expect, 'same html block twice in a row' );
+}

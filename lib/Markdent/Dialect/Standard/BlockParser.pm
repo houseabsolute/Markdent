@@ -73,7 +73,7 @@ sub parse_document {
                          (?:
                            (?{{ $nested_tags }})
                            |
-                           .+
+                           .+?
                          )
                          ^ </ \g{-1} >
                        )
@@ -84,8 +84,8 @@ sub parse_document {
         my $text = shift;
 
         ${$text}
-            =~ s{ ( \A\n? | \n\n ) $nested_tags ( \n\n | \n?\z ) }
-                { ( $1 || q{} ) . $self->_hash_and_save_html($2) . ( $3 || q{} ) }egx;
+            =~ s{ ( \A\n? | \n\n ) $nested_tags (?= \n\n | \n?\z ) }
+                { ( $1 || q{} ) . $self->_hash_and_save_html($2) }egx;
 
         return;
     }
