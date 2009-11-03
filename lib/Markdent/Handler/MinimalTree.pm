@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use MooseX::Params::Validate qw( validated_list );
+use MooseX::Params::Validate qw( validated_list validated_hash );
 use Markdent::Types qw( HeaderLevel Str );
 use Tree::Simple;
 
@@ -143,6 +143,29 @@ sub end_code {
     $self->_set_current_up_one_level();
 }
 
+sub start_link {
+    my $self = shift;
+    my %p = validated_hash(
+        \@_,
+        uri   => { isa => Str, optional => 1 },
+        title => { isa => Str, optional => 1 },
+        id    => { isa => Str, optional => 1 },
+    );
+
+    die 'A link must have a uri or id'
+        unless defined $p{uri} || defined $p{id};
+
+    delete @p{ grep { ! defined $p{$_} } keys %p };
+
+    $self->_start_markup_node( 'link', %p )
+}
+
+sub end_link {
+    my $self = shift;
+
+    $self->_set_current_up_one_level();
+}
+
 sub text {
     my $self = shift;
     my ($text) = validated_list( \@_, content => { isa => Str }, );
@@ -167,10 +190,6 @@ sub html_block {
     $self->_current_node()->addChild($html_node);
 }
 
-sub link {
-
-}
-
 sub image {
 
 }
@@ -186,7 +205,7 @@ sub _start_markup_node {
     my $self = shift;
     my $type = shift;
 
-    my $markup = Tree::Simple->new( { type => $type } );
+    my $markup = Tree::Simple->new( { type => $type, @_ } );
     $self->_current_node()->addChild($markup);
 
     $self->_set_current_node($markup)

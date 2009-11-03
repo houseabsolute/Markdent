@@ -50,25 +50,7 @@ sub parse_markup {
 
     # Note that we have to pass a _reference_ to text in order to make sure
     # that we are matching the same variable with /g regexes each time.
- PARSE_MARKUP:
-    while (1) {
-        if ( $text =~ /\G\z/gc ) {
-            $self->_event_for_text_buffer();
-            last;
-        }
-
-        for my $span ( $self->_possible_span_matches() ) {
-            my ( $markup, @args ) = ref $span ? @{$span} : $span;
-
-            my $meth = '_match_' . $markup;
-
-            if ( $self->$meth( \$text, @args ) ) {
-                next PARSE_MARKUP;
-            }
-        }
-
-        $self->_match_plain_text( \$text );
-    }
+    $self->_parse_text(\$text);
 
     # This catches any bad start events that were found after the last end
     # event, or if there were _no_ end events at all.
@@ -88,6 +70,31 @@ sub parse_markup {
     return;
 }
 
+sub _parse_text {
+    my $self = shift;
+    my $text = shift;
+
+ PARSE_MARKUP:
+    while (1) {
+        if ( ${$text} =~ /\G\z/gc ) {
+            $self->_event_for_text_buffer();
+            last;
+        }
+
+        for my $span ( $self->_possible_span_matches() ) {
+            my ( $markup, @args ) = ref $span ? @{$span} : $span;
+
+            my $meth = '_match_' . $markup;
+
+            if ( $self->$meth( $text, @args ) ) {
+                next PARSE_MARKUP;
+            }
+        }
+
+        $self->_match_plain_text($text);
+    }
+}
+
 sub _possible_span_matches {
     my $self = shift;
 
@@ -105,8 +112,9 @@ sub _possible_span_matches {
 
     push @look_for, 'html';
 
-    return @look_for;
-    push @look_for, qw( link image );
+    unless ( $self->_start_event_for_span('link') ) {
+        push @look_for, qw( link image );
+    }
 
     return @look_for;
 }
@@ -239,7 +247,7 @@ sub _match_delimiter_start {
     my $text  = shift;
     my $delim = shift;
 
-    return unless ${$text} =~ /(?: ^ | [ ] \G ) ($delim) (?= \S ) /xgc;
+    return unless ${$text} =~ /(?: ^ | \P{Letter} \G ) ($delim) (?= \S ) /xgc;
 
     return $1;
 }
@@ -269,6 +277,81 @@ sub _match_html {
     $self->_markup_event($event);
 
     return 1;
+}
+
+# Stolen from Text::Markdown
+my $nested_brackets;
+$nested_brackets = qr{
+    (?>                                 # Atomic matching
+       [^\[\]]+                         # Anything other than brackets
+       |
+       \[
+         (??{ $nested_brackets })       # Recursive set of nested brackets
+       \]
+    )*
+}x;
+
+sub _match_link {
+    my $self = shift;
+    my $text = shift;
+
+    return unless
+        ${$text} =~ /\G
+                     \[ ($nested_brackets) \]  # link text
+                     (?:
+                       \(
+                         ( [^\s]+ )            # an inline URI
+                         (?:
+                           \s+
+                           ( ["'] )
+                           ([^\3]+)            # an optional quoted title
+                           \3
+                         )?
+                         \s*
+                       \)
+                       |
+                       \s*
+                       \[ ( [^]]* ) \]         # an id (can be empty)
+                     )
+                    /xgc;
+
+    my $link_text = $1;
+
+    my %attr;
+    if ( defined $2 ) {
+        $attr{uri}   = $2;
+        $attr{title} = $4
+            if defined $4;
+    }
+    else {
+        $attr{id} = $5 || $1;
+    }
+
+    my $start = Markdent::Event->new(
+        type       => 'start',
+        name       => 'link',
+        attributes => \%attr,
+    );
+
+    $self->_markup_event($start);
+
+    $self->_parse_text( \$link_text );
+
+    my $end = Markdent::Event->new(
+        type => 'end',
+        name => 'link',
+    );
+
+    $self->_markup_event($end);
+
+    return 1;
+}
+
+sub _match_image {
+    my $self = shift;
+    my $text = shift;
+
+    return;
 }
 
 sub _match_plain_text {
@@ -480,18 +563,6 @@ sub _debug_pending_events {
 }
 
 use re 'eval';
-
-# These two regexes stolen from Text::Markdown
-my $nested_brackets;
-$nested_brackets = qr{
-    (?>                                 # Atomic matching
-       [^\[\]]+                         # Anything other than brackets
-     |
-       \[
-         (??{ $nested_brackets })       # Recursive set of nested brackets
-       \]
-    )*
-}x;
 
 my $nested_parens;
 $nested_parens = qr{
