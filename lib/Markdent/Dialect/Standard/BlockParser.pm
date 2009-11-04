@@ -6,13 +6,14 @@ use warnings;
 our $VERSION = '0.01';
 
 use Digest::SHA1 qw( sha1_hex );
-use Markdent::Types qw( Str ArrayRef HashRef );
+use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
 use MooseX::Params::Validate qw( validated_list );
 use re 'eval';
 use Text::Balanced qw( gen_extract_tagged );
 
 use namespace::autoclean;
 use Moose;
+use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
 with 'Markdent::Role::BlockParser';
@@ -44,15 +45,42 @@ has __html_blocks => (
     },
 );
 
+has _blockquote_level => (
+    is       => 'rw',
+    isa      => Int,
+    default  => 0,
+    init_arg => undef,
+);
+
+has _list_level => (
+    is       => 'rw',
+    isa      => Int,
+    default  => 0,
+    init_arg => undef,
+);
+
+has _previous_line_was_empty => (
+    is       => 'rw',
+    isa      => Bool,
+    default  => 0,
+    init_arg => undef,
+);
+
 sub parse_document {
     my $self = shift;
     my $text = shift;
 
+    $self->_set_previous_line_was_empty(0);
+
     $self->_hash_html_blocks($text);
 
-    for my $line ( split /\n/, ${$text} ) {
-        chomp $line;
+    my @lines = map { chomp; $_ } split /\n/, ${$text};
+
+    for my $i ( 0 .. $#lines ) {
+        my $line = $lines[$i];
+
         $self->_parse_line($line);
+        $self->_set_previous_line_was_empty( $line =~ /^\s*$/ ? 1 : 0 );
     }
 
     $self->_finalize_document();
@@ -106,17 +134,53 @@ sub _parse_line {
     my $self = shift;
     my $line = shift;
 
-    $self->_match_hashed_html($line) and return;
+    $self->_maybe_close_open_blocks($line);
 
-    $self->_match_atx_header($line) and return;
+    $self->_match_empty_line($line) and return;
 
-    $self->_match_paragraph_break($line) and return;
+    $self->_parse_line_contents($line);
 
-    $self->_match_two_line_header($line) and return;
+    return;
+}
 
-    $self->_match_horizontal_rule($line) and return;
+# This method can be called mid-line (like in a block quote or list item) to
+# look for further block-level contents. The _parse_line method can only be
+# called once per line.
+sub _parse_line_contents {
+    my $self = shift;
+    my $line = shift;
+
+    $self->_match_hashed_html($line) and return 1;
+
+    $self->_match_atx_header($line) and return 1;
+
+    $self->_match_two_line_header($line) and return 1;
+
+    $self->_match_horizontal_rule($line) and return 1;
+
+    $self->_match_blockquote($line) and return 1;
 
     $self->_add_line_to_buffer($line);
+
+    return;
+}
+
+sub _match_empty_line {
+    my $self = shift;
+    my $line = shift;
+
+    return unless $self->_line_is_empty($line);
+
+    $self->_print_debug("Found an empty line, flushing the buffer\n")
+        if $self->debug();
+
+    $self->_flush_buffer();
+
+    return 1;
+}
+
+sub _line_is_empty {
+    return $_[1] =~ /^\s*$/;
 }
 
 sub _match_hashed_html {
@@ -163,23 +227,6 @@ sub _match_atx_header {
     return 1;
 }
 
-sub _match_paragraph_break {
-    my $self = shift;
-    my $line = shift;
-
-    return unless $line =~ /^\s*$/;
-
-    return
-        unless $self->_has_buffer()
-            && $self->_last_buffered_line() =~ /\S/;
-
-    $self->_paragraph( $self->_buffered_lines() );
-
-    $self->_clear_buffer();
-
-    return 1;
-}
-
 sub _match_two_line_header {
     my $self = shift;
     my $line = shift;
@@ -220,7 +267,7 @@ sub _match_horizontal_rule {
         || ( $line =~ /^[\s\-]+$/
         && ( $line =~ tr/-/-/ ) >= 3 );
 
-    return if $self->_has_buffer() && $self->_last_buffered_line() =~ /\S/;
+    return if $self->_has_buffer() && ! $self->_previous_line_was_empty();
 
     $self->_debug_parse_result(
         $line,
@@ -232,14 +279,117 @@ sub _match_horizontal_rule {
     return 1;
 }
 
+sub _match_blockquote {
+    my $self = shift;
+    my $line = shift;
+
+    my $starting_spaces = $self->_list_level * 4;
+
+    return unless $line =~ / \G
+                             ^
+                             [ ]{$starting_spaces}  # one indent level per list level
+                             (?: [ ]{,3} )?         # up to 3 spaces
+                             (>(?:\s*>)?)
+                             ([^\n]+)
+                           /xm;
+
+    my $bq   = $1;
+    my $text = $2;
+
+    my $level = $bq =~ tr/>/>/;
+
+    $self->_flush_buffer()
+        if $level != $self->_blockquote_level();
+
+    $self->_debug_parse_result(
+        $line,
+        'blockquote',
+        [ level => $level ],
+    ) if $self->debug();
+
+    if ( $level > $self->_blockquote_level() ) {
+        $self->_start_blockquote()
+            for $self->_blockquote_level() + 1 .. $level;
+    }
+    elsif ( $level < $self->_blockquote_level() ) {
+        $self->_end_blockquote() for $level + 1 .. $self->_blockquote_level();
+    }
+
+    $self->_set_blockquote_level($level);
+
+    $text =~ s/^\s+//;
+
+    $self->_parse_line_contents($text);
+
+    return 1;
+}
+
 sub _finalize_document {
     my $self = shift;
 
-    return unless $self->_has_buffer;
+    $self->_flush_buffer('always');
+
+    $self->_close_open_blocks();
+}
+
+sub _flush_buffer {
+    my $self   = shift;
+    my $always = shift;
+
+    return unless $self->_has_buffer();
+
+    return unless $always || ! $self->_previous_line_was_empty();
+
+    if ( $self->debug() ) {
+        if ( $always ) {
+            $self->_print_debug("Flushing the buffer unconditionally\n")
+        }
+        else {
+            $self->_print_debug("Flushing the buffer because the previous line had content\n");
+        }
+    }
 
     $self->_paragraph( $self->_buffered_lines() );
 
     $self->_clear_buffer();
+}
+
+sub _maybe_close_open_blocks {
+    my $self = shift;
+    my $line = shift;
+
+    return
+        unless $self->_previous_line_was_empty()
+            && $line =~ /^[ ]{0,3}\S/;
+
+    $self->_print_debug("Found content after an empty line, checking for open blocks which need closing\n$line\n")
+        if $self->debug();
+
+    if ( $self->_blockquote_level() ) {
+        return if $line =~ /^>(\s*>)*\s*\S/;
+
+        $self->_print_debug("  ... closing any open blockquotes\n")
+            if $self->debug();
+
+        $self->_close_open_blockquotes();
+    }
+}
+
+sub _close_open_blocks {
+    my $self = shift;
+
+    $self->_close_open_blockquotes();
+}
+
+sub _close_open_blockquotes {
+    my $self = shift;
+
+    return unless $self->_blockquote_level();
+
+    $self->_end_blockquote()
+        for 1 .. $self->_blockquote_level();
+
+    $self->_set_blockquote_level(0);
 }
 
 sub _header {
@@ -293,6 +443,24 @@ sub _horizontal_rule {
     $self->handler()->handle_event(
         type => 'inline',
         name => 'hr',
+    );
+}
+
+sub _start_blockquote {
+    my $self = shift;
+
+    $self->handler()->handle_event(
+        type => 'start',
+        name => 'blockquote',
+    );
+}
+
+sub _end_blockquote {
+    my $self = shift;
+
+    $self->handler()->handle_event(
+        type => 'end',
+        name => 'blockquote',
     );
 }
 

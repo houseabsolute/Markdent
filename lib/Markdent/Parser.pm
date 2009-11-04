@@ -121,8 +121,6 @@ sub parse {
 
     $self->_block_parser()->parse_document(\$text);
 
-    $self->_block_parser()->_finalize_document();
-
     $self->handler()->handle_event(
         type => 'end',
         name => 'document',
@@ -138,6 +136,10 @@ sub _clean_text {
     ${$text} =~ s/\r\n?/\n/g;
     ${$text} .= "\n"
         unless substr( ${$text}, -1, 1 ) eq "\n";
+
+    # XXX - not sure if this is really okay, but it does make parsing simpler
+    # ;)
+    ${$text} =~ s/\t/    /g;
 
     return;
 }

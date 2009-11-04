@@ -61,11 +61,18 @@ sub end_header {
 }
 
 sub start_blockquote {
+    my $self  = shift;
 
+    my $bq = Tree::Simple->new( { type => 'blockquote' } );
+    $self->_current_node()->addChild($bq);
+
+    $self->_set_current_node($bq);
 }
 
 sub end_blockquote {
+    my $self  = shift;
 
+    $self->_set_current_up_one_level();
 }
 
 sub start_ordered_list {
@@ -95,10 +102,10 @@ sub end_preformatted {
 sub start_paragraph {
     my $self  = shift;
 
-    my $header = Tree::Simple->new( { type => 'paragraph' } );
-    $self->_current_node()->addChild($header);
+    my $para = Tree::Simple->new( { type => 'paragraph' } );
+    $self->_current_node()->addChild($para);
 
-    $self->_set_current_node($header);
+    $self->_set_current_node($para);
 }
 
 sub end_paragraph {
