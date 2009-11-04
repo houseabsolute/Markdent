@@ -270,3 +270,37 @@ EOF
 
     parse_ok( $text, $expect, 'text with a link, link text has markup and nested brackets' );
 }
+
+{
+    my $text = <<'EOF';
+Some text with [*A link*] and more text.
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Some text with ',
+            }, {
+                type        => 'link',
+                id          => '*A link*',
+                implicit_id => 1,
+            },
+            [
+                { type => 'emphasis' },
+                [
+                    {
+                        type => 'text',
+                        text => 'A link',
+                    },
+                ],
+            ], {
+                type => 'text',
+                text => ' and more text.',
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'text with a link by id, implicit id contains markup' );
+}
