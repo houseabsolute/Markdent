@@ -11,7 +11,7 @@ use Test::Markdent;
 
 {
     my $text = <<'EOF';
-Some [*em text*]
+Some %*em text*%
 EOF
 
     my $expect = [
@@ -19,7 +19,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Some [ ',
+                text => 'Some %',
             }, {
                 type => 'emphasis',
             },
@@ -29,6 +29,10 @@ EOF
                     text => 'em text',
                 },
             ],
+         {
+          type => 'text',
+          text => '%',
+         },
         ],
     ];
 
