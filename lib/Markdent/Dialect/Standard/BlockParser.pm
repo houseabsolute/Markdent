@@ -59,6 +59,13 @@ has _list_level => (
     init_arg => undef,
 );
 
+has _in_preformatted => (
+    is       => 'rw',
+    isa      => Bool,
+    default  => 0,
+    init_arg => undef,
+);
+
 has _previous_line_was_empty => (
     is       => 'rw',
     isa      => Bool,
@@ -160,6 +167,8 @@ sub _parse_line_contents {
 
     $self->_match_blockquote($line) and return 1;
 
+    $self->_match_preformatted($line) and return 1;
+
     $self->_add_line_to_buffer($line);
 
     return;
@@ -170,6 +179,8 @@ sub _match_empty_line {
     my $line = shift;
 
     return unless $self->_line_is_empty($line);
+
+    return if $self->_in_preformatted();
 
     $self->_print_debug("Found an empty line, flushing the buffer\n")
         if $self->debug();
@@ -279,16 +290,48 @@ sub _match_horizontal_rule {
     return 1;
 }
 
+sub _match_preformatted {
+    my $self = shift;
+    my $line = shift;
+
+    my $leading_space = $self->_list_level * 4;
+
+    return unless $line =~ / ^
+                             (
+                               [ ]{$leading_space}
+                               [ ]{4,}
+                               .+
+                             )
+                           /xm;
+
+    my $text = $1;
+
+    $self->_flush_buffer()
+        unless $self->_in_preformatted();
+
+    $self->_debug_parse_result(
+        $line,
+        'preformatted',
+    ) if $self->debug();
+
+    $text =~ s/^[ ]{$leading_space}[ ]{4}//;
+
+    $self->_set_in_preformatted(1);
+
+    $self->_add_line_to_buffer($text);
+
+    return 1;
+}
+
 sub _match_blockquote {
     my $self = shift;
     my $line = shift;
 
-    my $starting_spaces = $self->_list_level * 4;
+    my $leading_space = $self->_list_level * 4;
 
-    return unless $line =~ / \G
-                             ^
-                             [ ]{$starting_spaces}  # one indent level per list level
-                             (?: [ ]{,3} )?         # up to 3 spaces
+    return unless $line =~ / ^
+                             [ ]{$leading_space}  # one indent level per list level
+                             (?: [ ]{,3} )?       # up to 3 spaces
                              (>(?:\s*>)?)
                              ([^\n]+)
                            /xm;
@@ -302,7 +345,7 @@ sub _match_blockquote {
         if $level != $self->_blockquote_level();
 
     $self->_debug_parse_result(
-        $line,
+         $line,
         'blockquote',
         [ level => $level ],
     ) if $self->debug();
@@ -327,9 +370,11 @@ sub _match_blockquote {
 sub _finalize_document {
     my $self = shift;
 
+    $self->_close_open_preformatted();
+
     $self->_flush_buffer('always');
 
-    $self->_close_open_blocks();
+    $self->_close_open_blockquotes();
 }
 
 sub _flush_buffer {
@@ -365,6 +410,16 @@ sub _maybe_close_open_blocks {
     $self->_print_debug("Found content after an empty line, checking for open blocks which need closing\n$line\n")
         if $self->debug();
 
+    if ( $self->_in_preformatted() ) {
+        return if $line =~ /^\s*$/;
+
+        my $leading_space = $self->_list_level() * 4;
+
+        return if $line =~ /^[ ]{$leading_space}[ ]{4,}\S/;
+
+        $self->_close_open_preformatted();
+    }
+
     if ( $self->_blockquote_level() ) {
         return if $line =~ /^>(\s*>)*\s*\S/;
 
@@ -375,10 +430,32 @@ sub _maybe_close_open_blocks {
     }
 }
 
-sub _close_open_blocks {
+sub _close_open_preformatted {
     my $self = shift;
 
-    $self->_close_open_blockquotes();
+    return unless $self->_in_preformatted();
+
+    $self->handler()->handle_event(
+        type       => 'start',
+        name       => 'preformatted',
+    );
+
+    my @buffer = $self->_buffered_lines();
+    pop @buffer while defined $buffer[-1] && $self->_line_is_empty( $buffer[-1] );
+
+    $self->handler()->handle_event( type => 'inline',
+                                    name => 'text',
+                                    attributes => { content => $_ . "\n" } )
+        for @buffer;
+
+    $self->_clear_buffer();
+
+    $self->handler()->handle_event(
+        type       => 'end',
+        name       => 'preformatted',
+    );
+
+    $self->_set_in_preformatted(0);
 }
 
 sub _close_open_blockquotes {

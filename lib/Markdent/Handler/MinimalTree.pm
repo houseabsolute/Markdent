@@ -92,11 +92,18 @@ sub end_unordered_list {
 }
 
 sub start_preformatted {
+    my $self  = shift;
 
+    my $pre = Tree::Simple->new( { type => 'preformatted' } );
+    $self->_current_node()->addChild($pre);
+
+    $self->_set_current_node($pre);
 }
 
 sub end_preformatted {
+    my $self  = shift;
 
+    $self->_set_current_up_one_level();
 }
 
 sub start_paragraph {
