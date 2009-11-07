@@ -9,49 +9,49 @@ use lib 't/lib';
 
 use Test::Markdent;
 
-# {
-#     my $text = <<'EOF';
-#     preformatted line
-# EOF
+{
+    my $text = <<'EOF';
+    preformatted line
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'preformatted',
-#         },
-#         [
-#             {
-#                 type => 'text',
-#                 text => "preformatted line\n",
-#             }
-#         ],
-#     ];
+    my $expect = [
+        {
+            type => 'preformatted',
+        },
+        [
+            {
+                type => 'text',
+                text => "preformatted line\n",
+            }
+        ],
+    ];
 
-#     parse_ok( $text, $expect, 'one-line preformatted' );
-# }
+    parse_ok( $text, $expect, 'one-line preformatted' );
+}
 
-# {
-#     my $text = <<'EOF';
-#     pre 1
-#       pre 2
-# EOF
+{
+    my $text = <<'EOF';
+    pre 1
+      pre 2
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'preformatted',
-#         },
-#         [
-#             {
-#                 type => 'text',
-#                 text => "pre 1\n",
-#             }, {
-#                 type => 'text',
-#                 text => "  pre 2\n",
-#             }
-#         ],
-#     ];
+    my $expect = [
+        {
+            type => 'preformatted',
+        },
+        [
+            {
+                type => 'text',
+                text => "pre 1\n",
+            }, {
+                type => 'text',
+                text => "  pre 2\n",
+            }
+        ],
+    ];
 
-#     parse_ok( $text, $expect, 'two pre lines, second has 2-space indentation' );
-# }
+    parse_ok( $text, $expect, 'two pre lines, second has 2-space indentation' );
+}
 
 {
     my $text = <<'EOF';
@@ -119,7 +119,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'regular text',
+                text => "regular text\n",
             },
         ],
     ];

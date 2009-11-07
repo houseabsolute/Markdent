@@ -443,10 +443,11 @@ sub _close_open_preformatted {
     my @buffer = $self->_buffered_lines();
     pop @buffer while defined $buffer[-1] && $self->_line_is_empty( $buffer[-1] );
 
-    $self->handler()->handle_event( type => 'inline',
-                                    name => 'text',
-                                    attributes => { content => $_ . "\n" } )
-        for @buffer;
+    $self->handler()->handle_event(
+        type       => 'inline',
+        name       => 'text',
+        attributes => { content => $_ }
+    ) for @buffer;
 
     $self->_clear_buffer();
 
