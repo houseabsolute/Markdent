@@ -24,6 +24,9 @@ EOF
                 type     => 'image',
                 uri      => 'http://www.example.com/example.jpg',
                 alt_text => 'My Alt',
+            }, {
+                type => 'text',
+                text => "\n",
             },
         ]
     ];
@@ -44,6 +47,9 @@ EOF
                 uri      => 'http://www.example.com/example.jpg',
                 alt_text => 'My Alt',
                 title    => 'A title',
+            }, {
+                type => 'text',
+                text => "\n",
             },
         ]
     ];
@@ -64,6 +70,9 @@ EOF
                 type     => 'image',
                 id       => 'image',
                 alt_text => 'My Alt',
+            }, {
+                type => 'text',
+                text => "\n",
             },
         ]
     ];
@@ -83,6 +92,9 @@ EOF
                 type     => 'image',
                 id       => 'image',
                 alt_text => 'My Alt',
+            }, {
+                type => 'text',
+                text => "\n",
             },
         ]
     ];
@@ -103,6 +115,9 @@ EOF
                 id          => 'My Alt',
                 implicit_id => 1,
                 alt_text    => 'My Alt',
+            }, {
+                type => 'text',
+                text => "\n",
             },
         ]
     ];
@@ -123,6 +138,9 @@ EOF
                 id          => 'My Alt',
                 implicit_id => 1,
                 alt_text    => 'My Alt',
+            }, {
+                type => 'text',
+                text => "\n",
             },
         ]
     ];

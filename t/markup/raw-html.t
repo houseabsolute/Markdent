@@ -33,7 +33,7 @@ EOF
                 html => q{</span>},
             }, {
                 type => 'text',
-                text => ' my text!',
+                text => " my text!\n",
             },
         ],
     ];
@@ -65,7 +65,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Some text',
+                text => "Some text\n",
             },
         ], {
             type => 'html_block',
@@ -102,7 +102,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Some text',
+                text => "Some text\n",
             },
         ], {
             type => 'html_block',
@@ -159,18 +159,21 @@ EOF
         },
         [
             {
-                'text' => 'Some text ',
+                'text' => "Some text\n",
                 'type' => 'text'
             }, {
                 'html' => '<div>',
                 'type' => 'html'
             }, {
-                'text' => ' An arbitrary chunk of html. ',
+                'text' => "\nAn arbitrary chunk of html.\n",
                 'type' => 'text'
             }, {
                 'html' => '</div>',
                 'type' => 'html'
-            }
+            }, {
+                type => 'text',
+                text => "\n",
+            },
         ]
     ];
 
@@ -200,13 +203,13 @@ EOF
                 'html' => '<div>',
                 'type' => 'html'
             }, {
-                'text' => ' An arbitrary chunk of html. ',
+                'text' => "\nAn arbitrary chunk of html.\n",
                 'type' => 'text'
             }, {
                 'html' => '</div>',
                 'type' => 'html'
             }, {
-                'text' => ' Some text',
+                'text' => "\nSome text\n",
                 'type' => 'text'
             },
         ]

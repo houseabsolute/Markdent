@@ -38,7 +38,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 1',
+                text => "Header 1\n",
             },
         ], {
             type  => 'header',
@@ -47,7 +47,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 2',
+                text => "Header 2\n",
             },
         ], {
             type  => 'header',
@@ -56,7 +56,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 1A',
+                text => "Header 1A\n",
             },
         ], {
             type  => 'header',
@@ -65,7 +65,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 2A',
+                text => "Header 2A\n",
             },
         ], {
             type  => 'header',
@@ -74,7 +74,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 3',
+                text => "Header 3\n",
             },
         ], {
             type  => 'header',
@@ -83,7 +83,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 4',
+                text => "Header 4\n",
             },
         ], {
             type  => 'header',
@@ -92,7 +92,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 5',
+                text => "Header 5\n",
             },
         ], {
             type  => 'header',
@@ -101,7 +101,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'Header 6',
+                text => "Header 6\n",
             },
         ],
     ];
@@ -133,7 +133,10 @@ EOF
                     type => 'text',
                     text => 'with em',
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ], {
             type  => 'header',
             level => 3,
@@ -149,7 +152,10 @@ EOF
                     type => 'text',
                     text => 'with strong',
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ],
     ];
 

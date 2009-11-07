@@ -25,7 +25,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'blockquote',
+                    text => "blockquote\n",
                 }
             ],
         ],
@@ -51,7 +51,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'blockquote and more',
+                    text => "blockquote\nand more\n",
                 }
             ],
         ],
@@ -78,7 +78,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'blockquote',
+                    text => "blockquote\n",
                 }
             ],
             { type => 'blockquote' },
@@ -89,7 +89,7 @@ EOF
                 [
                     {
                         type => 'text',
-                        text => 'level 2',
+                        text => "level 2\n",
                     }
                 ],
             ],
@@ -99,7 +99,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'level 1',
+                    text => "level 1\n",
                 }
             ],
         ],
@@ -127,7 +127,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'blockquote',
+                    text => "blockquote\n",
                 }
             ],
             { type => 'blockquote' },
@@ -138,7 +138,7 @@ EOF
                 [
                     {
                         type => 'text',
-                        text => 'level 2',
+                        text => "level 2\n",
                     }
                 ],
             ],
@@ -148,7 +148,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'plain text',
+                text => "plain text\n",
             },
         ],
     ];
@@ -168,22 +168,21 @@ EOF
         },
         [
             {
-                type => 'header',
-             level => 2,
+                type  => 'header',
+                level => 2,
             },
             [
                 {
                     type => 'text',
-                    text => 'bq header',
+                    text => "bq header\n",
                 }
-            ],
-            {
+            ], {
                 type => 'paragraph',
             },
             [
                 {
                     type => 'text',
-                    text => 'normal bq',
+                    text => "normal bq\n",
                 }
             ],
         ],
@@ -211,7 +210,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'blockquote',
+                    text => "blockquote\n",
                 }
             ],
             { type => 'blockquote' },
@@ -222,7 +221,7 @@ EOF
                 [
                     {
                         type => 'text',
-                        text => 'level 2',
+                        text => "level 2\n",
                     }
                 ],
             ],
@@ -232,7 +231,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'plain text',
+                text => "plain text\n",
             },
         ],
     ];
@@ -273,9 +272,12 @@ EOF
                 [
                     {
                         type => 'text',
-                        text => 'spanning lines',
+                        text => "spanning\nlines",
                     }
-                ],
+                ], {
+                    type => 'text',
+                    text => "\n",
+                }
             ],
         ],
     ];
@@ -299,7 +301,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'bq with   an >-less line and a proper line',
+                    text => "bq with\n  an >-less line\nand a proper line\n",
                 },
             ],
         ],
@@ -325,14 +327,14 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'bq with   an >-less line',
+                    text => "bq with\n  an >-less line\n",
                 },
             ],
             { type => 'paragraph' },
             [
                 {
                     type => 'text',
-                    text => 'new para',
+                    text => "new para\n",
                 },
             ],
         ],

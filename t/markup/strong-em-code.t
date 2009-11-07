@@ -28,11 +28,10 @@ EOF
                     type => 'text',
                     text => 'em text',
                 },
-            ],
-         {
-          type => 'text',
-          text => '%',
-         },
+            ], {
+                type => 'text',
+                text => "%\n",
+            },
         ],
     ];
 
@@ -58,7 +57,10 @@ EOF
                     type => 'text',
                     text => 'code ` with backtick',
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ],
     ];
 

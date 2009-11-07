@@ -81,7 +81,7 @@ sub parse_document {
 
     $self->_hash_html_blocks($text);
 
-    my @lines = map { chomp; $_ } split /\n/, ${$text};
+    my @lines = map { $_ . "\n" } split /\n/, ${$text};
 
     for my $i ( 0 .. $#lines ) {
         my $line = $lines[$i];
@@ -222,7 +222,7 @@ sub _match_atx_header {
     my $self = shift;
     my $line = shift;
 
-    return unless $line =~ /^(\#{1,6})\s+(.+)/;
+    return unless $line =~ /^(\#{1,6})\s+(.+)/s;
 
     my $level       = length $1;
     my $header_text = $2;
@@ -302,7 +302,7 @@ sub _match_preformatted {
                                [ ]{4,}
                                .+
                              )
-                           /xm;
+                           /xms;
 
     my $text = $1;
 
@@ -362,7 +362,7 @@ sub _match_blockquote {
 
     $text =~ s/^\s+//;
 
-    $self->_parse_line_contents($text);
+    $self->_parse_line_contents( $text . "\n" );
 
     return 1;
 }
@@ -491,9 +491,8 @@ sub _header {
 
 sub _paragraph {
     my $self = shift;
-    my @lines = grep {/\S/} @_;
 
-    return unless @lines;
+    my @lines = $self->_buffered_lines();
 
     $self->_debug_parse_result(
         \@lines,
@@ -505,7 +504,8 @@ sub _paragraph {
         name => 'paragraph',
     );
 
-    my $text = join q{ }, @lines;
+    my $text = join q{}, @lines;
+
     $self->span_parser()->parse_markup($text);
 
     $self->handler()->handle_event(

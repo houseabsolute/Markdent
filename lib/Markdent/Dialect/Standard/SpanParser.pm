@@ -413,7 +413,7 @@ sub _match_plain_text {
                        |
                        \z                 #   or the end of the string
                      )
-                    /xgc;
+                    /xgcs;
 
     $self->_print_debug( "Interpreting as plain text\n\n[$1]\n" )
         if $self->debug();

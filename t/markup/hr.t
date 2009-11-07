@@ -83,7 +83,7 @@ EOF
         [
             {
                 type => 'text',
-                text => 'not an hr * * * * * * * just some text',
+                text => "not an hr\n* * * * * * *\njust some text\n",
             },
         ],
     ];

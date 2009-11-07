@@ -25,7 +25,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' em*',
+                text => " em*\n",
             },
         ],
     ];
@@ -51,7 +51,10 @@ EOF
                     type => 'text',
                     text => 'good em',
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ],
     ];
 
@@ -76,7 +79,10 @@ EOF
                     type => 'text',
                     text => 'good em',
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ],
     ];
 
@@ -103,7 +109,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and ``bad code',
+                text => " and ``bad code\n",
             },
         ],
     ];
@@ -136,7 +142,10 @@ EOF
                         text => 'good code',
                     },
                 ],
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ],
     ];
 
@@ -168,7 +177,10 @@ EOF
                     type => 'text',
                     text => ' code``',
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ],
     ];
 

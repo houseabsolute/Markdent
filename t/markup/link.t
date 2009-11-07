@@ -31,7 +31,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -62,7 +62,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -92,7 +92,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -122,7 +122,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -153,7 +153,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -184,7 +184,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -225,7 +225,7 @@ EOF
                 },
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
@@ -262,9 +262,12 @@ EOF
                     },
                 ], {
                     type => 'text',
-                    text => ' markup] and brackets',
+                    text => " markup] and brackets",
                 },
-            ],
+            ], {
+                type => 'text',
+                text => "\n",
+            },
         ]
     ];
 
@@ -297,7 +300,7 @@ EOF
                 ],
             ], {
                 type => 'text',
-                text => ' and more text.',
+                text => " and more text.\n",
             },
         ]
     ];
