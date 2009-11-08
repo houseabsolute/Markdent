@@ -100,6 +100,8 @@ sub _possible_span_matches {
 
     my @look_for;
 
+    # Strong needs to be checked before emphasis because emphasis is a shorter
+    # version of strong, so it always matches where strong _could_ match.
     for my $type (qw( strong emphasis code )) {
         if ( my $event = $self->_start_event_for_span($type) ) {
             push @look_for,
