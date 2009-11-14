@@ -307,3 +307,27 @@ EOF
 
     parse_ok( $text, $expect, 'text with a link by id, implicit id contains markup' );
 }
+
+{
+    my $text = <<'EOF';
+An auto link <http://www.example.com/> and more text
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'An auto link ',
+            }, {
+                type => 'auto_link',
+                uri  => 'http://www.example.com/',
+            }, {
+                type => 'text',
+                text => " and more text\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'text with an auto link' );
+}

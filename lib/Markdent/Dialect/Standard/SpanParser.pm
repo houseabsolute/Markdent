@@ -112,11 +112,11 @@ sub _possible_span_matches {
         }
     }
 
-    push @look_for, 'html';
-
     unless ( $self->_start_event_for_span('link') ) {
-        push @look_for, qw( link image );
+        push @look_for, qw( auto_link link image );
     }
+
+    push @look_for, 'html';
 
     return @look_for;
 }
@@ -264,19 +264,19 @@ sub _match_delimiter_end {
     return 1;
 }
 
-sub _match_html {
+sub _match_auto_link {
     my $self = shift;
     my $text = shift;
 
-    return unless ${$text} =~ /\G (< [^>]+ >)/xgc;
+    return unless ${$text} =~ /\G <( (?:https?|mailto|ftp): [^>]+ ) >/xgc;
 
-    my $event = Markdent::Event->new(
+    my $link = Markdent::Event->new(
         type       => 'inline',
-        name       => 'html',
-        attributes => { content => $1 },
+        name       => 'auto_link',
+        attributes => { uri => $1 },
     );
 
-    $self->_markup_event($event);
+    $self->_markup_event($link);
 
     return 1;
 }
@@ -393,6 +393,23 @@ sub _link_match_results {
     }
 
     return ( $text, \%attr );
+}
+
+sub _match_html {
+    my $self = shift;
+    my $text = shift;
+
+    return unless ${$text} =~ /\G (< [^>]+ >)/xgc;
+
+    my $event = Markdent::Event->new(
+        type       => 'inline',
+        name       => 'html',
+        attributes => { content => $1 },
+    );
+
+    $self->_markup_event($event);
+
+    return 1;
 }
 
 sub _match_plain_text {

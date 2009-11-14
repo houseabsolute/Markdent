@@ -9,73 +9,86 @@ use lib 't/lib';
 
 use Test::Markdent;
 
+# {
+#     my $text = <<'EOF';
+
+# ---
+
+# EOF
+
+#     my $expect = [
+#         {
+#             type => 'hr',
+#         },
+#     ];
+
+#     parse_ok( $text, $expect, 'hr preceded by blank line' );
+# }
+
+# {
+#     my $text = <<'EOF';
+# ---
+# EOF
+
+#     my $expect = [
+#         {
+#             type => 'hr',
+#         },
+#     ];
+
+#     parse_ok( $text, $expect, 'hr at beginning of document' );
+# }
+
+# {
+#     my $text = <<'EOF';
+
+# * *   ***
+
+# EOF
+
+#     my $expect = [
+#         {
+#             type => 'hr',
+#         },
+#     ];
+
+#     parse_ok( $text, $expect, 'hr preceded by blank line' );
+# }
+
+
+# {
+#     my $text = <<'EOF';
+# ************************
+# EOF
+
+#     my $expect = [
+#         {
+#             type => 'hr',
+#         },
+#     ];
+
+#     parse_ok( $text, $expect, 'hr at beginning of document' );
+# }
+
+# {
+#     my $text = <<'EOF';
+#    ************************
+# EOF
+
+#     my $expect = [
+#         {
+#             type => 'hr',
+#         },
+#     ];
+
+#     parse_ok( $text, $expect, 'hr with three leading spaces' );
+# }
+
 {
     my $text = <<'EOF';
-
----
-
-EOF
-
-    my $expect = [
-        {
-            type => 'hr',
-        },
-    ];
-
-    parse_ok( $text, $expect, 'hr preceded by blank line' );
-}
-
-
-{
-    my $text = <<'EOF';
----
-EOF
-
-    my $expect = [
-        {
-            type => 'hr',
-        },
-    ];
-
-    parse_ok( $text, $expect, 'hr at beginning of document' );
-}
-
-{
-    my $text = <<'EOF';
-
-* *   ***
-
-EOF
-
-    my $expect = [
-        {
-            type => 'hr',
-        },
-    ];
-
-    parse_ok( $text, $expect, 'hr preceded by blank line' );
-}
-
-
-{
-    my $text = <<'EOF';
-************************
-EOF
-
-    my $expect = [
-        {
-            type => 'hr',
-        },
-    ];
-
-    parse_ok( $text, $expect, 'hr at beginning of document' );
-}
-
-{
-    my $text = <<'EOF';
-not an hr
+still an hr
 * * * * * * *
-just some text
+and some text
 EOF
 
     my $expect = [
@@ -83,7 +96,15 @@ EOF
         [
             {
                 type => 'text',
-                text => "not an hr\n* * * * * * *\njust some text\n",
+                text => "still an hr\n",
+            },
+        ],
+        { type => 'hr' },
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "and some text\n",
             },
         ],
     ];

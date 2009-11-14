@@ -50,7 +50,38 @@ EOF
 </div>
 EOF
 
-    chomp $html;
+    my $text = <<"EOF";
+Some text
+
+$html
+EOF
+
+    my $expect = [
+        {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => "Some text\n",
+            },
+        ], {
+            type => 'html_block',
+            html => $html,
+        },
+    ];
+
+    parse_ok( $text, $expect, 'html in a block' );
+}
+
+{
+    my $html = <<'EOF';
+<div class="foo">
+  <p>
+    An arbitrary chunk of html.
+  </p>
+</div>
+EOF
 
     my $text = <<"EOF";
 Some text
@@ -87,8 +118,6 @@ EOF
 </div>
 EOF
 
-    chomp $html;
-
     my $text = <<"EOF";
 Some text
 
@@ -124,8 +153,6 @@ EOF
 </div>
 EOF
 
-    chomp $html;
-
     my $text = $html;
 
     my $expect = [
@@ -138,15 +165,12 @@ EOF
     parse_ok( $text, $expect, 'html as sole content' );
 }
 
-
 {
     my $html = <<'EOF';
 <div>
 An arbitrary chunk of html.
 </div>
 EOF
-
-    chomp $html;
 
     my $text = <<"EOF";
 Some text
@@ -224,8 +248,6 @@ EOF
 An arbitrary chunk of html.
 </div>
 EOF
-
-    chomp $html;
 
     my $text = <<"EOF";
 $html

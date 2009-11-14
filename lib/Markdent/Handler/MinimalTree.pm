@@ -75,35 +75,57 @@ sub end_blockquote {
     $self->_set_current_up_one_level();
 }
 
-sub start_ordered_list {
-
-}
-
-sub end_ordered_list {
-
-}
-
 sub start_unordered_list {
+    my $self  = shift;
 
+    my $bq = Tree::Simple->new( { type => 'unordered_list' } );
+    $self->_current_node()->addChild($bq);
+
+    $self->_set_current_node($bq);
 }
 
 sub end_unordered_list {
-
-}
-
-sub start_preformatted {
-    my $self  = shift;
-
-    my $pre = Tree::Simple->new( { type => 'preformatted' } );
-    $self->_current_node()->addChild($pre);
-
-    $self->_set_current_node($pre);
-}
-
-sub end_preformatted {
     my $self  = shift;
 
     $self->_set_current_up_one_level();
+}
+
+sub start_ordered_list {
+    my $self  = shift;
+
+    my $bq = Tree::Simple->new( { type => 'ordered_list' } );
+    $self->_current_node()->addChild($bq);
+
+    $self->_set_current_node($bq);
+}
+
+sub end_ordered_list {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub start_list_item {
+    my $self  = shift;
+
+    my $para = Tree::Simple->new( { type => 'list_item' } );
+    $self->_current_node()->addChild($para);
+
+    $self->_set_current_node($para);
+}
+
+sub end_list_item {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub preformatted {
+    my $self = shift;
+    my ($text) = validated_list( \@_, content => { isa => Str }, );
+
+    my $pre_node = Tree::Simple->new( { type => 'preformatted', text => $text } );
+    $self->_current_node()->addChild($pre_node);
 }
 
 sub start_paragraph {
@@ -155,6 +177,17 @@ sub end_code {
     my $self = shift;
 
     $self->_set_current_up_one_level();
+}
+
+sub auto_link {
+    my $self = shift;
+    my %p    = validated_hash(
+        \@_,
+        uri         => { isa => Str,  optional => 1 },
+    );
+
+    my $link_node = Tree::Simple->new( { type => 'auto_link', %p } );
+    $self->_current_node()->addChild($link_node);
 }
 
 sub start_link {
@@ -216,8 +249,8 @@ sub image {
         implicit_id => { isa => Bool, optional => 1 },
     );
 
-    my $hr_node = Tree::Simple->new( { type => 'image', %p } );
-    $self->_current_node()->addChild($hr_node);
+    my $image_node = Tree::Simple->new( { type => 'image', %p } );
+    $self->_current_node()->addChild($image_node);
 }
 
 sub hr {

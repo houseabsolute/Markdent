@@ -13,6 +13,49 @@ use Test::Markdent;
     my $text = <<'EOF';
 Header 1
 ========
+EOF
+
+    my $expect = [
+        {
+            type  => 'header',
+            level => 1,
+        },
+        [
+            {
+                type => 'text',
+                text => "Header 1\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'Single two-line header' );
+}
+
+{
+    my $text = <<'EOF';
+# Header 1
+EOF
+
+    my $expect = [
+        {
+            type  => 'header',
+            level => 1,
+        },
+        [
+            {
+                type => 'text',
+                text => "Header 1\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'Single atx header' );
+}
+
+{
+    my $text = <<'EOF';
+Header 1
+========
 
 Header 2
 --------
@@ -160,4 +203,45 @@ EOF
     ];
 
     parse_ok( $text, $expect, 'two-line header with em markup' );
+}
+
+{
+    my $text = <<'EOF';
+Header with no empty space after
+================
+### H3 with no empty space after
+a paragraph
+EOF
+
+    my $expect = [
+        {
+            type  => 'header',
+            level => 1,
+        },
+        [
+            {
+                type => 'text',
+                text => "Header with no empty space after\n",
+            },
+        ], {
+            type  => 'header',
+            level => 3,
+        },
+        [
+            {
+                type => 'text',
+                text => "H3 with no empty space after\n",
+            },
+        ], {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => "a paragraph\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'headers with no whitespace after' );
 }

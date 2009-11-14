@@ -17,13 +17,8 @@ EOF
     my $expect = [
         {
             type => 'preformatted',
-        },
-        [
-            {
-                type => 'text',
-                text => "preformatted line\n",
-            }
-        ],
+            text => "preformatted line\n",
+        }
     ];
 
     parse_ok( $text, $expect, 'one-line preformatted' );
@@ -35,19 +30,13 @@ EOF
       pre 2
 EOF
 
+    ( my $expect_text = $text ) =~ s/^[ ]{4}//g;
+
     my $expect = [
         {
             type => 'preformatted',
+            text => $expect_text,
         },
-        [
-            {
-                type => 'text',
-                text => "pre 1\n",
-            }, {
-                type => 'text',
-                text => "  pre 2\n",
-            }
-        ],
     ];
 
     parse_ok( $text, $expect, 'two pre lines, second has 2-space indentation' );
@@ -61,59 +50,38 @@ EOF
     pre 2
 EOF
 
+    ( my $expect_text = $text ) =~ s/^[ ]{4}//g;
+
     my $expect = [
         {
             type => 'preformatted',
+            text => $expect_text,
         },
-        [
-            {
-                type => 'text',
-                text => "pre 1\n",
-            }, {
-                type => 'text',
-                text => "\n",
-            }, {
-                type => 'text',
-                text => "\n",
-            }, {
-                type => 'text',
-                text => "pre 2\n",
-            }
-        ],
     ];
 
     parse_ok( $text, $expect, 'preformatted text includes empty lines' );
 }
 
 {
-    my $text = <<'EOF';
+    my $pre = <<'EOF';
     pre 1
 
 
     pre 2
+EOF
 
+    my $text = <<"EOF";
+$pre
 regular text
 EOF
+
+    ( my $expect_text = $pre ) =~ s/^[ ]{4}//g;
 
     my $expect = [
         {
             type => 'preformatted',
-        },
-        [
-            {
-                type => 'text',
-                text => "pre 1\n",
-            }, {
-                type => 'text',
-                text => "\n",
-            }, {
-                type => 'text',
-                text => "\n",
-            }, {
-                type => 'text',
-                text => "pre 2\n",
-            }
-        ], {
+            text => $expect_text,
+        }, {
             type => 'paragraph',
         },
         [
