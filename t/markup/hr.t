@@ -9,80 +9,80 @@ use lib 't/lib';
 
 use Test::Markdent;
 
-# {
-#     my $text = <<'EOF';
+{
+    my $text = <<'EOF';
 
-# ---
+---
 
-# EOF
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'hr',
-#         },
-#     ];
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
 
-#     parse_ok( $text, $expect, 'hr preceded by blank line' );
-# }
+    parse_ok( $text, $expect, 'hr preceded by blank line' );
+}
 
-# {
-#     my $text = <<'EOF';
-# ---
-# EOF
+{
+    my $text = <<'EOF';
+---
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'hr',
-#         },
-#     ];
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
 
-#     parse_ok( $text, $expect, 'hr at beginning of document' );
-# }
+    parse_ok( $text, $expect, 'hr at beginning of document' );
+}
 
-# {
-#     my $text = <<'EOF';
+{
+    my $text = <<'EOF';
 
-# * *   ***
+* *   ***
 
-# EOF
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'hr',
-#         },
-#     ];
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
 
-#     parse_ok( $text, $expect, 'hr preceded by blank line' );
-# }
+    parse_ok( $text, $expect, 'hr preceded by blank line' );
+}
 
 
-# {
-#     my $text = <<'EOF';
-# ************************
-# EOF
+{
+    my $text = <<'EOF';
+************************
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'hr',
-#         },
-#     ];
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
 
-#     parse_ok( $text, $expect, 'hr at beginning of document' );
-# }
+    parse_ok( $text, $expect, 'hr at beginning of document' );
+}
 
-# {
-#     my $text = <<'EOF';
-#    ************************
-# EOF
+{
+    my $text = <<'EOF';
+   ************************
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'hr',
-#         },
-#     ];
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
 
-#     parse_ok( $text, $expect, 'hr with three leading spaces' );
-# }
+    parse_ok( $text, $expect, 'hr with three leading spaces' );
+}
 
 {
     my $text = <<'EOF';

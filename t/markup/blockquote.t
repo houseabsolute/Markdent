@@ -9,152 +9,152 @@ use lib 't/lib';
 
 use Test::Markdent;
 
-# {
-#     my $text = <<'EOF';
-# > blockquote
-# EOF
+{
+    my $text = <<'EOF';
+> blockquote
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'blockquote',
-#         },
-#         [
-#             {
-#                 type => 'paragraph',
-#             },
-#             [
-#                 {
-#                     type => 'text',
-#                     text => "blockquote\n",
-#                 }
-#             ],
-#         ],
-#     ];
+    my $expect = [
+        {
+            type => 'blockquote',
+        },
+        [
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "blockquote\n",
+                }
+            ],
+        ],
+    ];
 
-#     parse_ok( $text, $expect, 'one-line blockquote' );
-# }
+    parse_ok( $text, $expect, 'one-line blockquote' );
+}
 
-# {
-#     my $text = <<'EOF';
-# > blockquote
-# > and more
-# EOF
+{
+    my $text = <<'EOF';
+> blockquote
+> and more
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'blockquote',
-#         },
-#         [
-#             {
-#                 type => 'paragraph',
-#             },
-#             [
-#                 {
-#                     type => 'text',
-#                     text => "blockquote\nand more\n",
-#                 }
-#             ],
-#         ],
-#     ];
+    my $expect = [
+        {
+            type => 'blockquote',
+        },
+        [
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "blockquote\nand more\n",
+                }
+            ],
+        ],
+    ];
 
-#     parse_ok( $text, $expect, 'two-line blockquote, one para' );
-# }
+    parse_ok( $text, $expect, 'two-line blockquote, one para' );
+}
 
-# {
-#     my $text = <<'EOF';
-# > blockquote
-# >> level 2
-# > level 1
-# EOF
+{
+    my $text = <<'EOF';
+> blockquote
+>> level 2
+> level 1
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'blockquote',
-#         },
-#         [
-#             {
-#                 type => 'paragraph',
-#             },
-#             [
-#                 {
-#                     type => 'text',
-#                     text => "blockquote\n",
-#                 }
-#             ],
-#             { type => 'blockquote' },
-#             [
-#                 {
-#                     type => 'paragraph',
-#                 },
-#                 [
-#                     {
-#                         type => 'text',
-#                         text => "level 2\n",
-#                     }
-#                 ],
-#             ],
-#             {
-#                 type => 'paragraph',
-#             },
-#             [
-#                 {
-#                     type => 'text',
-#                     text => "level 1\n",
-#                 }
-#             ],
-#         ],
-#     ];
+    my $expect = [
+        {
+            type => 'blockquote',
+        },
+        [
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "blockquote\n",
+                }
+            ],
+            { type => 'blockquote' },
+            [
+                {
+                    type => 'paragraph',
+                },
+                [
+                    {
+                        type => 'text',
+                        text => "level 2\n",
+                    }
+                ],
+            ],
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "level 1\n",
+                }
+            ],
+        ],
+    ];
 
-#     parse_ok( $text, $expect, 'three-line blockquote, middle line is 2nd level' );
-# }
+    parse_ok( $text, $expect, 'three-line blockquote, middle line is 2nd level' );
+}
 
-# {
-#     my $text = <<'EOF';
-# > blockquote
-# >> level 2
+{
+    my $text = <<'EOF';
+> blockquote
+>> level 2
 
-# plain text
-# EOF
+plain text
+EOF
 
-#     my $expect = [
-#         {
-#             type => 'blockquote',
-#         },
-#         [
-#             {
-#                 type => 'paragraph',
-#             },
-#             [
-#                 {
-#                     type => 'text',
-#                     text => "blockquote\n",
-#                 }
-#             ],
-#             { type => 'blockquote' },
-#             [
-#                 {
-#                     type => 'paragraph',
-#                 },
-#                 [
-#                     {
-#                         type => 'text',
-#                         text => "level 2\n",
-#                     }
-#                 ],
-#             ],
-#         ], {
-#             type => 'paragraph',
-#         },
-#         [
-#             {
-#                 type => 'text',
-#                 text => "plain text\n",
-#             },
-#         ],
-#     ];
+    my $expect = [
+        {
+            type => 'blockquote',
+        },
+        [
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "blockquote\n",
+                }
+            ],
+            { type => 'blockquote' },
+            [
+                {
+                    type => 'paragraph',
+                },
+                [
+                    {
+                        type => 'text',
+                        text => "level 2\n",
+                    }
+                ],
+            ],
+        ], {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => "plain text\n",
+            },
+        ],
+    ];
 
-#     parse_ok( $text, $expect, 'two-line blockquote, ends at 2nd level, followed by plain paragraph' );
-# }
+    parse_ok( $text, $expect, 'two-line blockquote, ends at 2nd level, followed by plain paragraph' );
+}
 
 {
     my $text = <<'EOF';
