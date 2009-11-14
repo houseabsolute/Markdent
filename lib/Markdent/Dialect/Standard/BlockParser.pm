@@ -302,14 +302,31 @@ sub _match_blockquote {
 
     return unless ${$text} =~ / \G
                                 $BlockStart
-                                ((?:
+                                (
                                   ^
-                                  > \p{SpaceSeparator}*
+                                  >
+                                  \p{SpaceSeparator}*
                                   \S
-                                  .+
-                                  \n
-                                )+)
-                                $BlockEnd
+                                  (?:
+                                    .*
+                                    \n
+                                  )+?
+                                )
+                                (?=
+                                  $EmptyLine  # ... an empty line
+                                  ^
+                                  (?=
+                                    \S            # ... followed by content in column 1
+                                  )
+                                  (?!             # ... which is not
+                                    >             # ... a blockquote
+                                    \p{SpaceSeparator}*
+                                    \S
+                                  )
+                                  |
+                                  \s*         # or end of the document
+                                  \z
+                                )
                               /xmgc;
 
     my $bq = $1;
@@ -347,7 +364,7 @@ sub _match_blockquote {
 my $PreLine = qr/ ^
                   \p{spaceSeparator}{4,}
                   \S
-                  .+
+                  .*
                   \n
                 /xm;
 
@@ -513,7 +530,7 @@ sub _match_list_item {
                                   ^
                                   \p{SpaceSeparator}*
                                   \S
-                                  .+
+                                  .*
                                   \n
                                 )+?)
                                 (?=
@@ -524,7 +541,7 @@ sub _match_list_item {
                                   ^
                                   > \p{SpaceSeparator}*
                                   \S
-                                  .+
+                                  .*
                                   \n
                                   |
                                   \z
@@ -554,7 +571,7 @@ sub _match_paragraph {
                                   ^
                                   \p{SpaceSeparator}*
                                   \S
-                                  .+
+                                  .*
                                   \n
                                 )+?)
                                 (?:
