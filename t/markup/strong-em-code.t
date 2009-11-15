@@ -66,3 +66,32 @@ EOF
 
     parse_ok( $text, $expect, 'code marked with `` containing a single backtick' );
 }
+
+{
+    my $text = <<'EOF';
+Do not look for `<html> in` code
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Do not look for ',
+            }, {
+                type => 'code',
+            },
+            [
+                {
+                    type => 'text',
+                    text => '<html> in',
+                },
+            ], {
+                type => 'text',
+                text => " code\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'code containing html' );
+}
