@@ -288,3 +288,91 @@ EOF
 
     parse_ok( $text, $expect, 'unordered list with first item having two paragraphs followed by regular paragraph' );
 }
+
+{
+    my $text = <<'EOF';
+*   Abacus
+    * answer
+*   Bubbles
+    1.  bunk
+    2.  bupkis
+        * BELITTLER
+    3. burper
+*   Cunning
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "Abacus\n",
+                },
+                { type => 'unordered_list' },
+                [
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "answer\n",
+                        },
+                    ],
+                ],
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "Bubbles\n",
+                },
+                { type => 'ordered_list' },
+                [
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "bunk\n",
+                        },
+                    ],
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "bupkis\n",
+                        },
+                        { type => 'unordered_list' },
+                        [
+                            { type => 'list_item' },
+                            [
+                                {
+                                    type => 'text',
+                                    text => "BELITTLER\n",
+                                },
+                            ],
+                        ],
+                    ],
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "burper\n",
+                        },
+                    ],
+                ],
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "Cunning\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'complex three-level list from Dingus' );
+}

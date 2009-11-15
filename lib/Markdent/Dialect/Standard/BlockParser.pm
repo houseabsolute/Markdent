@@ -410,41 +410,47 @@ my $Bullet = qr/ (?:
                  \p{SpaceSeparator}+
                /xm;
 
-my $List = qr/ $Bullet
-               (?: .* \n )+?
-             /xm;
-
 sub _list_re {
     my $self = shift;
 
-    my $list_start;
+    my $bullet;
+    my $block_start;
+
     if ( $self->_list_level() ) {
-        my $space_width = $self->_list_level() * 4;
-        $list_start = qr/^ \p{SpaceSeparator}{$space_width} /xm;
+        $block_start = q{};
+        $bullet = qr/ \p{SpaceSeparator}{4} $Bullet /xm;
     }
     else {
-        $list_start = qr/ $BlockStart ^ /xm;
+        $block_start = qr/ $BlockStart /xm;
+        $bullet = qr/ $Bullet /xm;
     }
 
-    return qr/$list_start($List)/;
+    my $list = qr/ $block_start
+                   ^
+                   (
+                     $bullet
+                     (?: .* \n )+?
+                   )
+                 /xm;
+
+    return wantarray ? ( $list, $bullet ) : $list;
 }
 
 sub _match_list {
     my $self = shift;
     my $text = shift;
 
-    my $list_re = $self->_list_re();
+    my ( $list_re, $bullet_re ) = $self->_list_re();
 
     return unless ${$text} =~ / \G
                                 $list_re
                                 (?=           # list ends with
                                   $EmptyLine  # ... an empty line
-                                  ^
                                   (?=
                                     \S            # ... followed by content in column 1
                                   )
                                   (?!             # ... which is not
-                                    $Bullet       # ... a bullet
+                                    $bullet_re    # ... a bullet
                                   )
                                   |
                                   \s*         # or end of the document
@@ -465,6 +471,10 @@ sub _match_list {
         name => $type,
     );
 
+    if ( $self->_list_level() ) {
+        $list =~ s/^\p{SpaceSeparator}{4}//gm;
+    }
+
     $self->_inc_list_level();
 
     for my $item ( $self->_split_list_items($list) ) {
@@ -473,8 +483,10 @@ sub _match_list {
             name => 'list_item',
         );
 
-        $item =~ s/^$Bullet//;
-        $item =~ s/^\p{SpaceSeparator}{1,4}//;
+        $item =~ s/^$Bullet//gm;
+
+        $self->_print_debug( "Parsing list item for blocks:\n\n$item" )
+            if $self->debug();
 
         $self->_parse_text( \$item );
 
