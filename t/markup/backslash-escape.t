@@ -70,6 +70,8 @@ EOF
 Backslash: \\
 
 Backtick: \`
+
+Greater-than: \>
 EOF
 
     my $expect = [
@@ -87,7 +89,14 @@ EOF
                 text => "Backtick: `\n",
             },
         ],
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "Greater-than: >\n",
+            },
+        ],
     ];
 
-    parse_ok( $text, $expect, 'backslashed backslash and backtick' );
+    parse_ok( $text, $expect, 'backslashed backslash, backtick and greater-than' );
 }
