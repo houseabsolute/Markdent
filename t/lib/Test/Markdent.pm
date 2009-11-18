@@ -4,18 +4,22 @@ use strict;
 use warnings;
 
 use Data::Dumper;
+use HTML::Tidy;
 use Tree::Simple::Visitor::ToNestedArray;
 use Test::Deep;
+use Test::HTML::Lint;
 use Test::More;
+
 use Markdent::Parser;
+use Markdent::Handler::HTMLStream;
 use Markdent::Handler::MinimalTree;
 
 use Exporter qw( import );
 
-our @EXPORT = qw( parse_ok );
+our @EXPORT = qw( parse_ok html_output_ok );
 
 sub parse_ok {
-    my $text        = shift;
+    my $markdown    = shift;
     my $expect_tree = shift;
     my $desc        = shift;
 
@@ -23,7 +27,7 @@ sub parse_ok {
 
     my $parser = Markdent::Parser->new( handler => $handler );
 
-    $parser->parse( text => $text );
+    $parser->parse( text => $markdown );
 
     my $visitor = Tree::Simple::Visitor::ToNestedArray->new();
     $handler->tree()->accept($visitor);
@@ -31,12 +35,51 @@ sub parse_ok {
     # The top level of this data structure is always a one element array ref
     # containing the document contents.
     my $results = $visitor->getResults()->[0];
-    warn Dumper($results)
+    diag( Dumper($results) )
         if $ENV{MARKDENT_TEST_VERBOSE};
 
     cmp_deeply( $results, $expect_tree, $desc );
 }
 
+sub html_output_ok {
+    my $markdown    = shift;
+    my $expect_html = shift;
+    my $desc        = shift;
 
+    my $capture = q{};
+    open my $fh, '>', \$capture
+        or die $!;
+
+    my $handler = Markdent::Handler::HTMLStream->new(
+        title  => 'Test',
+        output => $fh,
+    );
+
+    my $parser = Markdent::Parser->new( handler => $handler );
+
+    $parser->parse( text => $markdown );
+
+    diag($capture)
+        if $ENV{MARKDENT_TEST_VERBOSE};
+
+    html_ok( $capture, "$desc - lint check" );
+
+    my $tidy = HTML::Tidy->new();
+
+    my $real_expect_html = <<"EOF";
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Test</title>
+</head>
+<body>
+$expect_html
+</body>
+</html>
+EOF
+
+    is( $tidy->clean($capture), $tidy->clean($real_expect_html), $desc );
+}
 
 1;
