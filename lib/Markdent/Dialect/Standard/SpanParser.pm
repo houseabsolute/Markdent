@@ -5,6 +5,8 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use re 'eval';
+
 use Markdent::Types qw( Str ArrayRef HashRef );
 use MooseX::Params::Validate qw( validated_list );
 
@@ -680,20 +682,6 @@ sub _debug_pending_events {
 
     $self->_print_debug($msg);
 }
-
-use re 'eval';
-
-my $nested_parens;
-$nested_parens = qr{
-    (?>                                 # Atomic matching
-       [^()\s]+                         # Anything other than parens or whitespace
-     |
-       \(
-         (??{ $nested_parens })         # Recursive set of nested brackets
-       \)
-    )*
-}x;
-
 
 __PACKAGE__->meta()->make_immutable();
 
