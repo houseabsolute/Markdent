@@ -162,7 +162,8 @@ sub _possible_span_matches {
         }
     }
 
-    unless ( $self->_start_event_for_span('link') ) {
+    unless ( $self->_start_event_for_span('link')
+        || $self->_start_event_for_span('code') ) {
         push @look_for, qw( auto_link link image );
     }
 
