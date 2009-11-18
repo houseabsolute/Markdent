@@ -506,14 +506,18 @@ sub _match_plain_text {
     return unless
         ${$text} =~ /\G
                      ( .+? )              # at least one character followed by ...
-                     (?:
-                       (?= \* | _ | \` )  #   possible span markup
+                     (?=
+                       (?<! \\ )          #   (not escaped)
+                       \* | _ | \`        #   possible span markup
                        |
-                       (?= !?\[ )         #   or a possible image or link
+                       (?<! \\ )          #   (not escaped)
+                       !?\[               #   or a possible image or link
                        |
-                       (?= < [^>]+ > )    #   an HTML tag
+                       (?<! \\ )          #   (not escaped)
+                       < [^>]+ >          #   an HTML tag
                        |
-                       (?= &\S+; )        #   an HTML entity
+                       (?<! \\ )          #   (not escaped)
+                       &\S+;              #   an HTML entity
                        |
                        \z                 #   or the end of the string
                      )
