@@ -35,7 +35,7 @@ sub _debug_parse_result {
 }
 
 sub _print_debug {
-    warn $HR1 . "\n" . $_[1] . "\n";
+    warn $HR1 . "\n" . ( ref $_[0] ) . "\n" . $_[1] . "\n";
 }
 
 no Moose::Role;
