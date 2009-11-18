@@ -5,10 +5,11 @@ use warnings;
 
 use Data::Dumper;
 use HTML::Tidy;
-use Tree::Simple::Visitor::ToNestedArray;
 use Test::Deep;
+use Test::Differences;
 use Test::HTML::Lint;
 use Test::More;
+use Tree::Simple::Visitor::ToNestedArray;
 
 use Markdent::Parser;
 use Markdent::Handler::HTMLStream;
@@ -79,7 +80,7 @@ $expect_html
 </html>
 EOF
 
-    is( $tidy->clean($capture), $tidy->clean($real_expect_html), $desc );
+    eq_or_diff( $tidy->clean($capture), $tidy->clean($real_expect_html), $desc );
 }
 
 1;

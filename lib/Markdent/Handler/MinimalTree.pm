@@ -227,6 +227,14 @@ sub html {
     $self->_current_node()->addChild($html_node);
 }
 
+sub html_entity {
+    my $self = shift;
+    my ($entity) = validated_list( \@_, entity => { isa => Str }, );
+
+    my $html_node = Tree::Simple->new( { type => 'html_entity', entity => $entity } );
+    $self->_current_node()->addChild($html_node);
+}
+
 sub html_block {
     my $self = shift;
     my ($html) = validated_list( \@_, content => { isa => Str }, );

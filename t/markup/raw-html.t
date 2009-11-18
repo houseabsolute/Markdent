@@ -42,6 +42,38 @@ EOF
 }
 
 {
+    my $text = <<'EOF';
+Using entities: &amp; and &#38;
+EOF
+
+    my $expect = [
+        {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => 'Using entities: ',
+            }, {
+                type   => 'html_entity',
+                entity => 'amp',
+            }, {
+                type => 'text',
+                text => ' and ',
+            }, {
+                type => 'html_entity',
+                entity => '#38',
+            }, {
+                type => 'text',
+                text => "\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'html entities in a paragraph' );
+}
+
+{
     my $html = <<'EOF';
 <div>
   <p>
@@ -267,4 +299,30 @@ EOF
     ];
 
     parse_ok( $text, $expect, 'same html block twice in a row' );
+}
+
+{
+    my $text = <<'EOF';
+`Inside code we do not match <em>html</em> &amp; entities`
+EOF
+
+    my $expect = [
+        {
+            type => 'paragraph',
+        },
+        [
+            { type => 'code' },
+            [
+                {
+                    type => 'text',
+                    text => "Inside code we do not match <em>html</em> &amp; entities",
+                },
+            ], {
+                type => 'text',
+                text => "\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'html inside code block is not treated as html' );
 }

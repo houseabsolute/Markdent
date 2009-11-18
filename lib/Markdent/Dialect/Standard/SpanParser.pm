@@ -166,7 +166,7 @@ sub _possible_span_matches {
         push @look_for, qw( auto_link link image );
     }
 
-    push @look_for, 'html'
+    push @look_for, ( 'html', 'html_entity' )
         unless $self->_start_event_for_span('code');
 
     return @look_for;
@@ -475,6 +475,23 @@ sub _match_html {
     return 1;
 }
 
+sub _match_html_entity {
+    my $self = shift;
+    my $text = shift;
+
+    return unless ${$text} =~ / \G
+                                &(\S+);
+                              /xgcs;
+
+    my $event = Markdent::Event->new(
+        type       => 'inline',
+        name       => 'html_entity',
+        attributes => { entity => $1 },
+    );
+
+    $self->_markup_event($event);
+}
+
 sub _match_plain_text {
     my $self = shift;
     my $text = shift;
@@ -492,6 +509,8 @@ sub _match_plain_text {
                        (?= !?\[ )         #   or a possible image or link
                        |
                        (?= < [^>]+ > )    #   an HTML tag
+                       |
+                       (?= &\S+; )        #   an HTML entity
                        |
                        \z                 #   or the end of the string
                      )

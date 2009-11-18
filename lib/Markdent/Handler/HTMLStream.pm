@@ -238,6 +238,13 @@ sub html {
     $self->output()->print($html);
 }
 
+sub html_entity {
+    my $self = shift;
+    my ($entity) = validated_list( \@_, entity => { isa => Str }, );
+
+    $self->stream()->ent($entity);
+}
+
 sub html_block {
     my $self = shift;
     my ($html) = validated_list( \@_, content => { isa => Str }, );
