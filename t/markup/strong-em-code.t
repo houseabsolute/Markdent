@@ -95,3 +95,32 @@ EOF
 
     parse_ok( $text, $expect, 'code containing html' );
 }
+
+{
+    my $text = <<'EOF';
+Do not look for `*any **markup** in*` code
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Do not look for ',
+            }, {
+                type => 'code',
+            },
+            [
+                {
+                    type => 'text',
+                    text => '*any **markup** in*',
+                },
+            ], {
+                type => 'text',
+                text => " code\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'code containing strong & em' );
+}

@@ -148,6 +148,10 @@ sub _parse_text {
 sub _possible_span_matches {
     my $self = shift;
 
+    if ( my $event = $self->_start_event_for_span('code') ) {
+        return [ 'code_end', $event->attributes()->{delimiter} ];
+    }
+
     my @look_for;
 
     # Strong needs to be checked before emphasis because emphasis is a shorter
@@ -162,13 +166,11 @@ sub _possible_span_matches {
         }
     }
 
-    unless ( $self->_start_event_for_span('link')
-        || $self->_start_event_for_span('code') ) {
+    unless ( $self->_start_event_for_span('link') ) {
         push @look_for, qw( auto_link link image );
     }
 
-    push @look_for, ( 'html', 'html_entity' )
-        unless $self->_start_event_for_span('code');
+    push @look_for, 'html', 'html_entity';
 
     return @look_for;
 }
