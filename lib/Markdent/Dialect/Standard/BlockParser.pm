@@ -344,6 +344,11 @@ sub _match_blockquote {
 
     $bq =~ s/^>\p{SpaceSeparator}{0,3}//gm;
 
+    # Even if the blockquote is inside a list, we want to look for paragraphs,
+    # not list items.
+    my $list_level = $self->_list_level();
+    $self->_set_list_level(0);
+
     # Dingus treats a new blockquote level as starting a new paragraph as
     # well. If we treat each change of blockquote level as starting a new
     # sub-document, we get the same behavior.
@@ -352,6 +357,8 @@ sub _match_blockquote {
 
         $self->_parse_text( \$chunk );
     }
+
+    $self->_set_list_level($list_level);
 
     $self->handler()->handle_event(
         type => 'end',
@@ -390,7 +397,7 @@ sub _match_preformatted {
         'preformatted',
     ) if $self->debug();
 
-    $pre =~ s/^\p{SpaceSeparator}{4}//g;
+    $pre =~ s/^\p{SpaceSeparator}{4}//gm;
 
     $self->handler()->handle_event(
         type       => 'inline',
@@ -413,34 +420,31 @@ my $Bullet = qr/ (?:
 sub _list_re {
     my $self = shift;
 
-    my $bullet;
     my $block_start;
 
     if ( $self->_list_level() ) {
         $block_start = q{};
-        $bullet = qr/ \p{SpaceSeparator}{4} $Bullet /xm;
     }
     else {
         $block_start = qr/ $BlockStart /xm;
-        $bullet = qr/ $Bullet /xm;
     }
 
     my $list = qr/ $block_start
                    ^
                    (
-                     $bullet
+                     $Bullet
                      (?: .* \n )+?
                    )
                  /xm;
 
-    return wantarray ? ( $list, $bullet ) : $list;
+    return $list;
 }
 
 sub _match_list {
     my $self = shift;
     my $text = shift;
 
-    my ( $list_re, $bullet_re ) = $self->_list_re();
+    my $list_re = $self->_list_re();
 
     return unless ${$text} =~ / \G
                                 $list_re
@@ -450,7 +454,7 @@ sub _match_list {
                                     \S            # ... followed by content in column 1
                                   )
                                   (?!             # ... which is not
-                                    $bullet_re    # ... a bullet
+                                    $Bullet    # ... a bullet
                                   )
                                   |
                                   \s*         # or end of the document
@@ -471,10 +475,6 @@ sub _match_list {
         name => $type,
     );
 
-    if ( $self->_list_level() ) {
-        $list =~ s/^\p{SpaceSeparator}{4}//gm;
-    }
-
     $self->_inc_list_level();
 
     for my $item ( $self->_split_list_items($list) ) {
@@ -483,7 +483,7 @@ sub _match_list {
             name => 'list_item',
         );
 
-        $item =~ s/^$Bullet//gm;
+        $item =~ s/^ (?: $Bullet | \p{SpaceSeparator}{4} )//xgm;
 
         $self->_print_debug( "Parsing list item for blocks:\n\n$item" )
             if $self->debug();
@@ -547,7 +547,6 @@ sub _match_list_item {
                                 )+?)
                                 (?=
                                   ^
-                                  \p{SpaceSeparator}{4}
                                   $Bullet
                                   |
                                   ^

@@ -30,7 +30,7 @@ EOF
       pre 2
 EOF
 
-    ( my $expect_text = $text ) =~ s/^[ ]{4}//g;
+    ( my $expect_text = $text ) =~ s/^[ ]{4}//gm;
 
     my $expect = [
         {
@@ -50,7 +50,7 @@ EOF
     pre 2
 EOF
 
-    ( my $expect_text = $text ) =~ s/^[ ]{4}//g;
+    ( my $expect_text = $text ) =~ s/^[ ]{4}//gm;
 
     my $expect = [
         {
@@ -75,7 +75,7 @@ $pre
 regular text
 EOF
 
-    ( my $expect_text = $pre ) =~ s/^[ ]{4}//g;
+    ( my $expect_text = $pre ) =~ s/^[ ]{4}//gm;
 
     my $expect = [
         {
