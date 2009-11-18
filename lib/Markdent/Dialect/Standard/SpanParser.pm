@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Markdent::Types qw( Str ArrayRef );
+use Markdent::Types qw( Str ArrayRef HashRef );
 use MooseX::Params::Validate qw( validated_list );
 
 use namespace::autoclean;
@@ -40,6 +40,54 @@ has _span_text_buffer => (
         _clear_span_text_buffer => 'clear',
     },
 );
+
+has _links_by_id => (
+    traits   => ['Hash'],
+    is       => 'ro',
+    isa      => HashRef[ArrayRef],
+    default  => sub { {} },
+    init_arg => undef,
+    handles  => {
+        _add_link_by_id => 'set',
+        _get_link_by_id => 'get',
+    },
+);
+
+sub extract_link_ids {
+    my $self = shift;
+    my $text = shift;
+
+    ${$text} =~ s/ ^
+                   \p{SpaceSeparator}{0,3}
+                   \[ ([^]]+) \]
+                   :
+                   \p{SpaceSeparator}*
+                   \n?
+                   \p{SpaceSeparator}*
+                   (.+)
+                   \n
+                 /
+                   $self->_process_id_for_link( $1, $2 );
+                 /egxm;
+}
+
+sub _process_id_for_link {
+    my $self    = shift;
+    my $id      = shift;
+    my $id_text = shift;
+
+    $id_text =~ s/\s+$//;
+
+    my ( $uri, $title ) = split /\p{SpaceSeparator}+/, $id_text, 2;
+
+    $uri =~ s/^<|>$//g;
+    $title =~ s/^"|"$//g
+        if defined $title;
+
+    $self->_add_link_by_id( $id => [ $uri, $title ] );
+
+    return q{};
+}
 
 sub parse_markup {
     my $self = shift;
@@ -326,7 +374,8 @@ sub _match_link {
                       $link
                     /xgc;
 
-    my ( $link_text, $attr ) = $self->_link_match_results();
+    my ( $link_text, $attr ) =
+        $self->_link_match_results( $1, $2, $4, $5 );
 
     my $start = Markdent::Event->new(
         type       => 'start',
@@ -359,7 +408,8 @@ sub _match_image {
                       $link
                     /xgc;
 
-    my ( $alt_text, $attr ) = $self->_link_match_results();
+    my ( $alt_text, $attr ) =
+        $self->_link_match_results( $1, $2, $4, $5 );
 
     $attr->{alt_text} = $alt_text;
 
@@ -375,22 +425,30 @@ sub _match_image {
 }
 
 sub _link_match_results {
-    my $self = shift;
-
-    my $text = $1;
+    my $self  = shift;
+    my $text  = shift;
+    my $uri   = shift;
+    my $title = shift;
+    my $id    = shift;
 
     my %attr;
-    if ( defined $2 ) {
-        $attr{uri}   = $2;
-        $attr{title} = $4
-            if defined $4;
-    }
-    elsif ( defined $5 && length $5 ) {
-        $attr{id} = $5;
+    if ( defined $uri ) {
+        $attr{uri}   = $uri;
+        $attr{title} = $title
+            if defined $title;
     }
     else {
-        $attr{id}          = $text;
-        $attr{implicit_id} = 1;
+        unless ( defined $id && length $id ) {
+            $id = $text;
+            $attr{implicit_id} = 1;
+        }
+
+        my $link = $self->_get_link_by_id($id) || [];
+
+        $attr{uri}   = $link->[0];
+        $attr{title} = $link->[1]
+            if defined $link->[1];
+        $attr{id} = $id;
     }
 
     return ( $text, \%attr );

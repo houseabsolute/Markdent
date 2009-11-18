@@ -194,14 +194,11 @@ sub start_link {
     my $self = shift;
     my %p    = validated_hash(
         \@_,
-        uri         => { isa => Str,  optional => 1 },
+        uri         => { isa => Str },
         title       => { isa => Str,  optional => 1 },
         id          => { isa => Str,  optional => 1 },
         implicit_id => { isa => Bool, optional => 1 },
     );
-
-    die 'A link must have a uri or id'
-        unless defined $p{uri} || defined $p{id};
 
     delete @p{ grep { ! defined $p{$_} } keys %p };
 
@@ -243,7 +240,7 @@ sub image {
     my %p    = validated_hash(
         \@_,
         alt_text    => { isa => Str },
-        uri         => { isa => Str, optional => 1 },
+        uri         => { isa => Str },
         title       => { isa => Str, optional => 1 },
         id          => { isa => Str, optional => 1 },
         implicit_id => { isa => Bool, optional => 1 },

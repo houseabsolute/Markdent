@@ -47,6 +47,8 @@ sub parse_document {
 
     $self->_hash_html_blocks($text);
 
+    $self->span_parser()->extract_link_ids($text);
+
     $self->_parse_text($text);
 }
 

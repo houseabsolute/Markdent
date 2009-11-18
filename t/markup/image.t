@@ -60,6 +60,8 @@ EOF
 {
     my $text = <<'EOF';
 ![My Alt][image]
+
+[image]: /foo.jpg
 EOF
 
 
@@ -69,6 +71,7 @@ EOF
             {
                 type     => 'image',
                 id       => 'image',
+                uri      => '/foo.jpg',
                 alt_text => 'My Alt',
             }, {
                 type => 'text',
@@ -83,6 +86,8 @@ EOF
 {
     my $text = <<'EOF';
 ![My Alt] [image]
+
+[image]: /foo.jpg
 EOF
 
     my $expect = [
@@ -91,6 +96,7 @@ EOF
             {
                 type     => 'image',
                 id       => 'image',
+                uri      => '/foo.jpg',
                 alt_text => 'My Alt',
             }, {
                 type => 'text',
@@ -105,6 +111,8 @@ EOF
 {
     my $text = <<'EOF';
 ![My Alt][]
+
+[My Alt]: /bar.jpg
 EOF
 
     my $expect = [
@@ -113,8 +121,9 @@ EOF
             {
                 type        => 'image',
                 id          => 'My Alt',
-                implicit_id => 1,
+                uri         => '/bar.jpg',
                 alt_text    => 'My Alt',
+                implicit_id => 1,
             }, {
                 type => 'text',
                 text => "\n",
@@ -128,6 +137,8 @@ EOF
 {
     my $text = <<'EOF';
 ![My Alt]
+
+[My Alt]: /baz.jpg "foo"
 EOF
 
     my $expect = [
@@ -136,8 +147,10 @@ EOF
             {
                 type        => 'image',
                 id          => 'My Alt',
-                implicit_id => 1,
                 alt_text    => 'My Alt',
+                uri         => '/baz.jpg',
+                title       => 'foo',
+                implicit_id => 1,
             }, {
                 type => 'text',
                 text => "\n",

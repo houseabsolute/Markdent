@@ -73,6 +73,8 @@ EOF
 {
     my $text = <<'EOF';
 Some text with [A link][link id] and more text.
+
+[link id]: /foo
 EOF
 
     my $expect = [
@@ -84,6 +86,7 @@ EOF
             }, {
                 type => 'link',
                 id   => 'link id',
+                uri  => '/foo',
             },
             [
                 {
@@ -103,6 +106,8 @@ EOF
 {
     my $text = <<'EOF';
 Some text with [A link] [link id] and more text.
+
+[link id]: </bar>
 EOF
 
     my $expect = [
@@ -114,6 +119,7 @@ EOF
             }, {
                 type => 'link',
                 id   => 'link id',
+                uri  => '/bar',
             },
             [
                 {
@@ -133,6 +139,9 @@ EOF
 {
     my $text = <<'EOF';
 Some text with [A link][] and more text.
+
+[A link]:
+/foo/bar "title"
 EOF
 
     my $expect = [
@@ -144,6 +153,8 @@ EOF
             }, {
                 type        => 'link',
                 id          => 'A link',
+                uri         => '/foo/bar',
+                title       => 'title',
                 implicit_id => 1,
             },
             [
@@ -164,6 +175,8 @@ EOF
 {
     my $text = <<'EOF';
 Some text with [A link] and more text.
+
+[A link]: /foo
 EOF
 
     my $expect = [
@@ -175,6 +188,7 @@ EOF
             }, {
                 type        => 'link',
                 id          => 'A link',
+                uri         => '/foo',
                 implicit_id => 1,
             },
             [
@@ -277,6 +291,8 @@ EOF
 {
     my $text = <<'EOF';
 Some text with [*A link*] and more text.
+
+[*A link*]: /baz
 EOF
 
     my $expect = [
@@ -288,6 +304,7 @@ EOF
             }, {
                 type        => 'link',
                 id          => '*A link*',
+                uri         => '/baz',
                 implicit_id => 1,
             },
             [
