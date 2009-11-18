@@ -41,6 +41,36 @@ EOF
 
 {
     my $text = <<'EOF';
+Some text with [A link](<http://www.example.com>) and more text.
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Some text with ',
+            }, {
+                type  => 'link',
+                uri   => 'http://www.example.com',
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'A link',
+                },
+            ], {
+                type => 'text',
+                text => " and more text.\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'text with an inline link' );
+}
+
+{
+    my $text = <<'EOF';
 Some text with [A link](http://www.example.com "A title") and more text.
 EOF
 

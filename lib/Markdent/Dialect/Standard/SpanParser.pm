@@ -433,6 +433,8 @@ sub _link_match_results {
 
     my %attr;
     if ( defined $uri ) {
+        $uri =~ s/^<|>$//g;
+
         $attr{uri}   = $uri;
         $attr{title} = $title
             if defined $title;
