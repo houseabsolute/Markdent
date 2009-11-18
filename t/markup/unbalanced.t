@@ -63,7 +63,7 @@ EOF
 
 {
     my $text = <<'EOF';
-**bad strong with ``bad code and *good em*
+**bad strong with ``bad code and *indirectly bad em*
 EOF
 
     my $expect = [
@@ -71,17 +71,7 @@ EOF
         [
             {
                 type => 'text',
-                text => '**bad strong with ``bad code and ',
-            },
-            { type => 'emphasis' },
-            [
-                {
-                    type => 'text',
-                    text => 'good em',
-                },
-            ], {
-                type => 'text',
-                text => "\n",
+                text => "**bad strong with ``bad code and *indirectly bad em*\n",
             },
         ],
     ];
@@ -154,7 +144,7 @@ EOF
 
 {
     my $text = <<'EOF';
-**good strong with *good ``em and bad* code``**
+**good strong with *bad ``em and good* code``**
 EOF
 
     my $expect = [
@@ -164,19 +154,15 @@ EOF
             [
                 {
                     type => 'text',
-                    text => 'good strong with ',
+                    text => 'good strong with *bad ',
                 },
-
-                { type => 'emphasis' },
+                { type => 'code' },
                 [
                     {
                         type => 'text',
-                        text => 'good ``em and bad',
+                        text => 'em and good* code',
                     },
-                ], {
-                    type => 'text',
-                    text => ' code``',
-                },
+                ],
             ], {
                 type => 'text',
                 text => "\n",
