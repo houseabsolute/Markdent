@@ -376,3 +376,61 @@ EOF
 
     parse_ok( $text, $expect, 'complex three-level list from Dingus' );
 }
+
+{
+    my $text = <<'EOF';
+1. ordered
+2. #2
+    * unordered
+    * #2
+3. and ordered again
+EOF
+
+    my $expect = [
+        {
+            type => 'ordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "ordered\n",
+                }
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "#2\n",
+                },
+                { type => 'unordered_list' },
+                [
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "unordered\n",
+                        },
+                    ],
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "#2\n",
+                        },
+                    ],
+                ],
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "and ordered again\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'ordered list containing an unordered list' );
+}
