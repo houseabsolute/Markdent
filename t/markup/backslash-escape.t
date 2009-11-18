@@ -64,3 +64,30 @@ EOF
 
     parse_ok( $text, $expect, 'backslash escape is ignored in code span' );
 }
+
+{
+    my $text = <<'EOF';
+Backslash: \\
+
+Backtick: \`
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "Backslash: \\\n",
+            },
+        ],
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "Backtick: `\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'backslashed backslash and backtick' );
+}

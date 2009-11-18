@@ -112,10 +112,29 @@ sub parse_markup {
 
     $self->_debug_pending_events('after text merging');
 
-    $self->handler()->handle_event($_)
-        for $self->_pending_events();
+    # We need to do backslash unescaping after text events are merged
+    my $unescape = 1;
+    for  my $event ( $self->_pending_events() ) {
+        if ( $event->name() eq 'code' ) {
+            $unescape = $event->type() eq 'start' ? 0 : 1;
+        }
+        elsif ( $event->name() eq 'text' && $unescape ) {
+            $self->_unescape_plain_text( \($event->attributes()->{content}) );
+        }
+
+        $self->handler()->handle_event($event);
+    }
 
     $self->_clear_pending_events();
+
+    return;
+}
+
+sub _unescape_plain_text {
+    my $self  = shift;
+    my $plain = shift;
+
+    ${$plain} =~ s/\\([\\`*_{}[\]()#+\-.!])/$1/g;
 
     return;
 }
@@ -526,23 +545,9 @@ sub _match_plain_text {
     $self->_print_debug( "Interpreting as plain text\n\n[$1]\n" )
         if $self->debug();
 
-    my $plain = $1;
-
-    $self->_unescape_plain_text(\$plain)
-        unless $self->_start_event_for_span('code');
-
-    $self->_save_span_text($plain);
+    $self->_save_span_text($1);
 
     return 1;
-}
-
-sub _unescape_plain_text {
-    my $self  = shift;
-    my $plain = shift;
-
-    ${$plain} =~ s/\\([\`*_{}[\]()#+\-.!])/$1/g;
-
-    return;
 }
 
 sub _markup_event {
@@ -643,7 +648,7 @@ sub _merge_consecutive_text_events {
     for my $i ( 0 .. $#{$events} ) {
         my $event = $events->[$i];
 
-        if ( $event->name eq 'text' ) {
+        if ( $event->name() eq 'text' ) {
             $merge_start = $i
                 unless defined $merge_start;
         }
@@ -665,17 +670,20 @@ sub _merge_consecutive_text_events {
         $pair->[0] -= $already_merged;
         $pair->[1] -= $already_merged;
 
-        $self->_splice_merged_text_event( $events, @{$pair} );
+        $self->_splice_merged_text_event(
+            $events,
+            @{$pair},
+        );
 
         $already_merged += $pair->[1] - $pair->[0];
     }
 }
 
 sub _splice_merged_text_event {
-    my $self   = shift;
-    my $events = shift;
-    my $start  = shift;
-    my $end    = shift;
+    my $self     = shift;
+    my $events   = shift;
+    my $start    = shift;
+    my $end      = shift;
 
     my @to_merge = map { $_->attributes()->{content} } @{$events}[ $start .. $end ];
 
