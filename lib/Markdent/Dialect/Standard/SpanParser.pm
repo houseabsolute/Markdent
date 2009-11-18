@@ -526,7 +526,8 @@ sub _match_plain_text {
     $self->_print_debug( "Interpreting as plain text\n\n[$1]\n" )
         if $self->debug();
 
-    my $plain = $self->_unescape_plain_text($1);
+    my $plain = $self->_unescape_plain_text($1)
+        unless $self->_start_event_for_span('code');
 
     $self->_save_span_text($plain);
 
