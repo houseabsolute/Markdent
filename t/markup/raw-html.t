@@ -302,6 +302,36 @@ EOF
 }
 
 {
+    my $html = "<div>An arbitrary chunk of html.</div>\n";
+
+    my $text = <<"EOF";
+$html
+A paragraph in the middle
+
+$html
+EOF
+
+    my $expect = [
+        {
+            type => 'html_block',
+            html => $html,
+        },
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "A paragraph in the middle\n",
+            },
+        ], {
+            type => 'html_block',
+            html => $html,
+        },
+    ];
+
+    parse_ok( $text, $expect, 'two html blocks and a paragraph in the middle' );
+}
+
+{
     my $text = <<'EOF';
 `Inside code we do not match <em>html</em> &amp; entities`
 EOF

@@ -77,7 +77,7 @@ my $BlockEnd = qr/(?=(?: $EmptyLines | \z ) )/xm;
                  (
                    ^ < ($block_names_re) [^>]* >
                    (?s: .+? )
-                   (?: ^ </ \3 > \n )+             # This catches repetitions of the final closing block
+                   (?: </ \3 > \n )+             # This catches repetitions of the final closing block
                  )
                  $BlockEnd
                 }
