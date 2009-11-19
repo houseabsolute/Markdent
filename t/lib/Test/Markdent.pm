@@ -65,7 +65,7 @@ sub html_output_ok {
 
     html_ok( $capture, "$desc - lint check" );
 
-    my $tidy = HTML::Tidy->new();
+    my $tidy = HTML::Tidy->new( { doctype => 'transitional' } );
 
     my $real_expect_html = <<"EOF";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
