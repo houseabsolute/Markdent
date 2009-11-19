@@ -91,7 +91,12 @@ sub _parse_uri_and_title {
     my $self = shift;
     my $text = shift;
 
+    $text =~ s/^\s+|\s+$//g;
+
     my ( $uri, $title ) = split /\p{SpaceSeparator}+/, $text, 2;
+
+    $uri = q{}
+        unless defined $uri;
 
     $uri =~ s/^<|>$//g;
     $title =~ s/^"|"$//g

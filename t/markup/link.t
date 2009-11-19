@@ -439,3 +439,57 @@ EOF
 
     parse_ok( $text, $expect, 'tricky use parens with an inline link that has a title' );
 }
+
+{
+    my $text = <<'EOF';
+[Empty]()
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'link',
+                uri  => q{},
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'Empty',
+                },
+            ], {
+                type => 'text',
+                text => "\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'An empty inline link' );
+}
+
+{
+    my $text = <<'EOF';
+[Empty](  )
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'link',
+                uri  => q{},
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'Empty',
+                },
+            ], {
+                type => 'text',
+                text => "\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'An inline link with only whitespace' );
+}

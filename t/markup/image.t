@@ -160,3 +160,47 @@ EOF
 
     parse_ok( $text, $expect, 'image by id, implicit id (no [])' );
 }
+
+{
+    my $text = <<'EOF';
+![Empty]()
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type     => 'image',
+                alt_text => 'Empty',
+                uri      => q{},
+            }, {
+                type => 'text',
+                text => "\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'An empty inline image' );
+}
+
+{
+    my $text = <<'EOF';
+![Empty](  )
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type     => 'image',
+                alt_text => 'Empty',
+                uri      => q{},
+            }, {
+                type => 'text',
+                text => "\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'An inline image with only whitespace' );
+}
