@@ -493,3 +493,21 @@ EOF
 
     parse_ok( $text, $expect, 'An inline link with only whitespace' );
 }
+
+{
+    my $text = <<'EOF';
+[Link?][no such id]
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "[Link?][no such id]\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'Link by reference with a bad id is treated as text' );
+}

@@ -204,3 +204,21 @@ EOF
 
     parse_ok( $text, $expect, 'An inline image with only whitespace' );
 }
+
+{
+    my $text = <<'EOF';
+![Image?][no such id]
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "![Image?][no such id]\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'Image by reference with a bad id is treated as text' );
+}

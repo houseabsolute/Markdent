@@ -395,6 +395,8 @@ sub _match_link {
     my $self = shift;
     my $text = shift;
 
+    my $pos = pos ${$text} || 0;
+
     # For some inexplicable reason, this regex needs to be recreated each time
     # the method is called or $nested_brackets && $nested_parens are
     # undef. Presumably this has something to do with using it in a
@@ -412,6 +414,13 @@ sub _match_link {
 
     my ( $link_text, $attr ) =
         $self->_link_match_results( $1, $2, $3 );
+
+    unless ( defined $attr->{uri} ) {
+        pos ${$text} = $pos
+            if defined $pos;
+
+        return;
+    }
 
     my $start = Markdent::Event->new(
         type       => 'start',
@@ -437,6 +446,8 @@ sub _match_image {
     my $self = shift;
     my $text = shift;
 
+    my $pos = pos ${$text} || 0;
+
     return unless
         ${$text} =~ / \G
                       !
@@ -451,6 +462,13 @@ sub _match_image {
 
     my ( $alt_text, $attr ) =
         $self->_link_match_results( $1, $2, $3 );
+
+    unless ( defined $attr->{uri} ) {
+        pos ${$text} = $pos
+            if defined $pos;
+
+        return;
+    }
 
     $attr->{alt_text} = $alt_text;
 
