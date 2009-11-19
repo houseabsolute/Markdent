@@ -7,7 +7,6 @@ use Data::Dumper;
 use HTML::Tidy;
 use Test::Deep;
 use Test::Differences;
-use Test::HTML::Lint;
 use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
@@ -62,8 +61,6 @@ sub html_output_ok {
 
     diag($capture)
         if $ENV{MARKDENT_TEST_VERBOSE};
-
-    html_ok( $capture, "$desc - lint check" );
 
     my $tidy = HTML::Tidy->new( { doctype => 'transitional' } );
 
