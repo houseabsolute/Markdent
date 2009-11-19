@@ -372,7 +372,7 @@ $nested_brackets = qr{
 my $link = qr{
               (?:
                 \(
-                   ( [^\s]+ )             # an inline URI
+                   ( [^\s]* )             # an inline URI
                    (?:
                      \s+
                      ( ["'] )
