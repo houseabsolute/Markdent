@@ -503,6 +503,8 @@ sub _link_match_results {
             $attr{implicit_id} = 1;
         }
 
+        $id =~ s/\s+/ /g;
+
         my $link = $self->_get_link_by_id($id) || [];
 
         $attr{uri}   = $link->[0];
@@ -564,7 +566,7 @@ sub _match_plain_text {
                        |
                        \* | _ | \`        #   possible span markup
                        |
-                       !?\[               #   or a possible image or link
+                       !?\[               #   possible image or link
                        |
                        < [^>]+ >          #   an HTML tag
                        |

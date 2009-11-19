@@ -511,3 +511,62 @@ EOF
 
     parse_ok( $text, $expect, 'Link by reference with a bad id is treated as text' );
 }
+
+{
+    my $text = <<'EOF';
+Here's one where the [link
+breaks] across lines.
+
+Here's another where the [link 
+breaks] across lines, but with a line-ending space.
+
+[link breaks]: /url/
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "Here's one where the ",
+            }, {
+                type        => 'link',
+                uri         => '/url/',
+                id          => 'link breaks',
+                implicit_id => 1,
+            },
+            [
+                {
+                    type => 'text',
+                    text => "link\nbreaks",
+                }
+            ], {
+                type => 'text',
+                text => " across lines.\n",
+            },
+        ],
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => "Here's another where the ",
+            }, {
+                type        => 'link',
+                uri         => '/url/',
+                id          => 'link breaks',
+                implicit_id => 1,
+            },
+            [
+                {
+                    type => 'text',
+                    text => "link \nbreaks",
+                }
+            ], {
+                type => 'text',
+                text => " across lines, but with a line-ending space.\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'Link text with a newline' );
+}
