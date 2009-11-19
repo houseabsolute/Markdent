@@ -112,29 +112,10 @@ sub parse_markup {
 
     $self->_debug_pending_events('after text merging');
 
-    # We need to do backslash unescaping after text events are merged
-    my $unescape = 1;
-    for  my $event ( $self->_pending_events() ) {
-        if ( $event->name() eq 'code' ) {
-            $unescape = $event->type() eq 'start' ? 0 : 1;
-        }
-        elsif ( $event->name() eq 'text' && $unescape ) {
-            $self->_unescape_plain_text( \($event->attributes()->{content}) );
-        }
-
-        $self->handler()->handle_event($event);
-    }
+    $self->handler()->handle_event($_)
+        for $self->_pending_events();
 
     $self->_clear_pending_events();
-
-    return;
-}
-
-sub _unescape_plain_text {
-    my $self  = shift;
-    my $plain = shift;
-
-    ${$plain} =~ s/\\([\\`*_{}[\]()#+\-.!])/$1/g;
 
     return;
 }
@@ -171,7 +152,7 @@ sub _possible_span_matches {
         return [ 'code_end', $event->attributes()->{delimiter} ];
     }
 
-    my @look_for;
+    my @look_for = 'escape';
 
     # Strong needs to be checked before emphasis because emphasis is a shorter
     # version of strong, so it always matches where strong _could_ match.
@@ -208,6 +189,24 @@ sub _start_event_for_span {
     }
 
     return $in;
+}
+
+my $Escape = qr/\\([\\`*_{}[\]()#+\-.!<>])/;
+
+sub _match_escape {
+    my $self = shift;
+    my $text = shift;
+
+    return unless ${$text} =~ / \G
+                                ($Escape)
+                              /xgc;
+
+    $self->_print_debug( "Interpreting as escaped character\n\n[$1]\n" )
+        if $self->debug();
+
+    $self->_save_span_text($2);
+
+    return 1;
 }
 
 sub _match_strong_start {
@@ -322,7 +321,7 @@ sub _match_delimiter_start {
     my $text  = shift;
     my $delim = shift;
 
-    return unless ${$text} =~ /(?: ^ | \P{Letter} \G ) ($delim) (?= \S ) /xgc;
+    return unless ${$text} =~ /(?: ^ | \P{Letter} ) \G ($delim)/xgc;
 
     return $1;
 }
@@ -332,7 +331,7 @@ sub _match_delimiter_end {
     my $text        = shift;
     my $delim       = shift;
 
-    return unless ${$text} =~ /[^\s\\] \G $delim (?= \P{Letter} | \z ) /xgc;
+    return unless ${$text} =~ /\G $delim (?= \P{Letter} | \z ) /xgc;
 
     return 1;
 }
@@ -526,16 +525,14 @@ sub _match_plain_text {
         ${$text} =~ /\G
                      ( .+? )              # at least one character followed by ...
                      (?=
-                       (?<! \\ )          #   (not escaped)
+                       $Escape
+                       |
                        \* | _ | \`        #   possible span markup
                        |
-                       (?<! \\ )          #   (not escaped)
                        !?\[               #   or a possible image or link
                        |
-                       (?<! \\ )          #   (not escaped)
                        < [^>]+ >          #   an HTML tag
                        |
-                       (?<! \\ )          #   (not escaped)
                        &\S+;              #   an HTML entity
                        |
                        \z                 #   or the end of the string
@@ -556,8 +553,17 @@ sub _markup_event {
 
     $self->_event_for_text_buffer();
 
-    $self->_print_debug( 'Found markup: ' . $event->event_name() . "\n" )
-        if $self->debug();
+    if ( $self->debug() ) {
+        my $msg = 'Found markup: ' . $event->event_name();
+
+        if ( $event->attributes()->{delimiter} ) {
+            $msg .= ' - delimiter: [' . $event->attributes()->{delimiter} . ']';
+        }
+
+        $msg .= "\n";
+
+        $self->_print_debug($msg);
+    }
 
     $self->_add_pending_event($event);
 
