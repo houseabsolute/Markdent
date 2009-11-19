@@ -100,3 +100,50 @@ EOF
 
     parse_ok( $text, $expect, 'backslashed backslash, backtick and greater-than' );
 }
+
+{
+    my $text = <<'EOF';
+Backslash: `\\`
+
+Backtick: `` \` ``
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Backslash: ',
+            },
+            { type => 'code' },
+            [
+                {
+                    type => 'text',
+                    text => '\\\\',
+                },
+            ], {
+                type => 'text',
+                text => "\n",
+            },
+        ],
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Backtick: ',
+            },
+            { type => 'code' },
+            [
+                {
+                    type => 'text',
+                    text => ' \` ',
+                },
+            ], {
+                type => 'text',
+                text => "\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'backslashes in code spans' );
+}
