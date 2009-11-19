@@ -378,3 +378,64 @@ EOF
 
     parse_ok( $text, $expect, 'text with an auto link' );
 }
+
+{
+    my $text = <<'EOF';
+(With outer parens and [parens in url](/foo(bar)))
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => '(With outer parens and ',
+            }, {
+                type => 'link',
+                uri  => '/foo(bar)',
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'parens in url',
+                },
+            ], {
+                type => 'text',
+                text => ")\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'tricky use parens with an inline link' );
+}
+
+{
+    my $text = <<'EOF';
+(With outer parens and [parens in url](/foo(bar) "title"))
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => '(With outer parens and ',
+            }, {
+                type  => 'link',
+                uri   => '/foo(bar)',
+                title => 'title',
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'parens in url',
+                },
+            ], {
+                type => 'text',
+                text => ")\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'tricky use parens with an inline link that has a title' );
+}

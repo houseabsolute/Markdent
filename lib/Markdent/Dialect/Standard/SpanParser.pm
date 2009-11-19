@@ -80,15 +80,24 @@ sub _process_id_for_link {
 
     $id_text =~ s/\s+$//;
 
-    my ( $uri, $title ) = split /\p{SpaceSeparator}+/, $id_text, 2;
+    my ( $uri, $title ) = $self->_parse_uri_and_title($id_text);
+
+    $self->_add_link_by_id( $id => [ $uri, $title ] );
+
+    return q{};
+}
+
+sub _parse_uri_and_title {
+    my $self = shift;
+    my $text = shift;
+
+    my ( $uri, $title ) = split /\p{SpaceSeparator}+/, $text, 2;
 
     $uri =~ s/^<|>$//g;
     $title =~ s/^"|"$//g
         if defined $title;
 
-    $self->_add_link_by_id( $id => [ $uri, $title ] );
-
-    return q{};
+    return ( $uri, $title );
 }
 
 sub parse_markup {
@@ -365,40 +374,39 @@ $nested_brackets = qr{
     )*
 }x;
 
-# For some inexplicable reason, if I put $nested_brackets in here right now,
-# the regex doesn't work properly. Presumably this has something to do with
-# using it in a subroutine's lexical scope (resetting the stack on each
-# invocation?)
-my $link = qr{
-              (?:
-                \(
-                   ( [^\s]* )             # an inline URI
-                   (?:
-                     \s+
-                     ( ["'] )
-                     ([^\3]+)             # an optional quoted title
-                     \3
-                   )?
-                   \s*
-                \)
-                |
-                \s*
-                \[ ( [^]]* ) \]           # an id (can be empty)
-              )?                          # with no id or explicit uri, use text as id
-             }x;
+# Also stolen from Text::Markdown
+my $nested_parens;
+$nested_parens = qr{
+    (?>                                 # Atomic matching
+       [^()]+                           # Anything other than parens
+       |
+       \(
+         (??{ $nested_parens })         # Recursive set of nested parens
+       \)
+    )*
+}x;
 
 sub _match_link {
     my $self = shift;
     my $text = shift;
 
+    # For some inexplicable reason, this regex needs to be recreated each time
+    # the method is called or $nested_brackets && $nested_parens are
+    # undef. Presumably this has something to do with using it in a
+    # subroutine's lexical scope (resetting the stack on each invocation?)
     return unless
         ${$text} =~ / \G
                       \[ ($nested_brackets) \]    # link or alt text
-                      $link
+                      (?:
+                        \( ($nested_parens) \)
+                        |
+                        \s*
+                        \[ ( [^]]* ) \]           # an id (can be empty)
+                      )?                          # with no id or explicit uri, use text as id
                     /xgc;
 
     my ( $link_text, $attr ) =
-        $self->_link_match_results( $1, $2, $4, $5 );
+        $self->_link_match_results( $1, $2, $3 );
 
     my $start = Markdent::Event->new(
         type       => 'start',
@@ -428,11 +436,16 @@ sub _match_image {
         ${$text} =~ / \G
                       !
                       \[ ($nested_brackets) \]    # link or alt text
-                      $link
+                      (?:
+                        \( ($nested_parens) \)
+                        |
+                        \s*
+                        \[ ( [^]]* ) \]           # an id (can be empty)
+                      )?                          # with no id or explicit uri, use text as id
                     /xgc;
 
     my ( $alt_text, $attr ) =
-        $self->_link_match_results( $1, $2, $4, $5 );
+        $self->_link_match_results( $1, $2, $3 );
 
     $attr->{alt_text} = $alt_text;
 
@@ -448,15 +461,14 @@ sub _match_image {
 }
 
 sub _link_match_results {
-    my $self  = shift;
-    my $text  = shift;
-    my $uri   = shift;
-    my $title = shift;
-    my $id    = shift;
+    my $self          = shift;
+    my $text          = shift;
+    my $uri_and_title = shift;
+    my $id            = shift;
 
     my %attr;
-    if ( defined $uri ) {
-        $uri =~ s/^<|>$//g;
+    if ( defined $uri_and_title ) {
+        my ( $uri, $title ) = $self->_parse_uri_and_title($uri_and_title);
 
         $attr{uri}   = $uri;
         $attr{title} = $title
