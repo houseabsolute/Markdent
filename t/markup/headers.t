@@ -62,9 +62,9 @@ Header 2
 
 # Header 1A
 
-## Header 2A
+## Header 2A ##
 
-### Header 3
+### Header 3 ###
 
 #### Header 4
 

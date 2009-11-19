@@ -179,9 +179,13 @@ my $AtxHeader = qr/ ^
                     (
                       \p{SpaceSeparator}*
                       \S
-                      .+
-                      \n
+                      .+?
                     )
+                    (?:
+                      \p{SpaceSeparator}+
+                      \#+
+                    )?
+                    \n
                   /xm;
 
 sub _match_atx_header {
@@ -194,7 +198,7 @@ sub _match_atx_header {
                               /xmgc;
 
     my $level       = length $2;
-    my $header_text = $3;
+    my $header_text = $3 . "\n";
 
     $self->_debug_parse_result(
         $1,
