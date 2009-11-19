@@ -271,6 +271,8 @@ my $HorizontalRule = qr/ ^
                              (?: \* \p{SpaceSeparator}* ){3,}
                              |
                              (?: -  \p{SpaceSeparator}* ){3,}
+                             |
+                             (?: _  \p{SpaceSeparator}* ){3,}
                            )
                            \n
                          )
@@ -344,7 +346,7 @@ sub _match_blockquote {
         name => 'blockquote',
     );
 
-    $bq =~ s/^>\p{SpaceSeparator}{0,3}//gm;
+    $bq =~ s/^>\p{SpaceSeparator}?//gm;
 
     # Even if the blockquote is inside a list, we want to look for paragraphs,
     # not list items.
