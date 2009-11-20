@@ -529,20 +529,17 @@ sub _match_list {
         if ( $item eq $items[-1] ) {
             if (   @items > 1
                 && $items[-2] =~ /^$EmptyLine\z/m ) {
-                warn "IS PARA\n";
+
                 $self->_treat_list_item_as_paragraph();
             }
             else {
-                warn "IS LINE\n";
                 $self->_treat_list_item_as_line();
             }
         }
         elsif ( $item =~ /^$EmptyLine\z/m ) {
-            warn "IS PARA\n";
             $self->_treat_list_item_as_paragraph();
         }
         else {
-            warn "IS LINE\n";
             $self->_treat_list_item_as_line();
         }
 
