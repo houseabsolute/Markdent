@@ -496,8 +496,10 @@ sub _match_list {
 
     $self->_inc_list_level();
 
+    my @items = $self->_split_list_items($list);
+
     my $last_item_had_nl = 0;
-    for my $item ( $self->_split_list_items($list) ) {
+    for my $item (@items) {
         $self->handler()->handle_event(
             type => 'start',
             name => 'list_item',
@@ -511,11 +513,11 @@ sub _match_list {
         # This is a hack to ensure that the last item in a loose list (each
         # item is a paragraph) also is treated as a paragraph, not just a list
         # item.
-        $item .= "\n" if $last_item_had_nl;
+        $item .= "\n" if $last_item_had_nl && $item eq $items[-1];
 
         $self->_parse_text( \$item );
 
-        $last_item_had_nl = $item =~ /$EmptyLine$/ ? 1 : 0;
+        $last_item_had_nl = $item =~ /^$EmptyLine\z/m ? 1 : 0;
 
         $self->handler()->handle_event(
             type => 'end',
