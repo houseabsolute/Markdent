@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use File::Slurp qw( read_file );
+use HTML::Tidy;
+use Markdent::Handler::HTMLStream;
+use Markdent::Parser;
+
+my $markdown = read_file(shift);
+
+my $capture = q{};
+open my $fh, '>', \$capture
+    or die $!;
+
+my $handler = Markdent::Handler::HTMLStream->new(
+    title  => 'Needs a Title',
+    output => $fh,
+);
+
+my $parser = Markdent::Parser->new( handler => $handler );
+
+$parser->parse( text => $markdown );
+
+my $tidy = HTML::Tidy->new(
+    {
+        doctype => 'transitional',
+        indent  => 1,
+    }
+);
+
+print $tidy->clean($capture);
