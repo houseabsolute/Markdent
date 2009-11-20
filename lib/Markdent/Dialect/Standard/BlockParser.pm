@@ -124,7 +124,9 @@ sub _parse_text {
 
         $self->_match_two_line_header($text) and next;
 
-        $self->_match_horizontal_rule($text) and next;
+        unless ( $self->_list_level() ) {
+            $self->_match_horizontal_rule($text) and next;
+        }
 
         $self->_match_blockquote($text) and next;
 
@@ -418,9 +420,17 @@ sub _match_preformatted {
 
 my $Bullet = qr/ (?:
                    \p{SpaceSeparator}{0,3}
-                   ( [\*\-\+] )       # unordered list bullet
-                   |
-                   ( \d+\. )          # ordered list number
+                   (
+                     \+
+                     |
+                     ( [\*\-] )         # unordered list bullet
+                     (?!                #   but is not a horizontal rule
+                       (?: \p{SpaceSeparator}* \g{-1} ){2,}
+                       \p{SpaceSeparator}* \n
+                     )
+                     |
+                     \d+\.              # ordered list number
+                   )
                  )
                  \p{SpaceSeparator}+
                /xm;
@@ -431,17 +441,21 @@ sub _list_re {
     my $block_start;
 
     if ( $self->_list_level() ) {
-        $block_start = q{};
+        $block_start = qr/(<= \n )/xm;
     }
     else {
         $block_start = qr/ $BlockStart /xm;
     }
 
     my $list = qr/ $block_start
-                   ^
                    (
-                     $Bullet
-                     (?: .* \n )+?
+                     (?:
+                       ^
+                       ($Bullet)
+                       .+ \n
+                       |
+                       $EmptyLine
+                     )+
                    )
                  /xm;
 
@@ -459,10 +473,10 @@ sub _match_list {
                                 (?=           # list ends with
                                   $EmptyLine  # ... an empty line
                                   (?=
-                                    \S            # ... followed by content in column 1
+                                    \S        # ... followed by content in column 1
                                   )
-                                  (?!             # ... which is not
-                                    $Bullet    # ... a bullet
+                                  (?!         # ... which is not
+                                    $Bullet   # ... a bullet
                                   )
                                   |
                                   \s*         # or end of the document
@@ -471,7 +485,9 @@ sub _match_list {
                               /xmgc;
 
     my $list = $1;
-    my $type = defined $2 ? 'unordered_list' : 'ordered_list';
+    my $bullet = $2;
+
+    my $type = $bullet =~ /\d/ ? 'ordered_list' : 'unordered_list';
 
     $self->_debug_parse_result(
         $list,

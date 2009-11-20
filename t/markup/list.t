@@ -434,3 +434,111 @@ EOF
 
     parse_ok( $text, $expect, 'ordered list containing an unordered list' );
 }
+
+{
+    my $text = <<'EOF';
+*	asterisk 1
+
+*	asterisk 2
+
+* * *
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "asterisk 1\n",
+                    },
+                ],
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "asterisk 2\n",
+                },
+            ],
+        ],
+        { type => 'hr' },
+    ];
+
+    parse_ok( $text, $expect, 'unordered list terminated by a horizontal rule' );
+}
+
+{
+    my $text = <<'EOF';
+* + x
+* + x
+* + x
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "+ x\n",
+                },
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "+ x\n",
+                },
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "+ x\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'list where each list item text looks like a bullet' );
+}
+
+{
+    my $text = <<'EOF';
+* ---
+* foo
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "---\n",
+                },
+            ],
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "foo\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'list cannot contain a horizontal rule' );
+}
