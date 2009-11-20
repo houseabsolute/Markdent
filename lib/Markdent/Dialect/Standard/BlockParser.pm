@@ -421,13 +421,7 @@ sub _match_preformatted {
 my $Bullet = qr/ (?:
                    \p{SpaceSeparator}{0,3}
                    (
-                     \+
-                     |
-                     ( [\*\-] )         # unordered list bullet
-                     (?!                #   but is not a horizontal rule
-                       (?: \p{SpaceSeparator}* \g{-1} ){2,}
-                       \p{SpaceSeparator}* \n
-                     )
+                     [\+\*\-]           # unordered list bullet
                      |
                      \d+\.              # ordered list number
                    )
@@ -449,13 +443,8 @@ sub _list_re {
 
     my $list = qr/ $block_start
                    (
-                     (?:
-                       ^
-                       ($Bullet)
-                       .+ \n
-                       |
-                       $EmptyLine
-                     )+
+                     $Bullet
+                     (?: .* \n )+?
                    )
                  /xm;
 
@@ -472,11 +461,17 @@ sub _match_list {
                                 $list_re
                                 (?=           # list ends with
                                   $EmptyLine  # ... an empty line
-                                  (?=
-                                    \S        # ... followed by content in column 1
-                                  )
-                                  (?!         # ... which is not
-                                    $Bullet   # ... a bullet
+                                  (?:
+                                    (?=
+                                      $HorizontalRule  # ... followed by a horizontal rule
+                                    )
+                                    |
+                                    (?=
+                                      \S               # ... or followed by content in column 1
+                                    )
+                                    (?!                # ... which is not
+                                      $Bullet          # ... a bullet
+                                    )
                                   )
                                   |
                                   \s*         # or end of the document
