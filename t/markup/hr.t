@@ -42,17 +42,26 @@ EOF
 {
     my $text = <<'EOF';
 
-* *   ***
+- -   ---
 
 EOF
 
     my $expect = [
         {
-            type => 'hr',
+            type => 'unordered_list',
         },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "-   ---\n",
+                },
+            ],
+        ],
     ];
 
-    parse_ok( $text, $expect, 'hr preceded by blank line' );
+    parse_ok( $text, $expect, 'hr cannot have >1 space between text items' );
 }
 
 

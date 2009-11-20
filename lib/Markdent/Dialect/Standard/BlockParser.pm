@@ -286,13 +286,13 @@ sub _header {
 
 my $HorizontalRule = qr/ ^
                          (
-                           \p{SpaceSeparator}{0,3}
+                           (?: \p{SpaceSeparator}{0,3} | \t )
                            (?:
-                             (?: \* \p{SpaceSeparator}* ){3,}
+                             (?: \* \p{SpaceSeparator}? ){3,}
                              |
-                             (?: -  \p{SpaceSeparator}* ){3,}
+                             (?: -  \p{SpaceSeparator}? ){3,}
                              |
-                             (?: _  \p{SpaceSeparator}* ){3,}
+                             (?: _  \p{SpaceSeparator}? ){3,}
                            )
                            \n
                          )
