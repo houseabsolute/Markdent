@@ -18,14 +18,14 @@ my $HR2 = q{-} x 70;
 
 sub _debug_parse_result {
     my $self  = shift;
-    my $lines = shift;
+    my $text  = shift;
     my $type  = shift;
     my $extra = shift || [];
 
-    my $text = join q{}, map { $_ . "\n" } ref $lines ? @{$lines} : $lines;
+    my $text = '[' . $text . ']';
 
-    my $msg = $text . $HR2 . "\n" . '  - ' . $type . "\n";
-    while ( @{ $extra} ) {
+    my $msg = $text . "\n" . $HR2 . "\n" . '  - ' . $type . "\n";
+    while ( @{$extra} ) {
         my ( $key, $value ) = splice @{$extra}, 0, 2;
         $msg .= sprintf( '    - %-10s : %s', $key, $value );
         $msg .= "\n";
