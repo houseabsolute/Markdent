@@ -140,12 +140,29 @@ sub _parse_text {
 
  PARSE_MARKUP:
     while (1) {
+        if ( $self->debug() && pos ${$text} ) {
+            $self->_print_debug( "Remaining text:\n[\n"
+                    . substr( ${$text}, pos ${$text} )
+                    . "\n]\n" );
+        }
+
         if ( ${$text} =~ /\G\z/gc ) {
             $self->_event_for_text_buffer();
             last;
         }
 
-        for my $span ( $self->_possible_span_matches() ) {
+        my @look_for = $self->_possible_span_matches();
+
+        if ( $self->debug() ) {
+            my @look_debug = map { ref $_ ? "$_->[0] ($_->[1])" : $_ } @look_for;
+
+            my $msg = "Looking for the following possible matches:\n";
+            $msg .= "  - $_\n" for @look_debug;
+
+            $self->_print_debug($msg);
+        }
+
+        for my $span (@look_for) {
             my ( $markup, @args ) = ref $span ? @{$span} : $span;
 
             my $meth = '_match_' . $markup;
@@ -170,7 +187,7 @@ sub _possible_span_matches {
 
     # Strong needs to be checked before emphasis because emphasis is a shorter
     # version of strong, so it always matches where strong _could_ match.
-    for my $type (qw( strong emphasis code )) {
+    for my $type (qw( strong emphasis )) {
         if ( my $event = $self->_start_event_for_span($type) ) {
             push @look_for,
                 [ $type . '_end', $event->attributes()->{delimiter} ];
@@ -179,6 +196,8 @@ sub _possible_span_matches {
             push @look_for, $type . '_start';
         }
     }
+
+    push @look_for, 'code_start';
 
     unless ( $self->_start_event_for_span('link') ) {
         push @look_for, qw( auto_link link image );
@@ -337,7 +356,7 @@ sub _match_delimiter_start {
     my $text  = shift;
     my $delim = shift;
 
-    return unless ${$text} =~ /(?: ^ | \P{Letter} ) \G ($delim)/xgc;
+    return unless ${$text} =~ / \G ($delim)/xgc;
 
     return $1;
 }
@@ -347,7 +366,7 @@ sub _match_delimiter_end {
     my $text        = shift;
     my $delim       = shift;
 
-    return unless ${$text} =~ /\G $delim (?= \P{Letter} | \z ) /xgc;
+    return unless ${$text} =~ /\G $delim /xgc;
 
     return 1;
 }
