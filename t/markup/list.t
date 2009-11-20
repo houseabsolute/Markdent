@@ -548,3 +548,73 @@ EOF
 
     parse_ok( $text, $expect, 'list cannot contain a horizontal rule' );
 }
+
+{
+    my $text = <<'EOF';
+
+1. First
+
+2. Second:
+	* Fee
+	* Fie
+
+3. Third
+EOF
+
+    my $expect = [
+        {
+            type => 'ordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "First\n",
+                    },
+                ],
+            ],
+            { type => 'list_item' },
+            [
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "Second:\n",
+                    },
+                ],
+                { type => 'unordered_list' },
+                [
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "Fee\n",
+                        },
+                    ],
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "Fie\n",
+                        },
+                    ],
+                ],
+            ],
+            { type => 'list_item' },
+            [
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "Third\n",
+                    },
+                ],
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'loose list with sublist should still have paras' );
+}

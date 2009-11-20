@@ -31,19 +31,33 @@ has __html_blocks => (
 );
 
 has _list_level => (
-    traits  => ['Counter'],
-    is      => 'rw',
-    isa     => Int,
-    default => 0,
-    handles => {
+    traits   => ['Counter'],
+    is       => 'rw',
+    isa      => Int,
+    default  => 0,
+    init_arg => undef,
+    handles  => {
         '_inc_list_level' => 'inc',
         '_dec_list_level' => 'dec',
+    },
+);
+
+has _list_item_is_paragraph => (
+    traits   => ['Bool'],
+    isa      => Bool,
+    default  => 0,
+    init_arg => undef,
+    handles  => {
+        _treat_list_item_as_paragraph => 'set',
+        _treat_list_item_as_line      => 'unset',
     },
 );
 
 sub parse_document {
     my $self = shift;
     my $text = shift;
+
+    $self->_treat_list_item_as_line();
 
     $self->_hash_html_blocks($text);
 
@@ -512,10 +526,25 @@ sub _match_list {
         # This is a hack to ensure that the last item in a loose list (each
         # item is a paragraph) also is treated as a paragraph, not just a list
         # item.
-        $item .= "\n"
-            if $item eq $items[-1]
-                && $items[-2]
-                && $items[-2] =~ /^$EmptyLine\z/m;
+        if ( $item eq $items[-1] ) {
+            if (   @items > 1
+                && $items[-2] =~ /^$EmptyLine\z/m ) {
+                warn "IS PARA\n";
+                $self->_treat_list_item_as_paragraph();
+            }
+            else {
+                warn "IS LINE\n";
+                $self->_treat_list_item_as_line();
+            }
+        }
+        elsif ( $item =~ /^$EmptyLine\z/m ) {
+            warn "IS PARA\n";
+            $self->_treat_list_item_as_paragraph();
+        }
+        else {
+            warn "IS LINE\n";
+            $self->_treat_list_item_as_line();
+        }
 
         $self->_parse_text( \$item );
 
@@ -593,7 +622,21 @@ sub _match_list_item {
         'list_item',
     ) if $self->debug();
 
+    if ( $self->_list_item_is_paragraph() ) {
+        $self->handler()->handle_event(
+            type => 'start',
+            name => 'paragraph',
+        );
+    }
+
     $self->span_parser()->parse_markup($1);
+
+    if ( $self->_list_item_is_paragraph() ) {
+        $self->handler()->handle_event(
+            type => 'end',
+            name => 'paragraph',
+        );
+    }
 
     return 1;
 }
