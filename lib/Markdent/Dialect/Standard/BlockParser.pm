@@ -435,7 +435,7 @@ sub _list_re {
     my $block_start;
 
     if ( $self->_list_level() ) {
-        $block_start = q{};
+        $block_start = qr/(?<= \n )/xm;
     }
     else {
         $block_start = qr/ $BlockStart /xm;
