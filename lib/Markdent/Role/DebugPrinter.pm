@@ -22,9 +22,7 @@ sub _debug_parse_result {
     my $type  = shift;
     my $extra = shift || [];
 
-    my $text = '[' . $text . ']';
-
-    my $msg = $text . "\n" . $HR2 . "\n" . '  - ' . $type . "\n";
+    my $msg = '[' . $text . "]\n" . $HR2 . "\n" . '  - ' . $type . "\n";
     while ( @{$extra} ) {
         my ( $key, $value ) = splice @{$extra}, 0, 2;
         $msg .= sprintf( '    - %-10s : %s', $key, $value );
