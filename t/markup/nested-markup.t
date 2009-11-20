@@ -162,10 +162,13 @@ EOF
             ],
             { type => 'list_item' },
             [
-                {
-                    type => 'text',
-                    text => "And another list item\n",
-                },
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "And another list item\n",
+                    },
+                ],
             ],
         ]
     ];
@@ -203,10 +206,13 @@ EOF
             ],
             { type => 'list_item' },
             [
-                {
-                    type => 'text',
-                    text => "And another list item\n",
-                },
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "And another list item\n",
+                    },
+                ],
             ],
         ],
     ];
