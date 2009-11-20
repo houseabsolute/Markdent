@@ -234,10 +234,13 @@ EOF
             ],
             { type => 'list_item' },
             [
-                {
-                    type => 'text',
-                    text => "l3\n",
-                }
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "l3\n",
+                    },
+                ],
             ],
         ],
     ];
@@ -461,10 +464,13 @@ EOF
             ],
             { type => 'list_item' },
             [
-                {
-                    type => 'text',
-                    text => "asterisk 2\n",
-                },
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "asterisk 2\n",
+                    },
+                ],
             ],
         ],
         { type => 'hr' },
