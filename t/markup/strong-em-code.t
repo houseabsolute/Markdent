@@ -124,3 +124,32 @@ EOF
 
     parse_ok( $text, $expect, 'code containing strong & em' );
 }
+
+{
+    my $text = <<'EOF';
+(`` ` ``)
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => '(',
+            }, {
+                type => 'code',
+            },
+            [
+                {
+                    type => 'text',
+                    text => q{`},
+                },
+            ], {
+                type => 'text',
+                text => ")\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'code in parens' );
+}

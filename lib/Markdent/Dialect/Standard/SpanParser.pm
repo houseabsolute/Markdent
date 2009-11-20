@@ -298,8 +298,10 @@ sub _match_code_start {
     my $self = shift;
     my $text = shift;
 
-    my ($delim) = $self->_match_delimiter_start( $text, qr/\`+/ )
+    my ($delim) = $self->_match_delimiter_start( $text, qr/\`+\p{SpaceSeparator}*/ )
         or return;
+
+    $delim =~ s/\p{SpaceSeparator}*$//;
 
     my $event = Markdent::Event->new(
         type       => 'start',
@@ -317,7 +319,7 @@ sub _match_code_end {
     my $text  = shift;
     my $delim = shift;
 
-    $self->_match_delimiter_end( $text, qr/\Q$delim/ )
+    $self->_match_delimiter_end( $text, qr/\p{SpaceSeparator}*\Q$delim/ )
         or return;
 
     my $event = Markdent::Event->new(
@@ -564,7 +566,11 @@ sub _match_plain_text {
                      (?=
                        $Escape
                        |
-                       \* | _ | \`        #   possible span markup
+                       \*                 #   possible span markup
+                       |
+                       _
+                       |
+                       \p{SpaceSeparator}* \`
                        |
                        !?\[               #   possible image or link
                        |

@@ -136,7 +136,7 @@ EOF
             [
                 {
                     type => 'text',
-                    text => ' \` ',
+                    text => q{\`},
                 },
             ], {
                 type => 'text',
