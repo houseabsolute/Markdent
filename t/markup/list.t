@@ -440,9 +440,9 @@ EOF
 
 {
     my $text = <<'EOF';
-*	asterisk 1
+*   asterisk 1
 
-*	asterisk 2
+*   asterisk 2
 
 * * *
 EOF
@@ -555,8 +555,8 @@ EOF
 1. First
 
 2. Second:
-	* Fee
-	* Fie
+    * Fee
+    * Fie
 
 3. Third
 EOF
