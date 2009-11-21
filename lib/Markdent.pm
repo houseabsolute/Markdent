@@ -13,23 +13,28 @@ __END__
 
 =head1 NAME
 
-Markdent - The fantastic new Markdent!
+Markdent - An event-based Markdown parser toolkit
 
 =head1 SYNOPSIS
 
-XXX - change this!
+    use Markdent::Simple
 
-    use Markdent;
-
-    my $foo = Markdent->new();
-
-    ...
+    my $parser = Markdent::Simple->new();
+    my $html = $parser->markdown_to_html($markdown);
 
 =head1 DESCRIPTION
 
-=head1 METHODS
+This distribution provides a toolkit for parsing Markdown (and Markdown
+variants). Unlike the other Markdown Perl tools, this module can be used for
+more than just generating HTML. The core parser generates events (like XML's
+SAX), making it easy to analyze a Markdown document in any number of ways.
 
-This class provides the following methods
+If you're only interested in converting Markdown to HTML, you can use the
+L<Markdent::Simple> class to do this, although you can just as well use better
+battle-tested tools like L<Test::Markdown>.
+
+Otherwise, see L<Markdown::Parser> for more details on how to connect your
+handlers to a parser.
 
 =head1 AUTHOR
 
@@ -37,7 +42,7 @@ Dave Rolsky, E<gt>autarch@urth.orgE<lt>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-text-markdown-eventual@rt.cpan.org>,
+Please report any bugs or feature requests to C<bug-markdent@rt.cpan.org>,
 or through the web interface at L<http://rt.cpan.org>.  I will be
 notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
