@@ -11,17 +11,21 @@ use Test::Markdent;
 
 {
     my $text = <<'EOF';
-**strong with *bad** em*
+**strong with *good* em*
 EOF
 
     my $expect = [
         { type => 'paragraph' },
         [
-            { type => 'strong' },
+            {
+                type => 'text',
+                text => '**strong with ',
+            },
+            { type => 'emphasis' },
             [
                 {
                     type => 'text',
-                    text => 'strong with *bad',
+                    text => 'good',
                 },
             ], {
                 type => 'text',
@@ -30,7 +34,7 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'good strong containing bad emphasis' );
+    parse_ok( $text, $expect, 'bad strong containing good emphasis' );
 }
 
 {
@@ -144,17 +148,21 @@ EOF
 
 {
     my $text = <<'EOF';
-**good strong with *bad ``em and good* code``**
+**bad strong with *good ``em and good* code``**
 EOF
 
     my $expect = [
         { type => 'paragraph' },
         [
-            { type => 'strong' },
+            {
+                type => 'text',
+                text => '**bad strong with ',
+            },
+            { type => 'emphasis' },
             [
                 {
                     type => 'text',
-                    text => 'good strong with *bad ',
+                    text => 'good ',
                 },
                 { type => 'code' },
                 [
@@ -165,10 +173,10 @@ EOF
                 ],
             ], {
                 type => 'text',
-                text => "\n",
+                text => "*\n",
             },
         ],
     ];
 
-    parse_ok( $text, $expect, 'good strong start, good emphasis interleaving bad code' );
+    parse_ok( $text, $expect, 'bad strong start, good emphasis and good code' );
 }
