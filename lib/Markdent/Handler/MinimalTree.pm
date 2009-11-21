@@ -284,3 +284,56 @@ sub _set_current_up_one_level {
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Markdent::Handler::HTMLStream - A Markdent handler which builds a tree
+
+=head1 DESCRIPTION
+
+This class implements an event receiver which in turn builds a tree using
+L<Tree::Simple>.
+
+It is primarily intended for use in testing.
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head2 Markdent::Handler::MinimalTree->new(...)
+
+This method creates a new handler.
+
+=head2 $mhmt->tree()
+
+Returns the root tree for the document.
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::EventsAsMethods> and
+L<Markdent::Role::Handler> roles.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<gt>autarch@urth.orgE<lt>
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

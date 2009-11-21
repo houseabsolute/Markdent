@@ -27,7 +27,7 @@ sub parse_ok {
 
     my $parser = Markdent::Parser->new( handler => $handler );
 
-    $parser->parse( text => $markdown );
+    $parser->parse( markdown => $markdown );
 
     my $visitor = Tree::Simple::Visitor::ToNestedArray->new();
     $handler->tree()->accept($visitor);

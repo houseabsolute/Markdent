@@ -31,7 +31,7 @@ sub markdown_to_html {
 
     my $parser = Markdent::Parser->new( handler => $handler );
 
-    $parser->parse( text => $markdown );
+    $parser->parse( markdown => $markdown );
 
     return $capture;
 }

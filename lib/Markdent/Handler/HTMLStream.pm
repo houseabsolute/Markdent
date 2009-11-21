@@ -21,17 +21,19 @@ has title => (
     required => 1,
 );
 
-has output => (
+has _output => (
     is       => 'ro',
     isa      => OutputStream,
     required => 1,
+    init_arg => 'output',
 );
 
-has stream => (
-    is      => 'ro',
-    isa     => 'HTML::Stream',
-    lazy    => 1,
-    default => sub { HTML::Stream->new( $_[0]->output() ) },
+has _stream => (
+    is       => 'ro',
+    isa      => 'HTML::Stream',
+    init_arg => undef,
+    lazy     => 1,
+    default  => sub { HTML::Stream->new( $_[0]->_output() ) },
 );
 
 my $Doctype = <<'EOF';
@@ -42,21 +44,21 @@ EOF
 sub start_document {
     my $self = shift;
 
-    $self->output()->print($Doctype);
-    $self->stream()->tag('html');
-    $self->stream()->tag('head');
-    $self->stream()->tag('title');
-    $self->stream()->text( $self->title() );
-    $self->stream()->tag('_title');
-    $self->stream()->tag('_head');
-    $self->stream()->tag('body');
+    $self->_output()->print($Doctype);
+    $self->_stream()->tag('html');
+    $self->_stream()->tag('head');
+    $self->_stream()->tag('title');
+    $self->_stream()->text( $self->title() );
+    $self->_stream()->tag('_title');
+    $self->_stream()->tag('_head');
+    $self->_stream()->tag('body');
 }
 
 sub end_document {
     my $self = shift;
 
-    $self->stream()->tag('_body');
-    $self->stream()->tag('_html');
+    $self->_stream()->tag('_body');
+    $self->_stream()->tag('_html');
 }
 
 sub start_header {
@@ -67,7 +69,7 @@ sub start_header {
 
     my $tag = 'h' . $level;
 
-    $self->stream()->tag($tag);
+    $self->_stream()->tag($tag);
 }
 
 sub end_header {
@@ -78,114 +80,114 @@ sub end_header {
 
     my $tag = '_h' . $level;
 
-    $self->stream()->tag($tag);
+    $self->_stream()->tag($tag);
 }
 
 sub start_blockquote {
     my $self  = shift;
 
-    $self->stream()->tag('blockquote');
+    $self->_stream()->tag('blockquote');
 }
 
 sub end_blockquote {
     my $self  = shift;
 
-    $self->stream()->tag('_blockquote');
+    $self->_stream()->tag('_blockquote');
 }
 
 sub start_unordered_list {
     my $self  = shift;
 
-    $self->stream()->tag('ul');
+    $self->_stream()->tag('ul');
 }
 
 sub end_unordered_list {
     my $self  = shift;
 
-    $self->stream()->tag('_ul');
+    $self->_stream()->tag('_ul');
 }
 
 sub start_ordered_list {
     my $self  = shift;
 
-    $self->stream()->tag('ol');
+    $self->_stream()->tag('ol');
 }
 
 sub end_ordered_list {
     my $self  = shift;
 
-    $self->stream()->tag('_ol');
+    $self->_stream()->tag('_ol');
 }
 
 sub start_list_item {
     my $self  = shift;
 
-    $self->stream()->tag('li');
+    $self->_stream()->tag('li');
 }
 
 sub end_list_item {
     my $self  = shift;
 
-    $self->stream()->tag('_li');
+    $self->_stream()->tag('_li');
 }
 
 sub preformatted {
     my $self = shift;
     my ($text) = validated_list( \@_, content => { isa => Str }, );
 
-    $self->stream()->tag('pre');
-    $self->stream()->tag('code');
-    $self->stream()->text($text);
-    $self->stream()->tag('_code');
-    $self->stream()->tag('_pre');
+    $self->_stream()->tag('pre');
+    $self->_stream()->tag('code');
+    $self->_stream()->text($text);
+    $self->_stream()->tag('_code');
+    $self->_stream()->tag('_pre');
 }
 
 sub start_paragraph {
     my $self  = shift;
 
-    $self->stream()->tag('p');
+    $self->_stream()->tag('p');
 }
 
 sub end_paragraph {
     my $self  = shift;
 
-    $self->stream()->tag('_p');
+    $self->_stream()->tag('_p');
 }
 
 sub start_emphasis {
     my $self = shift;
 
-    $self->stream()->tag('em');
+    $self->_stream()->tag('em');
 }
 
 sub end_emphasis {
     my $self = shift;
 
-    $self->stream()->tag('_em');
+    $self->_stream()->tag('_em');
 }
 
 sub start_strong {
     my $self = shift;
 
-    $self->stream()->tag('strong');
+    $self->_stream()->tag('strong');
 }
 
 sub end_strong {
     my $self = shift;
 
-    $self->stream()->tag('_strong');
+    $self->_stream()->tag('_strong');
 }
 
 sub start_code {
     my $self = shift;
 
-    $self->stream()->tag('code');
+    $self->_stream()->tag('code');
 }
 
 sub end_code {
     my $self = shift;
 
-    $self->stream()->tag('_code');
+    $self->_stream()->tag('_code');
 }
 
 sub auto_link {
@@ -195,9 +197,9 @@ sub auto_link {
         uri => { isa => Str, optional => 1 },
     );
 
-    $self->stream()->tag( 'a', href => $uri );
-    $self->stream()->text($uri);
-    $self->stream()->tag('_a');
+    $self->_stream()->tag( 'a', href => $uri );
+    $self->_stream()->text($uri);
+    $self->_stream()->tag('_a');
 }
 
 sub start_link {
@@ -212,7 +214,7 @@ sub start_link {
 
     delete @p{ grep { ! defined $p{$_} } keys %p };
 
-    $self->stream()->tag(
+    $self->_stream()->tag(
         'a', href => $p{uri},
         exists $p{title} ? ( title => $p{title} ) : (),
     );
@@ -221,35 +223,35 @@ sub start_link {
 sub end_link {
     my $self = shift;
 
-    $self->stream()->tag('_a');
+    $self->_stream()->tag('_a');
 }
 
 sub text {
     my $self = shift;
     my ($text) = validated_list( \@_, content => { isa => Str }, );
 
-    $self->stream()->text($text);
+    $self->_stream()->text($text);
 }
 
 sub html {
     my $self = shift;
     my ($html) = validated_list( \@_, content => { isa => Str }, );
 
-    $self->output()->print($html);
+    $self->_output()->print($html);
 }
 
 sub html_entity {
     my $self = shift;
     my ($entity) = validated_list( \@_, entity => { isa => Str }, );
 
-    $self->stream()->ent($entity);
+    $self->_stream()->ent($entity);
 }
 
 sub html_block {
     my $self = shift;
     my ($html) = validated_list( \@_, content => { isa => Str }, );
 
-    $self->output()->print($html);
+    $self->_output()->print($html);
 }
 
 sub image {
@@ -265,7 +267,7 @@ sub image {
 
     delete @p{ grep { ! defined $p{$_} } keys %p };
 
-    $self->stream()->tag(
+    $self->_stream()->tag(
         'img', src => $p{uri},
         ( exists $p{alt_text} ? ( alt   => $p{alt_text} ) : () ),
         ( exists $p{title}    ? ( title => $p{title} )    : () ),
@@ -275,9 +277,72 @@ sub image {
 sub hr {
     my $self = shift;
 
-    $self->stream()->tag('hr');
+    $self->_stream()->tag('hr');
 }
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Markdent::Handler::HTMLStream - A Markdent handler which generates HTML
+
+=head1 DESCRIPTION
+
+This class implements an event receiver which in turn generates a stream of
+HTML output based on those events.
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head2 Markdent::Handler::HTMLStream->new(...)
+
+This method creates a new handler. It accepts the following parameters:
+
+=over 4
+
+=item * title => $title
+
+The title of the document. This is required.
+
+=item * output => $fh
+
+The file handle to which HTML output will be streamed. If you want to capture
+the output in a string, you can open a filehandle to a string:
+
+  my $buffer = q{};
+  open my $fh, '>', \$buffer;
+
+=back
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::EventsAsMethods> and
+L<Markdent::Role::Handler> roles.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<gt>autarch@urth.orgE<lt>
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

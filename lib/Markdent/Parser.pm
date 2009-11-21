@@ -17,10 +17,11 @@ use MooseX::StrictConstructor;
 
 with 'Markdent::Role::AnyParser';
 
-has block_parser_class => (
-    is      => 'ro',
-    isa     => BlockParserClass,
-    default => 'Markdent::Dialect::Standard::BlockParser',
+has _block_parser_class => (
+    is       => 'ro',
+    isa      => BlockParserClass,
+    init_arg => 'block_parser_class',
+    default  => 'Markdent::Dialect::Standard::BlockParser',
 );
 
 has _block_parser => (
@@ -37,10 +38,11 @@ has _block_parser_args => (
     init_arg => undef,
 );
 
-has span_parser_class => (
-    is      => 'ro',
-    does    => SpanParserClass,
-    default => 'Markdent::Dialect::Standard::SpanParser',
+has _span_parser_class => (
+    is       => 'ro',
+    does     => SpanParserClass,
+    init_arg => 'span_parser_class',
+    default  => 'Markdent::Dialect::Standard::SpanParser',
 );
 
 has _span_parser_args => (
@@ -65,7 +67,7 @@ sub BUILD {
     for my $key (
         grep {defined}
         map  { $_->init_arg() }
-        $self->span_parser_class()->meta()->get_all_attributes()
+        $self->_span_parser_class()->meta()->get_all_attributes()
         ) {
 
         $sp_args{$key} = $args->{$key}
@@ -80,7 +82,7 @@ sub BUILD {
     for my $key (
         grep {defined}
         map  { $_->init_arg() }
-        $self->block_parser_class()->meta()->get_all_attributes()
+        $self->_block_parser_class()->meta()->get_all_attributes()
         ) {
 
         $bp_args{$key} = $args->{$key}
@@ -96,20 +98,20 @@ sub BUILD {
 sub _build_block_parser {
     my $self = shift;
 
-    return $self->block_parser_class()->new( $self->_block_parser_args() );
+    return $self->_block_parser_class()->new( $self->_block_parser_args() );
 }
 
 sub _build_span_parser {
     my $self = shift;
 
-    return $self->span_parser_class()->new( $self->_span_parser_args() );
+    return $self->_span_parser_class()->new( $self->_span_parser_args() );
 }
 
 sub parse {
     my $self = shift;
     my ($text) = validated_list(
         \@_,
-        text => { isa => Str },
+        markdown => { isa => Str },
     );
 
     $self->_clean_text(\$text);
@@ -143,3 +145,89 @@ sub _clean_text {
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Markdent::Parser - A markdown parser
+
+=head1 SYNOPSIS
+
+  my $handler = Markdent::Handler::HTMLStream->new( ... );
+
+  my $parser = Markdent::Parser->new(
+      block_parser_class => '...',
+      span_parser_class  => '...',
+      handler            => $handler,
+  );
+
+  $parse->parse( markdown => $markdown );
+
+=head1 DESCRIPTION
+
+This class provides the primary interface for creating a parser. It ties a
+block and span parser together with a handler.
+
+By default, it will parse the standard Markdown dialect, but you can provide
+alternate block or span parser classes.
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head2 Markdent::Parser->new(...)
+
+This method creates a new parser. It accepts the following parameters:
+
+=over 4
+
+=item * block_parser_class => $class
+
+This default to L<Markdent::Dialect::Standard::BlockParser>, but can be any
+class which implements the L<Markdent::Role::BlockParser> role.
+
+=item * span_parser_class => $class
+
+This default to L<Markdent::Dialect::Standard::SpanParser>, but can be any
+class which implements the L<Markdent::Role::SpanParser> role.
+
+=item * handler => $handler
+
+This can be any object which implements the L<Markdent::Role::Handler>
+role. It is required.
+
+=back
+
+=head2 $parser->parse( markdown => $markdown )
+
+This method parses the given document. The parsing will cause events to be
+fired which will be passed to the parser's handler.
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::EventsAsMethods> and
+L<Markdent::Role::Handler> roles.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<gt>autarch@urth.orgE<lt>
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
