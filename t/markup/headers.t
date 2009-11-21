@@ -245,3 +245,50 @@ EOF
 
     parse_ok( $text, $expect, 'headers with no whitespace after' );
 }
+
+{
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+#${tab}Header 1${tab}#
+EOF
+
+    my $expect = [
+        {
+            type  => 'header',
+            level => 1,
+        },
+        [
+            {
+                type => 'text',
+                text => "Header 1\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'ATX header with tabs' );
+}
+
+{
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+${tab}Header 1
+==============
+EOF
+
+    my $expect = [
+        {
+            type  => 'header',
+            level => 1,
+        },
+        [
+            {
+                type => 'text',
+                text => "${tab}Header 1\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'two-line header with tabs' );
+}

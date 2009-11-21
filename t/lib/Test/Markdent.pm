@@ -35,6 +35,7 @@ sub parse_ok {
     # The top level of this data structure is always a one element array ref
     # containing the document contents.
     my $results = $visitor->getResults()->[0];
+
     diag( Dumper($results) )
         if $ENV{MARKDENT_TEST_VERBOSE};
 

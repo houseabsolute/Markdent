@@ -66,7 +66,8 @@ sub parse_document {
     $self->_parse_text($text);
 }
 
-my $EmptyLine = qr/(?: ^ \p{SpaceSeparator}* \n ) /xm;
+my $HorizontalWS = qr/(?: \p{SpaceSeparator} | \t )/x;
+my $EmptyLine = qr/(?: ^ $HorizontalWS* \n ) /xm;
 my $EmptyLines = qr/ (?: $EmptyLine )+ /xm;
 
 my $BlockStart = qr/(?: \A | $EmptyLines )/xm;
@@ -193,12 +194,12 @@ sub _match_hashed_html {
 my $AtxHeader = qr/ ^
                     (\#{1,6})
                     (
-                      \p{SpaceSeparator}*
+                      $HorizontalWS*
                       \S
                       .+?
                     )
                     (?:
-                      \p{SpaceSeparator}+
+                      $HorizontalWS*
                       \#+
                     )?
                     \n
@@ -222,7 +223,7 @@ sub _match_atx_header {
         [ level => $level ],
     ) if $self->debug();
 
-    $header_text =~ s/^\p{SpaceSeparator}*//;
+    $header_text =~ s/^$HorizontalWS*//;
 
     $self->_header( $level, $header_text );
 
@@ -231,7 +232,7 @@ sub _match_atx_header {
 
 my $TwoLineHeader = qr/  ^
                          (
-                           \p{SpaceSeparator}*   # horizontal ws
+                           $HorizontalWS*
                            \S                    # must have some non-ws
                            .+                    # anything else
                            \n
@@ -286,7 +287,7 @@ sub _header {
 
 my $HorizontalRule = qr/ ^
                          (
-                           (?: \p{SpaceSeparator}{0,3} | \t )
+                           \p{SpaceSeparator}{0,3}
                            (?:
                              (?: \* \p{SpaceSeparator}? ){3,}
                              |
@@ -329,7 +330,7 @@ sub _match_blockquote {
                                 (
                                   ^
                                   >
-                                  \p{SpaceSeparator}*
+                                  $HorizontalWS*
                                   \S
                                   (?:
                                     .*
@@ -344,7 +345,7 @@ sub _match_blockquote {
                                   )
                                   (?!             # ... which is not
                                     >             # ... a blockquote
-                                    \p{SpaceSeparator}*
+                                    $HorizontalWS*
                                     \S
                                   )
                                   |
@@ -366,7 +367,7 @@ sub _match_blockquote {
         name => 'blockquote',
     );
 
-    $bq =~ s/^>\p{SpaceSeparator}?//gm;
+    $bq =~ s/^>(?: \p{SpaceSeparator} | \t )?//gxm;
 
     # Even if the blockquote is inside a list, we want to look for paragraphs,
     # not list items.
@@ -377,7 +378,7 @@ sub _match_blockquote {
     # well. If we treat each change of blockquote level as starting a new
     # sub-document, we get the same behavior.
     for my $chunk (
-        $self->_split_chunks_on_regex( $bq, qr/^>\p{SpaceSeparator}*\S/m ) ) {
+        $self->_split_chunks_on_regex( $bq, qr/^>(?: \p{SpaceSeparator} | \t )*\S/xm ) ) {
 
         $self->_parse_text( \$chunk );
     }
@@ -393,7 +394,11 @@ sub _match_blockquote {
 }
 
 my $PreLine = qr/ ^
-                  \p{spaceSeparator}{4,}
+                  (?:
+                    \p{spaceSeparator}{4,}
+                    |
+                    \t
+                  )
                   \S
                   .*
                   \n
@@ -421,7 +426,7 @@ sub _match_preformatted {
         'preformatted',
     ) if $self->debug();
 
-    $pre =~ s/^\p{SpaceSeparator}{4}//gm;
+    $pre =~ s/^(?:\p{SpaceSeparator}{4}|\t)//gm;
 
     $self->handler()->handle_event(
         type       => 'inline',
@@ -433,14 +438,14 @@ sub _match_preformatted {
 }
 
 my $Bullet = qr/ (?:
-                   \p{SpaceSeparator}{0,3}
+                   (?: \p{SpaceSeparator}{0,3} | \t )
                    (
                      [\+\*\-]           # unordered list bullet
                      |
                      \d+\.              # ordered list number
                    )
                  )
-                 \p{SpaceSeparator}+
+                 $HorizontalWS+
                /xm;
 
 sub _list_re {
@@ -510,6 +515,7 @@ sub _match_list {
 
     $self->_inc_list_level();
 
+    my $indent = 
     my @items = $self->_split_list_items($list);
 
     for my $item (@items) {
@@ -518,7 +524,7 @@ sub _match_list {
             name => 'list_item',
         );
 
-        $item =~ s/^ (?: $Bullet | \p{SpaceSeparator}{4} )//xgm;
+        $item =~ s/^ (?: $Bullet | \p{SpaceSeparator}{4} | \t )//xgm;
 
         $self->_print_debug( "Parsing list item for blocks:\n[$item]\n" )
             if $self->debug();
@@ -530,6 +536,10 @@ sub _match_list {
             if (   @items > 1
                 && $items[-2] =~ /^$EmptyLine\z/m ) {
 
+                $self->_print_debug(
+                    "Treating last list item as a paragraph because previous item ends with empty line\n"
+                ) if $self->debug();
+
                 $self->_treat_list_item_as_paragraph();
             }
             else {
@@ -537,6 +547,9 @@ sub _match_list {
             }
         }
         elsif ( $item =~ /^$EmptyLine\z/m ) {
+            $self->_print_debug("Treating item as a paragraph because it ends with empty line\n")
+                if $self->debug();
+
             $self->_treat_list_item_as_paragraph();
         }
         else {

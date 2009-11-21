@@ -50,29 +50,12 @@ EOF
 
     my $expect = [
         {
-            type => 'hr',
+            type => 'preformatted',
+            text => "---\n",
         },
     ];
 
-    parse_ok( $text, $expect, 'hr with a leading tab' );
-}
-
-{
-    my $tab = "\t";
-
-    my $text = <<"EOF";
-
-${tab}- - -
-
-EOF
-
-    my $expect = [
-        {
-            type => 'hr',
-        },
-    ];
-
-    parse_ok( $text, $expect, 'hr with a leading tab (loose)' );
+    parse_ok( $text, $expect, 'hr cannot have a leading tab' );
 }
 
 {

@@ -137,10 +137,6 @@ sub _clean_text {
     ${$text} .= "\n"
         unless substr( ${$text}, -1, 1 ) eq "\n";
 
-    # XXX - not sure if this is really okay, but it does make parsing simpler
-    # ;)
-    ${$text} =~ s/\t/    /g;
-
     return;
 }
 

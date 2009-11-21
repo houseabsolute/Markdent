@@ -23,6 +23,22 @@ EOF
 
     parse_ok( $text, $expect, 'one-line preformatted' );
 }
+{
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+${tab}preformatted line
+EOF
+
+    my $expect = [
+        {
+            type => 'preformatted',
+            text => "preformatted line\n",
+        }
+    ];
+
+    parse_ok( $text, $expect, 'one-line preformatted with leading tab' );
+}
 
 {
     my $text = <<'EOF';

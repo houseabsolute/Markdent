@@ -35,6 +35,33 @@ EOF
 }
 
 {
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+>${tab}blockquote
+EOF
+
+    my $expect = [
+        {
+            type => 'blockquote',
+        },
+        [
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "blockquote\n",
+                }
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'one-line blockquote with tab' );
+}
+
+{
     my $text = <<'EOF';
 > blockquote
 > and more
@@ -106,6 +133,55 @@ EOF
     ];
 
     parse_ok( $text, $expect, 'three-line blockquote, middle line is 2nd level' );
+}
+{
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+>${tab}blockquote
+>>${tab}level 2
+>${tab}level 1
+EOF
+
+    my $expect = [
+        {
+            type => 'blockquote',
+        },
+        [
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "blockquote\n",
+                }
+            ],
+            { type => 'blockquote' },
+            [
+                {
+                    type => 'paragraph',
+                },
+                [
+                    {
+                        type => 'text',
+                        text => "level 2\n",
+                    }
+                ],
+            ],
+            {
+                type => 'paragraph',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "level 1\n",
+                }
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'three-line blockquote with tabs, middle line is 2nd level' );
 }
 
 {
