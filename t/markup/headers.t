@@ -285,7 +285,7 @@ EOF
         [
             {
                 type => 'text',
-                text => "${tab}Header 1\n",
+                text => "    Header 1\n",
             },
         ],
     ];
