@@ -438,7 +438,7 @@ sub _match_preformatted {
 }
 
 my $Bullet = qr/ (?:
-                   (?: \p{SpaceSeparator}{0,3} | \t )
+                   \p{SpaceSeparator}{0,3}
                    (
                      [\+\*\-]           # unordered list bullet
                      |

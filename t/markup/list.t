@@ -643,3 +643,52 @@ EOF
 
     parse_ok( $text, $expect, 'loose list with sublist should still have paras' );
 }
+
+{
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+*${tab}Tab
+${tab}*${tab}Tab
+${tab}${tab}*${tab}Tab
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "Tab\n",
+                }, {
+                    type => 'unordered_list',
+                },
+                [
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "Tab\n",
+                        }, {
+                            type => 'unordered_list',
+                        },
+                        [
+                            { type => 'list_item' },
+                            [
+                                {
+                                    type => 'text',
+                                    text => "Tab\n",
+                                }
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'nested lists with leading tabs' );
+}
