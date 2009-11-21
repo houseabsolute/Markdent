@@ -179,27 +179,17 @@ sub _parse_text {
 sub _possible_span_matches {
     my $self = shift;
 
-    if ( my $event = $self->_start_event_for_span('code') ) {
+    if ( my $event = $self->_open_start_event_for_span('code') ) {
         return [ 'code_end', $event->attributes()->{delimiter} ];
     }
 
     my @look_for = 'escape';
 
-    # Strong needs to be checked before emphasis because emphasis is a shorter
-    # version of strong, so it always matches where strong _could_ match.
-    for my $type (qw( strong emphasis )) {
-        if ( my $event = $self->_start_event_for_span($type) ) {
-            push @look_for,
-                [ $type . '_end', $event->attributes()->{delimiter} ];
-        }
-        else {
-            push @look_for, $type . '_start';
-        }
-    }
+    push @look_for, $self->_look_for_strong_and_emphasis();
 
     push @look_for, 'code_start';
 
-    unless ( $self->_start_event_for_span('link') ) {
+    unless ( $self->_open_start_event_for_span('link') ) {
         push @look_for, qw( auto_link link image );
     }
 
@@ -208,7 +198,53 @@ sub _possible_span_matches {
     return @look_for;
 }
 
-sub _start_event_for_span {
+sub _look_for_strong_and_emphasis {
+    my $self = shift;
+
+    my %start;
+    $start{strong}   = $self->_open_start_event_for_span('strong');
+    $start{emphasis} = $self->_open_start_event_for_span('emphasis');
+
+    my @look_for;
+
+    # If we are in both, we need to try to end the most recent one first.
+    if ( $start{strong} && $start{emphasis} ) {
+        my $last_saw;
+        for my $event ( $self->_pending_events() ) {
+            if ( $event->event_name() eq 'start_strong' ) {
+                $last_saw = 'strong';
+            }
+            elsif ( $event->event_name() eq 'start_emphasis' ) {
+                $last_saw = 'emphasis';
+            }
+        }
+
+        my @order
+            = $last_saw eq 'strong'
+            ? qw( strong emphasis )
+            : qw( emphasis strong );
+
+        push @look_for,
+            map { [ $_ . '_end', $start{$_}->attributes()->{delimiter} ] }
+            @order;
+    }
+    else {
+        for my $key ( grep { $start{$_} } keys %start ) {
+            push @look_for, [ $key . '_end', $start{$key}->attributes()->{delimiter} ];
+        }
+    }
+
+    # We look for strong first since it's a longer version of emphasis (we
+    # need to try to match ** before *).
+    push @look_for, 'strong_start'
+        unless $start{strong};
+    push @look_for, 'emphasis_start'
+        unless $start{emphasis};
+
+    return @look_for;
+}
+
+sub _open_start_event_for_span {
     my $self = shift;
     my $type = shift;
 

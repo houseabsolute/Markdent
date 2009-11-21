@@ -153,3 +153,50 @@ EOF
 
     parse_ok( $text, $expect, 'code in parens' );
 }
+
+{
+    my $text = <<'EOF';
+**strong** *em* ***both***
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            { type => 'strong' },
+            [
+                {
+                    type => 'text',
+                    text => 'strong',
+                },
+            ], {
+                type => 'text',
+                text => q{ },
+            },
+            { type => 'emphasis' },
+            [
+                {
+                    type => 'text',
+                    text => 'em',
+                },
+            ], {
+                type => 'text',
+                text => q{ },
+            },
+            { type => 'strong' },
+            [
+                { type => 'emphasis' },
+                [
+                    {
+                        type => 'text',
+                        text => 'both',
+                    },
+                ]
+            ], {
+                type => 'text',
+                text => "\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'strong, em, and then both' );
+}
