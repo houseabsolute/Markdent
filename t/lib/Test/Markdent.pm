@@ -10,6 +10,7 @@ use Test::Differences;
 use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
+use Markdent::Handler::MinimalTree;
 use Markdent::Parser;
 use Markdent::Simple;
 
