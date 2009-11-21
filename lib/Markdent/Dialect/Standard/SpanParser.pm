@@ -93,7 +93,7 @@ sub _parse_uri_and_title {
 
     $text =~ s/^\s+|\s+$//g;
 
-    my ( $uri, $title ) = split /\p{SpaceSeparator}+/, $text, 2;
+    my ( $uri, $title ) = split /(?:\p{SpaceSeparator}|\t)+/, $text, 2;
 
     $uri = q{}
         unless defined $uri;

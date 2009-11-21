@@ -101,6 +101,39 @@ EOF
 }
 
 {
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+Some text with [A link](http://www.example.com${tab}"A title") and more text.
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Some text with ',
+            }, {
+                type  => 'link',
+                uri   => 'http://www.example.com',
+                title => "A title",
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'A link',
+                },
+            ], {
+                type => 'text',
+                text => " and more text.\n",
+            },
+        ]
+    ];
+
+    parse_ok( $text, $expect, 'text with an inline link (has title and tab before title)' );
+}
+
+{
     my $text = <<'EOF';
 Some text with [A link][link id] and more text.
 
