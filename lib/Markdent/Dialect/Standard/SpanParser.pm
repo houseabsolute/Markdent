@@ -674,10 +674,14 @@ sub _event_for_text_buffer {
 
     return unless $self->_has_span_text_buffer();
 
+    my $text = $self->_span_text_buffer();
+
+    $self->_detab_text(\$text);
+
     my $event = Markdent::Event->new(
         type       => 'inline',
         name       => 'text',
-        attributes => { content => $self->_span_text_buffer() },
+        attributes => { content => $text },
     );
 
     $self->_add_pending_event($event);

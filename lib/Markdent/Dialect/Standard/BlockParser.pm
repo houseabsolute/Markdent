@@ -130,8 +130,14 @@ sub _parse_text {
             last;
         }
 
-        die 'About to enter an endless loop!'
-            if $last_pos && $last_pos == pos ${$text};
+        if ( $last_pos && $last_pos == pos ${$text} ) {
+            my $msg = "About to enter an endless loop!\n";
+            $msg .= "\n";
+            $msg .= substr( ${$text}, $last_pos );
+            $msg .= "\n";
+
+            die $msg;
+        }
 
         $self->_match_hashed_html($text) and next;
 
@@ -399,6 +405,7 @@ my $PreLine = qr/ ^
                     |
                     \t
                   )
+                  $HorizontalWS*
                   \S
                   .*
                   \n
@@ -427,6 +434,8 @@ sub _match_preformatted {
     ) if $self->debug();
 
     $pre =~ s/^(?:\p{SpaceSeparator}{4}|\t)//gm;
+
+    $self->_detab_text(\$pre);
 
     $self->handler()->handle_event(
         type       => 'inline',
