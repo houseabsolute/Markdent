@@ -454,7 +454,7 @@ sub _list_re {
     my $block_start;
 
     if ( $self->_list_level() ) {
-        $block_start = qr/(?<= \n )/xm;
+        $block_start = qr/(?: (?<= \n ) | $EmptyLines )/xm;
     }
     else {
         $block_start = qr/ $BlockStart /xm;

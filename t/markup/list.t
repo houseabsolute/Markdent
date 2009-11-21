@@ -692,3 +692,52 @@ EOF
 
     parse_ok( $text, $expect, 'nested lists with leading tabs' );
 }
+
+{
+    my $tab = "\t";
+
+    my $text = <<'EOF';
+*	this
+
+	*	sub
+
+	that
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "this\n",
+                    },
+                ],
+                { type => 'unordered_list' },
+                [
+                    { type => 'list_item' },
+                    [
+                        {
+                            type => 'text',
+                            text => "sub\n",
+                        },
+                    ],
+                ],
+                { type => 'paragraph' },
+                [
+                    {
+                        type => 'text',
+                        text => "that\n",
+                    },
+                ],
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'weird use of tabs and nested lists from mdtest' );
+}
