@@ -33,6 +33,31 @@ EOF
 }
 
 {
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+*${tab}one line
+EOF
+
+    my $expect = [
+        {
+            type => 'unordered_list',
+        },
+        [
+            { type => 'list_item' },
+            [
+                {
+                    type => 'text',
+                    text => "one line\n",
+                }
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'one line unordered list with tab after bullet' );
+}
+
+{
     my $text = <<'EOF';
 * l1
 * l2
