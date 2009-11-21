@@ -279,7 +279,7 @@ sub _header {
         attributes => { level => $level },
     );
 
-    $self->_span_parser()->parse_markup($text);
+    $self->_span_parser()->parse_block($text);
 
     $self->handler()->handle_event(
         type       => 'end',
@@ -647,7 +647,7 @@ sub _match_list_item {
         );
     }
 
-    $self->_span_parser()->parse_markup($1);
+    $self->_span_parser()->parse_block($1);
 
     if ( $self->_list_item_is_paragraph() ) {
         $self->handler()->handle_event(
@@ -698,7 +698,7 @@ sub _match_paragraph {
         name => 'paragraph',
     );
 
-    $self->_span_parser()->parse_markup($1);
+    $self->_span_parser()->parse_block($1);
 
     $self->handler()->handle_event(
         type => 'end',
@@ -763,7 +763,7 @@ Daring Fireball and mdtest).
 
 This class provides the following methods:
 
-=head2 Markdent::Dialect::Standard::BlockParser->new( span_parser => $span_parser )
+=head2 Markdent::Dialect::Standard::BlockParser->new(  handler => $handler , span_parser => $span_parser )
 
 Creates a new block parser object. You must provide a span parser object.
 
@@ -772,6 +772,11 @@ Creates a new block parser object. You must provide a span parser object.
 This method takes a reference to a markdown string and parses it for
 blocks. Each block which contains text (except preformatted text) will be
 parsed for span-level markup using this object's C<span_parser>.
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::BlockParser>,
+L<Markdent::Role::AnyParser>, and L<Markdent::Role::DebugPrinter> roles.
 
 =head1 AUTHOR
 

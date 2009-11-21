@@ -7,7 +7,7 @@ use Moose::Role;
 
 with 'Markdent::Role::AnyParser';
 
-requires 'parse_markup';
+requires 'parse_block';
 
 no Moose::Role;
 

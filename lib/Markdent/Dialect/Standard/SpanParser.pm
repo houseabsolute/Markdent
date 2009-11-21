@@ -104,7 +104,7 @@ sub _parse_uri_and_title {
     return ( $uri, $title );
 }
 
-sub parse_markup {
+sub parse_block {
     my $self = shift;
     my $text = shift;
 
@@ -137,7 +137,7 @@ sub _parse_text {
     my $self = shift;
     my $text = shift;
 
- PARSE_MARKUP:
+ PARSE:
     while (1) {
         if ( $self->debug() && pos ${$text} ) {
             $self->_print_debug( "Remaining text:\n[\n"
@@ -167,7 +167,7 @@ sub _parse_text {
             my $meth = '_match_' . $markup;
 
             if ( $self->$meth( $text, @args ) ) {
-                next PARSE_MARKUP;
+                next PARSE;
             }
         }
 
@@ -830,3 +830,60 @@ sub _debug_pending_events {
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Markdent::Dialect::Standard::SpanParser - Span parser for standard Markdown
+
+=head1 DESCRIPTION
+
+This class parses spans for the standard Markdown dialect (as defined by
+Daring Fireball and mdtest).
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head2 Markdent::Dialect::Standard::SpanParser->new( handler => $handler )
+
+Creates a new span parser object. You must provide a span parser object.
+
+=head2 $span_parser->extract_link_ids(\$markdown)
+
+This method takes a reference to a markdown string and parses it for link
+ids. These are removed from the document and stored in the span parser for
+later use.
+
+=head2 $span_parser->parse_block(\$block)
+
+Parses a block for span-level markup.
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::SpanParser>,
+L<Markdent::Role::AnyParser>, and L<Markdent::Role::DebugPrinter> roles.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<gt>autarch@urth.orgE<lt>
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
