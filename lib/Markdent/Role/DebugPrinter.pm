@@ -3,6 +3,8 @@ package Markdent::Role::DebugPrinter;
 use strict;
 use warnings;
 
+our $VERSION = '0.01';
+
 use Markdent::Types qw( Bool );
 
 use Moose::Role;

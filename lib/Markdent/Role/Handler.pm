@@ -3,6 +3,8 @@ package Markdent::Role::Handler;
 use strict;
 use warnings;
 
+our $VERSION = '0.01';
+
 use Markdent::Event;
 
 use namespace::autoclean;

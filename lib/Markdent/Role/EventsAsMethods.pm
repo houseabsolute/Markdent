@@ -1,5 +1,10 @@
 package Markdent::Role::EventsAsMethods;
 
+use strict;
+use warnings;
+
+our $VERSION = '0.01';
+
 use namespace::autoclean;
 use Moose::Role;
 

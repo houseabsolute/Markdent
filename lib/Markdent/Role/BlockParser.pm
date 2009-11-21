@@ -3,6 +3,8 @@ package Markdent::Role::BlockParser;
 use strict;
 use warnings;
 
+our $VERSION = '0.01';
+
 use Moose::Role;
 
 with 'Markdent::Role::AnyParser';
