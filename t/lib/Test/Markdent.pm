@@ -11,8 +11,7 @@ use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
 use Markdent::Parser;
-use Markdent::Handler::HTMLStream;
-use Markdent::Handler::MinimalTree;
+use Markdent::Simple;
 
 use Exporter qw( import );
 
@@ -47,20 +46,10 @@ sub html_output_ok {
     my $expect_html = shift;
     my $desc        = shift;
 
-    my $capture = q{};
-    open my $fh, '>', \$capture
-        or die $!;
+    my $html = Markdent::Simple->new()
+        ->markdown_to_html( title => 'Test', markdown => $markdown );
 
-    my $handler = Markdent::Handler::HTMLStream->new(
-        title  => 'Test',
-        output => $fh,
-    );
-
-    my $parser = Markdent::Parser->new( handler => $handler );
-
-    $parser->parse( text => $markdown );
-
-    diag($capture)
+    diag($html)
         if $ENV{MARKDENT_TEST_VERBOSE};
 
     my $tidy = HTML::Tidy->new( { doctype => 'transitional' } );
@@ -78,7 +67,7 @@ $expect_html
 </html>
 EOF
 
-    eq_or_diff( $tidy->clean($capture), $tidy->clean($real_expect_html), $desc );
+    eq_or_diff( $tidy->clean($html), $tidy->clean($real_expect_html), $desc );
 }
 
 1;
