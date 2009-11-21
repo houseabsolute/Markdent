@@ -40,6 +40,42 @@ EOF
 }
 
 {
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+
+${tab}---
+
+EOF
+
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
+
+    parse_ok( $text, $expect, 'hr with a leading tab' );
+}
+
+{
+    my $tab = "\t";
+
+    my $text = <<"EOF";
+
+${tab}- - -
+
+EOF
+
+    my $expect = [
+        {
+            type => 'hr',
+        },
+    ];
+
+    parse_ok( $text, $expect, 'hr with a leading tab (loose)' );
+}
+
+{
     my $text = <<'EOF';
 
 - -   ---
