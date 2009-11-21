@@ -38,7 +38,6 @@ sub markdown_to_html {
 
 1;
 
-
 __END__
 
 =pod

@@ -60,7 +60,7 @@ sub parse_document {
 
     $self->_hash_html_blocks($text);
 
-    $self->span_parser()->extract_link_ids($text);
+    $self->_span_parser()->extract_link_ids($text);
 
     $self->_parse_text($text);
 }
@@ -279,7 +279,7 @@ sub _header {
         attributes => { level => $level },
     );
 
-    $self->span_parser()->parse_markup($text);
+    $self->_span_parser()->parse_markup($text);
 
     $self->handler()->handle_event(
         type       => 'end',
@@ -647,7 +647,7 @@ sub _match_list_item {
         );
     }
 
-    $self->span_parser()->parse_markup($1);
+    $self->_span_parser()->parse_markup($1);
 
     if ( $self->_list_item_is_paragraph() ) {
         $self->handler()->handle_event(
@@ -698,7 +698,7 @@ sub _match_paragraph {
         name => 'paragraph',
     );
 
-    $self->span_parser()->parse_markup($1);
+    $self->_span_parser()->parse_markup($1);
 
     $self->handler()->handle_event(
         type => 'end',
@@ -745,3 +745,51 @@ sub _split_chunks_on_regex {
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Markdent::Dialect::Standard::BlockParser - Block parser for standard Markdown
+
+=head1 DESCRIPTION
+
+This class parses blocks for the standard Markdown dialect (as defined by
+Daring Fireball and mdtest).
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head2 Markdent::Dialect::Standard::BlockParser->new( span_parser => $span_parser )
+
+Creates a new block parser object. You must provide a span parser object.
+
+=head2 $block_parser->parse_document(\$markdown)
+
+This method takes a reference to a markdown string and parses it for
+blocks. Each block which contains text (except preformatted text) will be
+parsed for span-level markup using this object's C<span_parser>.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<gt>autarch@urth.orgE<lt>
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

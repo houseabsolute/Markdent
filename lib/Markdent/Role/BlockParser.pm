@@ -9,9 +9,10 @@ with 'Markdent::Role::AnyParser';
 
 requires 'parse_document';
 
-has span_parser => (
+has _span_parser => (
     is       => 'ro',
     does     => 'Markdent::Role::SpanParser',
+    init_arg => 'span_parser',
     required => 1,
 );
 
