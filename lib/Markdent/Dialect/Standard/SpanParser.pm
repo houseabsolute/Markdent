@@ -8,7 +8,6 @@ our $VERSION = '0.01';
 use re 'eval';
 
 use Markdent::Types qw( Str ArrayRef HashRef );
-use MooseX::Params::Validate qw( validated_list );
 
 use namespace::autoclean;
 use Moose;

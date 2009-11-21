@@ -17,10 +17,13 @@ Markdent - An event-based Markdown parser toolkit
 
 =head1 SYNOPSIS
 
-    use Markdent::Simple
+    use Markdent::Simple;
 
     my $parser = Markdent::Simple->new();
-    my $html = $parser->markdown_to_html($markdown);
+    my $html   = $parser->markdown_to_html(
+        title    => 'My Document',
+        markdown => $markdown,
+    );
 
 =head1 DESCRIPTION
 

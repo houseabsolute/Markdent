@@ -7,7 +7,6 @@ our $VERSION = '0.01';
 
 use Digest::SHA1 qw( sha1_hex );
 use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
-use MooseX::Params::Validate qw( validated_list );
 use re 'eval';
 use Text::Balanced qw( gen_extract_tagged );
 
