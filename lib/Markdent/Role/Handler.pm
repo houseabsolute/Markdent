@@ -29,7 +29,7 @@ __END__
 
 =head1 NAME
 
-Markdent::Role::DebugPrinter - A required role for all handlers
+Markdent::Role::Handler - A required role for all handlers
 
 =head1 DESCRIPTION
 
