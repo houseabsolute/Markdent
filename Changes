@@ -1,3 +1,19 @@
+0.02
+
+- Fixed some cases of nested strong and em in the Standard dialect's
+  parser. It was broken for cases like this:
+
+  *This **is a test***.
+
+  This should turn into HTML like
+
+  <em>This <strong>is a test</strong></em>
+
+  but instead turned into
+
+  <em>This</em> <em>is a test</em>*.
+
+
 0.01   2009-11-21
 
 - First version, released on an unsuspecting world. Still rather alpha, and
