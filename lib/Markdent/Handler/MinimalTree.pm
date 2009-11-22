@@ -183,7 +183,7 @@ sub auto_link {
     my $self = shift;
     my %p    = validated_hash(
         \@_,
-        uri         => { isa => Str,  optional => 1 },
+        uri => { isa => Str, optional => 1 },
     );
 
     my $link_node = Tree::Simple->new( { type => 'auto_link', %p } );
