@@ -5,6 +5,8 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use Scalar::Util qw( blessed );
+
 use namespace::autoclean;
 use Moose::Role;
 
@@ -16,10 +18,7 @@ sub handle_event {
 
     my $meth = $event->event_name();
 
-    my %p = %{ $event->attributes() };
-    delete @p{ grep {/^!/} keys %p };
-
-    $self->$meth(%p);
+    $self->$meth( $event->kv_pairs_for_attributes() );
 }
 
 1;

@@ -15,6 +15,21 @@ has handler => (
     required => 1,
 );
 
+sub _send_event {
+    my $self = shift;
+
+    $self->handler()->handle_event( $self->_make_event(@_) );
+}
+
+sub _make_event {
+    my $self  = shift;
+    my $class = shift;
+
+    my $real_class = $class =~ /::/ ? $class : 'Markdent::Event::' . $class;
+
+    return $real_class->new(@_);
+}
+
 sub _detab_text {
     my $self = shift;
     my $text = shift;

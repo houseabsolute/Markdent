@@ -5,21 +5,10 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Markdent::Event;
-
 use namespace::autoclean;
 use Moose::Role;
 
 requires 'handle_event';
-
-around handle_event => sub {
-    my $orig = shift;
-    my $self = shift;
-
-    my $event = @_ > 1 ? Markdent::Event->new(@_) : shift;
-
-    return $self->$orig($event);
-};
 
 1;
 
@@ -42,13 +31,6 @@ This role implements behavior shared by all handlers.
 =item * $handler->handle_event(...)
 
 =back
-
-=head1 METHODS
-
-This role wraps the C<< $object->handle_event() >> method with a modifier. If
-the method is passed a list of key/value pairs, it calls C<<
-Markdent::Event->new() >> with those parameters and then calls the original
-method.
 
 =head1 AUTHOR
 

@@ -23,15 +23,18 @@ EOF
                 type => 'text',
                 text => 'Some random ',
             }, {
-                type => 'html',
-                html => q{<span class="foo">},
-            }, {
-                type => 'text',
-                text => 'html in',
-            }, {
-                type => 'html',
-                html => q{</span>},
-            }, {
+                type       => 'start_html_tag',
+                tag        => 'span',
+                attributes => {
+                    class => 'foo',
+                },
+            },
+            [
+                {
+                    type => 'text',
+                    text => 'html in',
+                },
+            ], {
                 type => 'text',
                 text => " my text!\n",
             },
@@ -215,18 +218,19 @@ EOF
         },
         [
             {
-                'text' => "Some text\n",
-                'type' => 'text'
+                type => 'text',
+                text => "Some text\n",
             }, {
-                'html' => '<div>',
-                'type' => 'html'
-            }, {
-                'text' => "\nAn arbitrary chunk of html.\n",
-                'type' => 'text'
-            }, {
-                'html' => '</div>',
-                'type' => 'html'
-            }, {
+                type       => 'start_html_tag',
+                tag        => 'div',
+                attributes => {},
+            },
+            [
+                {
+                    type => 'text',
+                    text => "\nAn arbitrary chunk of html.\n",
+                },
+            ], {
                 type => 'text',
                 text => "\n",
             },
@@ -256,17 +260,18 @@ EOF
         },
         [
             {
-                'html' => '<div>',
-                'type' => 'html'
-            }, {
-                'text' => "\nAn arbitrary chunk of html.\n",
-                'type' => 'text'
-            }, {
-                'html' => '</div>',
-                'type' => 'html'
-            }, {
-                'text' => "\nSome text\n",
-                'type' => 'text'
+                type       => 'start_html_tag',
+                tag        => 'div',
+                attributes => {},
+            },
+            [
+                {
+                    type => 'text',
+                    text => "\nAn arbitrary chunk of html.\n",
+                },
+            ], {
+                type => 'text',
+                text => "\nSome text\n",
             },
         ]
     ];

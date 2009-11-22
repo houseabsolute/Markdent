@@ -21,9 +21,10 @@ EOF
                 type => 'text',
                 text => 'An image: ',
             }, {
-                type     => 'image',
-                uri      => 'http://www.example.com/example.jpg',
-                alt_text => 'My Alt',
+                type           => 'image',
+                uri            => 'http://www.example.com/example.jpg',
+                alt_text       => 'My Alt',
+                is_implicit_id => 0,
             }, {
                 type => 'text',
                 text => "\n",
@@ -43,10 +44,11 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type     => 'image',
-                uri      => 'http://www.example.com/example.jpg',
-                alt_text => 'My Alt',
-                title    => 'A title',
+                type           => 'image',
+                uri            => 'http://www.example.com/example.jpg',
+                alt_text       => 'My Alt',
+                title          => 'A title',
+                is_implicit_id => 0,
             }, {
                 type => 'text',
                 text => "\n",
@@ -69,10 +71,11 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type     => 'image',
-                id       => 'image',
-                uri      => '/foo.jpg',
-                alt_text => 'My Alt',
+                type           => 'image',
+                id             => 'image',
+                uri            => '/foo.jpg',
+                alt_text       => 'My Alt',
+                is_implicit_id => 0,
             }, {
                 type => 'text',
                 text => "\n",
@@ -94,10 +97,11 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type     => 'image',
-                id       => 'image',
-                uri      => '/foo.jpg',
-                alt_text => 'My Alt',
+                type           => 'image',
+                id             => 'image',
+                uri            => '/foo.jpg',
+                alt_text       => 'My Alt',
+                is_implicit_id => 0,
             }, {
                 type => 'text',
                 text => "\n",
@@ -119,11 +123,11 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type        => 'image',
-                id          => 'My Alt',
-                uri         => '/bar.jpg',
-                alt_text    => 'My Alt',
-                implicit_id => 1,
+                type           => 'image',
+                id             => 'My Alt',
+                uri            => '/bar.jpg',
+                alt_text       => 'My Alt',
+                is_implicit_id => 1,
             }, {
                 type => 'text',
                 text => "\n",
@@ -145,12 +149,12 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type        => 'image',
-                id          => 'My Alt',
-                alt_text    => 'My Alt',
-                uri         => '/baz.jpg',
-                title       => 'foo',
-                implicit_id => 1,
+                type           => 'image',
+                id             => 'My Alt',
+                alt_text       => 'My Alt',
+                uri            => '/baz.jpg',
+                title          => 'foo',
+                is_implicit_id => 1,
             }, {
                 type => 'text',
                 text => "\n",
@@ -170,9 +174,10 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type     => 'image',
-                alt_text => 'Empty',
-                uri      => q{},
+                type           => 'image',
+                alt_text       => 'Empty',
+                uri            => q{},
+                is_implicit_id => 0,
             }, {
                 type => 'text',
                 text => "\n",
@@ -192,9 +197,10 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type     => 'image',
-                alt_text => 'Empty',
-                uri      => q{},
+                type           => 'image',
+                alt_text       => 'Empty',
+                uri            => q{},
+                is_implicit_id => 0,
             }, {
                 type => 'text',
                 text => "\n",

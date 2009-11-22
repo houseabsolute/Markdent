@@ -7,7 +7,21 @@ our $VERSION = '0.01';
 
 use re 'eval';
 
-use Markdent::Types qw( Str ArrayRef HashRef );
+use Markdent::Event::AutoLink;
+use Markdent::Event::EndCode;
+use Markdent::Event::EndEmphasis;
+use Markdent::Event::EndHTMLTag;
+use Markdent::Event::EndLink;
+use Markdent::Event::EndStrong;
+use Markdent::Event::HTMLEntity;
+use Markdent::Event::Image;
+use Markdent::Event::StartCode;
+use Markdent::Event::StartEmphasis;
+use Markdent::Event::StartHTMLTag;
+use Markdent::Event::StartLink;
+use Markdent::Event::StartStrong;
+use Markdent::Event::Text;
+use Markdent::Types qw( Str ArrayRef HashRef EventObject );
 
 use namespace::autoclean;
 use Moose;
@@ -19,7 +33,7 @@ with 'Markdent::Role::SpanParser';
 has __pending_events => (
     traits   => ['Array'],
     is       => 'rw',
-    isa      => ArrayRef['Markdent::Event'],
+    isa      => ArrayRef[EventObject],
     default  => sub { [] },
     init_arg => undef,
     handles  => {
@@ -179,7 +193,7 @@ sub _possible_span_matches {
     my $self = shift;
 
     if ( my $event = $self->_open_start_event_for_span('code') ) {
-        return [ 'code_end', $event->attributes()->{delimiter} ];
+        return [ 'code_end', $event->delimiter() ];
     }
 
     my @look_for = 'escape';
@@ -222,16 +236,16 @@ sub _look_for_strong_and_emphasis {
             : qw( emphasis strong );
 
         return
-            map { [ $_ . '_end', $start{$_}->attributes()->{delimiter} ] }
+            map { [ $_ . '_end', $start{$_}->delimiter() ] }
             @order;
     }
     elsif ( $start{emphasis} ) {
         return ( 'strong_start',
-            [ 'emphasis_end', $start{emphasis}->attributes()->{delimiter} ] );
+            [ 'emphasis_end', $start{emphasis}->delimiter() ] );
     }
     elsif ( $start{strong} ) {
         return (
-            [ 'strong_end', $start{strong}->attributes()->{delimiter} ],
+            [ 'strong_end', $start{strong}->delimiter() ],
             'emphasis_start'
         );
     }
@@ -282,11 +296,7 @@ sub _match_strong_start {
     my ($delim) = $self->_match_delimiter_start( $text, qr/(?:\*\*|__)/ )
         or return;
 
-    my $event = Markdent::Event->new(
-        type       => 'start',
-        name       => 'strong',
-        attributes => { delimiter => $delim },
-    );
+    my $event = $self->_make_event( StartStrong => delimiter => $delim );
 
     $self->_markup_event($event);
 
@@ -298,12 +308,10 @@ sub _match_strong_end {
     my $text  = shift;
     my $delim = shift;
 
-    $self->_match_delimiter_end( $text, qr/\Q$delim/ ) or return;
+    $self->_match_delimiter_end( $text, qr/\Q$delim\E/ )
+        or return;
 
-    my $event = Markdent::Event->new(
-        type => 'end',
-        name => 'strong',
-    );
+    my $event = $self->_make_event( EndStrong => delimiter => $delim );
 
     $self->_markup_event($event);
 
@@ -317,11 +325,7 @@ sub _match_emphasis_start {
     my ($delim) = $self->_match_delimiter_start( $text, qr/(?:\*|_)/ )
         or return;
 
-    my $event = Markdent::Event->new(
-        type       => 'start',
-        name       => 'emphasis',
-        attributes => { delimiter => $delim },
-    );
+    my $event = $self->_make_event( StartEmphasis => delimiter => $delim );
 
     $self->_markup_event($event);
 
@@ -333,13 +337,10 @@ sub _match_emphasis_end {
     my $text  = shift;
     my $delim = shift;
 
-    $self->_match_delimiter_end( $text, qr/\Q$delim/ )
+    $self->_match_delimiter_end( $text, qr/\Q$delim\E/ )
         or return;
 
-    my $event = Markdent::Event->new(
-        type => 'end',
-        name => 'emphasis',
-    );
+    my $event = $self->_make_event( EndEmphasis => delimiter => $delim );
 
     $self->_markup_event($event);
 
@@ -355,11 +356,7 @@ sub _match_code_start {
 
     $delim =~ s/\p{SpaceSeparator}*$//;
 
-    my $event = Markdent::Event->new(
-        type       => 'start',
-        name       => 'code',
-        attributes => { delimiter => $delim },
-    );
+    my $event = $self->_make_event( StartCode => delimiter => $delim );
 
     $self->_markup_event($event);
 
@@ -374,10 +371,7 @@ sub _match_code_end {
     $self->_match_delimiter_end( $text, qr/\p{SpaceSeparator}*\Q$delim/ )
         or return;
 
-    my $event = Markdent::Event->new(
-        type => 'end',
-        name => 'code',
-    );
+    my $event = $self->_make_event( EndCode => delimiter => $delim );
 
     $self->_markup_event($event);
 
@@ -410,11 +404,7 @@ sub _match_auto_link {
 
     return unless ${$text} =~ /\G <( (?:https?|mailto|ftp): [^>]+ ) >/xgc;
 
-    my $link = Markdent::Event->new(
-        type       => 'inline',
-        name       => 'auto_link',
-        attributes => { uri => $1 },
-    );
+    my $link = $self->_make_event( AutoLink => uri => $1 );
 
     $self->_markup_event($link);
 
@@ -476,20 +466,13 @@ sub _match_link {
         return;
     }
 
-    my $start = Markdent::Event->new(
-        type       => 'start',
-        name       => 'link',
-        attributes => $attr,
-    );
+    my $start = $self->_make_event( StartLink => %{$attr} );
 
     $self->_markup_event($start);
 
     $self->_parse_text( \$link_text );
 
-    my $end = Markdent::Event->new(
-        type => 'end',
-        name => 'link',
-    );
+    my $end = $self->_make_event('EndLink');
 
     $self->_markup_event($end);
 
@@ -526,11 +509,7 @@ sub _match_image {
 
     $attr->{alt_text} = $alt_text;
 
-    my $image = Markdent::Event->new(
-        type       => 'inline',
-        name       => 'image',
-        attributes => $attr,
-    );
+    my $image = $self->_make_event( Image => %{$attr} );
 
     $self->_markup_event($image);
 
@@ -554,7 +533,7 @@ sub _link_match_results {
     else {
         unless ( defined $id && length $id ) {
             $id = $text;
-            $attr{implicit_id} = 1;
+            $attr{is_implicit_id} = 1;
         }
 
         $id =~ s/\s+/ /g;
@@ -576,11 +555,42 @@ sub _match_html {
 
     return unless ${$text} =~ /\G (< [^>]+ >)/xgc;
 
-    my $event = Markdent::Event->new(
-        type       => 'inline',
-        name       => 'html',
-        attributes => { content => $1 },
-    );
+    my $tag = $1;
+
+    my $event;
+    if ( $tag =~ m{^</(\w+)>$} ) {
+        $event = $self->_make_event( EndHTMLTag => tag => $1 );
+    }
+    else {
+        $tag =~ s/^<|>$//g;
+
+        my ( $name, $attr ) = split /\s+/, $tag, 2;
+
+        my %attr;
+        if ( defined $attr && $attr =~ /\S/ ) {
+            for my $attr ( split /\s+/, $attr ) {
+                if ( $attr =~ /=/ ) {
+                    my ( $name, $val ) = split /=/, $attr;
+
+                    $val =~ s/^([\"\'])(.+)\1$/$2/g;
+
+                    $attr{$name} = $val;
+                }
+                else {
+                    # A value-less attribute like in
+                    # <option value="1" selected>
+                    $attr{$name} = undef;
+                }
+            }
+        }
+
+        $event = $self->_make_event(
+            StartHTMLTag => (
+                tag        => $name,
+                attributes => \%attr,
+            ),
+        );
+    }
 
     $self->_markup_event($event);
 
@@ -595,11 +605,7 @@ sub _match_html_entity {
                                 &(\S+);
                               /xgcs;
 
-    my $event = Markdent::Event->new(
-        type       => 'inline',
-        name       => 'html_entity',
-        attributes => { entity => $1 },
-    );
+    my $event = $self->_make_event( HTMLEntity => entity => $1 );
 
     $self->_markup_event($event);
 }
@@ -651,8 +657,8 @@ sub _markup_event {
     if ( $self->debug() ) {
         my $msg = 'Found markup: ' . $event->event_name();
 
-        if ( $event->attributes()->{delimiter} ) {
-            $msg .= ' - delimiter: [' . $event->attributes()->{delimiter} . ']';
+        if ( $event->can('delimiter') ) {
+            $msg .= ' - delimiter: [' . $event->delimiter() . ']';
         }
 
         $msg .= "\n";
@@ -663,7 +669,7 @@ sub _markup_event {
     $self->_add_pending_event($event);
 
     $self->_convert_invalid_start_events_to_text()
-        if $event->type() eq 'end';
+        if $event->is_end();
 }
 
 sub _event_for_text_buffer {
@@ -675,11 +681,7 @@ sub _event_for_text_buffer {
 
     $self->_detab_text(\$text);
 
-    my $event = Markdent::Event->new(
-        type       => 'inline',
-        name       => 'text',
-        attributes => { content => $text },
-    );
+    my $event = $self->_make_event( Text => text => $text );
 
     $self->_add_pending_event($event);
 
@@ -699,10 +701,10 @@ EVENT:
     for my $i ( 0 .. $#{$events} ) {
         my $event = $events->[$i];
 
-        if ( $event->type eq 'start' ) {
+        if ( $event->is_start() ) {
             push @starts, [ $i, $event ];
         }
-        elsif ( $event->type() eq 'end' ) {
+        elsif ( $event->is_end() ) {
             while ( my $start = pop @starts ) {
                 next EVENT
                     if $start->[1]->name() eq $event->name();
@@ -727,18 +729,16 @@ sub _convert_start_event_to_text {
     $self->_print_debug( 'Found bad start event for '
             . $event->name()
             . q{ with "}
-            . $event->attributes()->{delimiter}
+            . $event->delimiter()
             . q{" as the delimiter}
             . "\n" )
         if $self->debug();
 
-    return Markdent::Event->new(
-        type       => 'inline',
-        name       => 'text',
-        attributes => {
-            content           => $event->attributes()->{delimiter},
-            '!converted_from' => $event->event_name(),
-        },
+    return $self->_make_event(
+        Text => (
+            text            => $event->delimiter(),
+            _converted_from => $event->event_name(),
+        )
     );
 }
 
@@ -753,7 +753,7 @@ sub _merge_consecutive_text_events {
     for my $i ( 0 .. $#{$events} ) {
         my $event = $events->[$i];
 
-        if ( $event->name() eq 'text' ) {
+        if ( $event->event_name() eq 'text' ) {
             $merge_start = $i
                 unless defined $merge_start;
         }
@@ -790,7 +790,7 @@ sub _splice_merged_text_event {
     my $start    = shift;
     my $end      = shift;
 
-    my @to_merge = map { $_->attributes()->{content} } @{$events}[ $start .. $end ];
+    my @to_merge = map { $_->text() } @{$events}[ $start .. $end ];
 
     $self->_print_debug( "Merging consecutive text events ($start-$end) for: \n"
             . ( join q{}, map {"  - [$_]\n"} @to_merge ) )
@@ -798,13 +798,11 @@ sub _splice_merged_text_event {
 
     my $merged_text = join q{}, @to_merge;
 
-    my $event = Markdent::Event->new(
-        type       => 'inline',
-        name       => 'text',
-        attributes => {
-            content        => $merged_text,
-            '!merged_from' => \@to_merge,
-        },
+    my $event = $self->_make_event(
+        Text => (
+            text         => $merged_text,
+            _merged_from => \@to_merge,
+        ),
     );
 
     splice @{$events}, $start, ( $end - $start ) + 1, $event;

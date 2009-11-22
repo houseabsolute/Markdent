@@ -21,8 +21,9 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type  => 'link',
-                uri   => 'http://www.example.com',
+                type           => 'link',
+                uri            => 'http://www.example.com',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -51,8 +52,9 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type  => 'link',
-                uri   => 'http://www.example.com',
+                type           => 'link',
+                uri            => 'http://www.example.com',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -81,9 +83,10 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type  => 'link',
-                uri   => 'http://www.example.com',
-                title => "A title",
+                type           => 'link',
+                uri            => 'http://www.example.com',
+                title          => "A title",
+                is_implicit_id => 0,
             },
             [
                 {
@@ -114,9 +117,10 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type  => 'link',
-                uri   => 'http://www.example.com',
-                title => "A title",
+                type           => 'link',
+                uri            => 'http://www.example.com',
+                title          => "A title",
+                is_implicit_id => 0,
             },
             [
                 {
@@ -147,9 +151,10 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type => 'link',
-                id   => 'link id',
-                uri  => '/foo',
+                type           => 'link',
+                id             => 'link id',
+                uri            => '/foo',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -180,9 +185,10 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type => 'link',
-                id   => 'link id',
-                uri  => '/bar',
+                type           => 'link',
+                id             => 'link id',
+                uri            => '/bar',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -214,11 +220,11 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type        => 'link',
-                id          => 'A link',
-                uri         => '/foo/bar',
-                title       => 'title',
-                implicit_id => 1,
+                type           => 'link',
+                id             => 'A link',
+                uri            => '/foo/bar',
+                title          => 'title',
+                is_implicit_id => 1,
             },
             [
                 {
@@ -249,10 +255,10 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type        => 'link',
-                id          => 'A link',
-                uri         => '/foo',
-                implicit_id => 1,
+                type           => 'link',
+                id             => 'A link',
+                uri            => '/foo',
+                is_implicit_id => 1,
             },
             [
                 {
@@ -281,8 +287,9 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type => 'link',
-                uri  => 'http://www.example.com',
+                type           => 'link',
+                uri            => 'http://www.example.com',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -322,8 +329,9 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type => 'link',
-                uri  => 'http://www.example.com',
+                type           => 'link',
+                uri            => 'http://www.example.com',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -365,10 +373,10 @@ EOF
                 type => 'text',
                 text => 'Some text with ',
             }, {
-                type        => 'link',
-                id          => '*A link*',
-                uri         => '/baz',
-                implicit_id => 1,
+                type           => 'link',
+                id             => '*A link*',
+                uri            => '/baz',
+                is_implicit_id => 1,
             },
             [
                 { type => 'emphasis' },
@@ -424,8 +432,9 @@ EOF
                 type => 'text',
                 text => '(With outer parens and ',
             }, {
-                type => 'link',
-                uri  => '/foo(bar)',
+                type           => 'link',
+                uri            => '/foo(bar)',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -454,9 +463,10 @@ EOF
                 type => 'text',
                 text => '(With outer parens and ',
             }, {
-                type  => 'link',
-                uri   => '/foo(bar)',
-                title => 'title',
+                type           => 'link',
+                uri            => '/foo(bar)',
+                title          => 'title',
+                is_implicit_id => 0,
             },
             [
                 {
@@ -482,8 +492,9 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type => 'link',
-                uri  => q{},
+                type           => 'link',
+                uri            => q{},
+                is_implicit_id => 0,
             },
             [
                 {
@@ -509,8 +520,9 @@ EOF
         { type => 'paragraph' },
         [
             {
-                type => 'link',
-                uri  => q{},
+                type           => 'link',
+                uri            => q{},
+                is_implicit_id => 0,
             },
             [
                 {
@@ -563,10 +575,10 @@ EOF
                 type => 'text',
                 text => "Here's one where the ",
             }, {
-                type        => 'link',
-                uri         => '/url/',
-                id          => 'link breaks',
-                implicit_id => 1,
+                type           => 'link',
+                uri            => '/url/',
+                id             => 'link breaks',
+                is_implicit_id => 1,
             },
             [
                 {
@@ -584,10 +596,10 @@ EOF
                 type => 'text',
                 text => "Here's another where the ",
             }, {
-                type        => 'link',
-                uri         => '/url/',
-                id          => 'link breaks',
-                implicit_id => 1,
+                type           => 'link',
+                uri            => '/url/',
+                id             => 'link breaks',
+                is_implicit_id => 1,
             },
             [
                 {

@@ -6,7 +6,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use MooseX::Params::Validate qw( validated_list validated_hash );
-use Markdent::Types qw( HeaderLevel Str Bool );
+use Markdent::Types qw( HeaderLevel Str Bool HashRef );
 use Tree::Simple;
 
 use namespace::autoclean;
@@ -122,7 +122,7 @@ sub end_list_item {
 
 sub preformatted {
     my $self = shift;
-    my ($text) = validated_list( \@_, content => { isa => Str }, );
+    my ($text) = validated_list( \@_, text => { isa => Str }, );
 
     my $pre_node = Tree::Simple->new( { type => 'preformatted', text => $text } );
     $self->_current_node()->addChild($pre_node);
@@ -192,12 +192,12 @@ sub auto_link {
 
 sub start_link {
     my $self = shift;
-    my %p    = validated_hash(
+    my %p = validated_hash(
         \@_,
-        uri         => { isa => Str },
-        title       => { isa => Str,  optional => 1 },
-        id          => { isa => Str,  optional => 1 },
-        implicit_id => { isa => Bool, optional => 1 },
+        uri            => { isa => Str },
+        title          => { isa => Str, optional => 1 },
+        id             => { isa => Str, optional => 1 },
+        is_implicit_id => { isa => Bool },
     );
 
     delete @p{ grep { ! defined $p{$_} } keys %p };
@@ -213,18 +213,37 @@ sub end_link {
 
 sub text {
     my $self = shift;
-    my ($text) = validated_list( \@_, content => { isa => Str }, );
+    my ($text) = validated_list( \@_, text => { isa => Str }, );
 
     my $text_node = Tree::Simple->new( { type => 'text', text => $text } );
     $self->_current_node()->addChild($text_node);
 }
 
-sub html {
+sub start_html_tag {
     my $self = shift;
-    my ($html) = validated_list( \@_, content => { isa => Str }, );
+    my ( $tag, $attributes ) = validated_list(
+        \@_,
+        tag        => { isa => Str },
+        attributes => { isa => HashRef },
+    );
 
-    my $html_node = Tree::Simple->new( { type => 'html', html => $html } );
-    $self->_current_node()->addChild($html_node);
+    my $tag_node = Tree::Simple->new(
+        {
+            type       => 'start_html_tag',
+            tag        => $tag,
+            attributes => $attributes,
+        }
+    );
+
+    $self->_current_node()->addChild($tag_node);
+
+    $self->_set_current_node($tag_node);
+}
+
+sub end_html_tag {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
 }
 
 sub html_entity {
@@ -237,7 +256,7 @@ sub html_entity {
 
 sub html_block {
     my $self = shift;
-    my ($html) = validated_list( \@_, content => { isa => Str }, );
+    my ($html) = validated_list( \@_, html => { isa => Str }, );
 
     my $html_node = Tree::Simple->new( { type => 'html_block', html => $html } );
     $self->_current_node()->addChild($html_node);
@@ -247,21 +266,21 @@ sub image {
     my $self = shift;
     my %p    = validated_hash(
         \@_,
-        alt_text    => { isa => Str },
-        uri         => { isa => Str },
-        title       => { isa => Str, optional => 1 },
-        id          => { isa => Str, optional => 1 },
-        implicit_id => { isa => Bool, optional => 1 },
+        alt_text       => { isa => Str },
+        uri            => { isa => Str },
+        title          => { isa => Str, optional => 1 },
+        id             => { isa => Str, optional => 1 },
+        is_implicit_id => { isa => Bool, optional => 1 },
     );
 
     my $image_node = Tree::Simple->new( { type => 'image', %p } );
     $self->_current_node()->addChild($image_node);
 }
 
-sub hr {
+sub horizontal_rule {
     my $self = shift;
 
-    my $hr_node = Tree::Simple->new( { type => 'hr' } );
+    my $hr_node = Tree::Simple->new( { type => 'horizontal_rule' } );
     $self->_current_node()->addChild($hr_node);
 }
 

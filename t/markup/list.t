@@ -498,7 +498,7 @@ EOF
                 ],
             ],
         ],
-        { type => 'hr' },
+        { type => 'horizontal_rule' },
     ];
 
     parse_ok( $text, $expect, 'unordered list terminated by a horizontal rule' );

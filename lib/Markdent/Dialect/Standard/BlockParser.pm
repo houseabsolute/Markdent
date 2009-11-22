@@ -6,8 +6,24 @@ use warnings;
 our $VERSION = '0.01';
 
 use Digest::SHA1 qw( sha1_hex );
+use Markdent::Event::StartDocument;
+use Markdent::Event::EndDocument;
+use Markdent::Event::StartBlockquote;
+use Markdent::Event::EndBlockquote;
+use Markdent::Event::StartHeader;
+use Markdent::Event::EndHeader;
+use Markdent::Event::StartListItem;
+use Markdent::Event::EndListItem;
+use Markdent::Event::StartOrderedList;
+use Markdent::Event::EndOrderedList;
+use Markdent::Event::StartParagraph;
+use Markdent::Event::EndParagraph;
+use Markdent::Event::StartUnorderedList;
+use Markdent::Event::EndUnorderedList;
+use Markdent::Event::HorizontalRule;
+use Markdent::Event::HTMLBlock;
+use Markdent::Event::Preformatted;
 use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
-use re 'eval';
 
 use namespace::autoclean;
 use Moose;
@@ -186,10 +202,8 @@ sub _match_hashed_html {
         'hashed html',
     ) if $self->debug();
 
-    $self->handler()->handle_event(
-        type       => 'inline',
-        name       => 'html_block',
-        attributes => { content => $html },
+    $self->_send_event(
+        HTMLBlock => html => $html,
     );
 
     return 1;
@@ -272,19 +286,11 @@ sub _header {
     my $level = shift;
     my $text  = shift;
 
-    $self->handler()->handle_event(
-        type       => 'start',
-        name       => 'header',
-        attributes => { level => $level },
-    );
+    $self->_send_event( StartHeader => level => $level );
 
     $self->_span_parser()->parse_block($text);
 
-    $self->handler()->handle_event(
-        type       => 'end',
-        name       => 'header',
-        attributes => { level => $level },
-    );
+    $self->_send_event( EndHeader => level => $level );
 
     return 1;
 }
@@ -317,10 +323,7 @@ sub _match_horizontal_rule {
         'horizontal rule',
     ) if $self->debug();
 
-    $self->handler()->handle_event(
-        type => 'inline',
-        name => 'hr',
-    );
+    $self->_send_event('HorizontalRule');
 
     return 1;
 }
@@ -366,10 +369,7 @@ sub _match_blockquote {
     ) if $self->debug();
 
 
-    $self->handler()->handle_event(
-        type => 'start',
-        name => 'blockquote',
-    );
+    $self->_send_event('StartBlockquote');
 
     $bq =~ s/^>(?: \p{SpaceSeparator} | \t )?//gxm;
 
@@ -389,10 +389,7 @@ sub _match_blockquote {
 
     $self->_set_list_level($list_level);
 
-    $self->handler()->handle_event(
-        type => 'end',
-        name => 'blockquote',
-    );
+    $self->_send_event('EndBlockquote');
 
     return 1;
 }
@@ -435,11 +432,7 @@ sub _match_preformatted {
 
     $self->_detab_text(\$pre);
 
-    $self->handler()->handle_event(
-        type       => 'inline',
-        name       => 'preformatted',
-        attributes => { content => $pre },
-    );
+    $self->_send_event( Preformatted => text => $pre );
 
     return 1;
 }
@@ -508,17 +501,14 @@ sub _match_list {
     my $list = $1;
     my $bullet = $2;
 
-    my $type = $bullet =~ /\d/ ? 'ordered_list' : 'unordered_list';
+    my $type = $bullet =~ /\d/ ? 'OrderedList' : 'UnorderedList';
 
     $self->_debug_parse_result(
         $list,
         $type,
     ) if $self->debug();
 
-    $self->handler()->handle_event(
-        type => 'start',
-        name => $type,
-    );
+    $self->_send_event( 'Start' . $type );
 
     $self->_inc_list_level();
 
@@ -526,10 +516,7 @@ sub _match_list {
     my @items = $self->_split_list_items($list);
 
     for my $item (@items) {
-        $self->handler()->handle_event(
-            type => 'start',
-            name => 'list_item',
-        );
+        $self->_send_event('StartListItem');
 
         $item =~ s/^ (?: $Bullet | \p{SpaceSeparator}{4} | \t )//xgm;
 
@@ -565,18 +552,12 @@ sub _match_list {
 
         $self->_parse_text( \$item );
 
-        $self->handler()->handle_event(
-            type => 'end',
-            name => 'list_item',
-        );
+        $self->_send_event('EndListItem');
     }
 
     $self->_dec_list_level();
 
-    $self->handler()->handle_event(
-        type => 'end',
-        name => $type,
-    );
+    $self->_send_event( 'End' . $type );
 
     return 1;
 }
@@ -639,21 +620,13 @@ sub _match_list_item {
         'list_item',
     ) if $self->debug();
 
-    if ( $self->_list_item_is_paragraph() ) {
-        $self->handler()->handle_event(
-            type => 'start',
-            name => 'paragraph',
-        );
-    }
+    $self->_send_event('StartParagraph')
+        if $self->_list_item_is_paragraph();
 
     $self->_span_parser()->parse_block($1);
 
-    if ( $self->_list_item_is_paragraph() ) {
-        $self->handler()->handle_event(
-            type => 'end',
-            name => 'paragraph',
-        );
-    }
+    $self->_send_event('EndParagraph')
+        if $self->_list_item_is_paragraph();
 
     return 1;
 }
@@ -692,17 +665,11 @@ sub _match_paragraph {
         'paragraph',
     ) if $self->debug();
 
-    $self->handler()->handle_event(
-        type => 'start',
-        name => 'paragraph',
-    );
+    $self->_send_event('StartParagraph');
 
     $self->_span_parser()->parse_block($1);
 
-    $self->handler()->handle_event(
-        type => 'end',
-        name => 'paragraph',
-    );
+    $self->_send_event('EndParagraph');
 }
 
 sub _split_chunks_on_regex {

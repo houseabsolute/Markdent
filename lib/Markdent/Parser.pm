@@ -116,17 +116,11 @@ sub parse {
 
     $self->_clean_text(\$text);
 
-    $self->handler()->handle_event(
-        type => 'start',
-        name => 'document',
-    );
+    $self->_send_event('StartDocument');
 
     $self->_block_parser()->parse_document(\$text);
 
-    $self->handler()->handle_event(
-        type => 'end',
-        name => 'document',
-    );
+    $self->_send_event('EndDocument');
 
     return;
 }

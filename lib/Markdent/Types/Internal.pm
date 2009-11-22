@@ -11,7 +11,7 @@ use MooseX::Types -declare => [
     qw( HeaderLevel
         BlockParserClass
         SpanParserClass
-        EventType
+        EventObject
         OutputStream
         )
 ];
@@ -31,7 +31,9 @@ subtype SpanParserClass,
     as ClassName,
     where { $_->can('does') && $_->does('Markdent::Role::SpanParser') };
 
-enum EventType, qw( start end inline );
+subtype EventObject,
+    as Object,
+    where { $_->can('does') && $_->does('Markdent::Role::Event') };
 
 subtype OutputStream,
     as Any,

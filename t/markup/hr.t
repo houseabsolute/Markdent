@@ -18,7 +18,7 @@ EOF
 
     my $expect = [
         {
-            type => 'hr',
+            type => 'horizontal_rule',
         },
     ];
 
@@ -32,7 +32,7 @@ EOF
 
     my $expect = [
         {
-            type => 'hr',
+            type => 'horizontal_rule',
         },
     ];
 
@@ -91,7 +91,7 @@ EOF
 
     my $expect = [
         {
-            type => 'hr',
+            type => 'horizontal_rule',
         },
     ];
 
@@ -105,7 +105,7 @@ EOF
 
     my $expect = [
         {
-            type => 'hr',
+            type => 'horizontal_rule',
         },
     ];
 
@@ -127,7 +127,7 @@ EOF
                 text => "still an hr\n",
             },
         ],
-        { type => 'hr' },
+        { type => 'horizontal_rule' },
         { type => 'paragraph' },
         [
             {
