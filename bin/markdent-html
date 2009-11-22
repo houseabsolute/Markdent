@@ -5,23 +5,14 @@ use warnings;
 
 use File::Slurp qw( read_file );
 use HTML::Tidy;
-use Markdent::Handler::HTMLStream;
-use Markdent::Parser;
+use Markdent::Simple;
 
 my $markdown = read_file(shift);
 
-my $capture = q{};
-open my $fh, '>', \$capture
-    or die $!;
-
-my $handler = Markdent::Handler::HTMLStream->new(
-    title  => 'Needs a Title',
-    output => $fh,
+my $html = Markdent::Simple->new()->markdown_to_html(
+    title    => 'Needs a Title',
+    markdown => $markdown,
 );
-
-my $parser = Markdent::Parser->new( handler => $handler );
-
-$parser->parse( text => $markdown );
 
 my $tidy = HTML::Tidy->new(
     {
@@ -30,4 +21,4 @@ my $tidy = HTML::Tidy->new(
     }
 );
 
-print $tidy->clean($capture);
+print $tidy->clean($html);
