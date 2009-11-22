@@ -204,8 +204,6 @@ sub _look_for_strong_and_emphasis {
     $start{strong}   = $self->_open_start_event_for_span('strong');
     $start{emphasis} = $self->_open_start_event_for_span('emphasis');
 
-    my @look_for;
-
     # If we are in both, we need to try to end the most recent one first.
     if ( $start{strong} && $start{emphasis} ) {
         my $last_saw;
@@ -223,24 +221,24 @@ sub _look_for_strong_and_emphasis {
             ? qw( strong emphasis )
             : qw( emphasis strong );
 
-        push @look_for,
+        return
             map { [ $_ . '_end', $start{$_}->attributes()->{delimiter} ] }
             @order;
     }
-    else {
-        for my $key ( grep { $start{$_} } keys %start ) {
-            push @look_for, [ $key . '_end', $start{$key}->attributes()->{delimiter} ];
-        }
+    elsif ( $start{emphasis} ) {
+        return ( 'strong_start',
+            [ 'emphasis_end', $start{emphasis}->attributes()->{delimiter} ] );
+    }
+    elsif ( $start{strong} ) {
+        return (
+            [ 'strong_end', $start{strong}->attributes()->{delimiter} ],
+            'emphasis_start'
+        );
     }
 
     # We look for strong first since it's a longer version of emphasis (we
     # need to try to match ** before *).
-    push @look_for, 'strong_start'
-        unless $start{strong};
-    push @look_for, 'emphasis_start'
-        unless $start{emphasis};
-
-    return @look_for;
+    return ( 'strong_start', 'emphasis_start' );
 }
 
 sub _open_start_event_for_span {
