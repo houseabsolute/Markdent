@@ -18,6 +18,7 @@ my $builder = Module::Build->new(
         'Tree::Simple'                   => '0',
     },
     build_requires => {
+        'File::Slurp'       => '0',
         'Test::Deep'        => '0',
         'Test::Differences' => '0',
         'Test::More'        => '0',
