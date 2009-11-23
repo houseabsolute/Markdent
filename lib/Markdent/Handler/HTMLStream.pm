@@ -7,7 +7,7 @@ our $VERSION = '0.01';
 
 use HTML::Stream;
 use MooseX::Params::Validate qw( validated_list validated_hash );
-use Markdent::Types qw( Bool Str OutputStream HeaderLevel );
+use Markdent::Types qw( Bool Str HashRef OutputStream HeaderLevel );
 
 use namespace::autoclean;
 use Moose;
@@ -133,7 +133,7 @@ sub end_list_item {
 
 sub preformatted {
     my $self = shift;
-    my ($text) = validated_list( \@_, content => { isa => Str }, );
+    my ($text) = validated_list( \@_, text => { isa => Str }, );
 
     $self->_stream()->tag('pre');
     $self->_stream()->tag('code');
@@ -206,10 +206,10 @@ sub start_link {
     my $self = shift;
     my %p    = validated_hash(
         \@_,
-        uri         => { isa => Str },
-        title       => { isa => Str,  optional => 1 },
-        id          => { isa => Str,  optional => 1 },
-        implicit_id => { isa => Bool, optional => 1 },
+        uri            => { isa => Str },
+        title          => { isa => Str, optional => 1 },
+        id             => { isa => Str, optional => 1 },
+        is_implicit_id => { isa => Bool, optional => 1 },
     );
 
     delete @p{ grep { ! defined $p{$_} } keys %p };
@@ -228,16 +228,31 @@ sub end_link {
 
 sub text {
     my $self = shift;
-    my ($text) = validated_list( \@_, content => { isa => Str }, );
+    my ($text) = validated_list( \@_, text => { isa => Str }, );
 
     $self->_stream()->text($text);
 }
 
-sub html {
+sub start_html_tag {
     my $self = shift;
-    my ($html) = validated_list( \@_, content => { isa => Str }, );
+    my ( $tag, $attributes ) = validated_list(
+        \@_,
+        tag        => { isa => Str },
+        attributes => { isa => HashRef },
+    );
 
-    $self->_output()->print($html);
+    $self->_stream()->tag( $tag, %{$attributes} );
+}
+
+
+sub end_html_tag {
+    my $self = shift;
+    my ($tag) = validated_list(
+        \@_,
+        tag => { isa => Str },
+    );
+
+    $self->_stream()->tag( q{_} . $tag );
 }
 
 sub html_entity {
@@ -249,7 +264,7 @@ sub html_entity {
 
 sub html_block {
     my $self = shift;
-    my ($html) = validated_list( \@_, content => { isa => Str }, );
+    my ($html) = validated_list( \@_, html => { isa => Str }, );
 
     $self->_output()->print($html);
 }
@@ -258,11 +273,11 @@ sub image {
     my $self = shift;
     my %p    = validated_hash(
         \@_,
-        alt_text    => { isa => Str },
-        uri         => { isa => Str, optional => 1 },
-        title       => { isa => Str, optional => 1 },
-        id          => { isa => Str, optional => 1 },
-        implicit_id => { isa => Bool, optional => 1 },
+        alt_text       => { isa => Str },
+        uri            => { isa => Str, optional => 1 },
+        title          => { isa => Str, optional => 1 },
+        id             => { isa => Str, optional => 1 },
+        is_implicit_id => { isa => Bool, optional => 1 },
     );
 
     delete @p{ grep { ! defined $p{$_} } keys %p };
@@ -274,7 +289,7 @@ sub image {
     );
 }
 
-sub hr {
+sub horizontal_rule {
     my $self = shift;
 
     $self->_stream()->tag('hr');
