@@ -32,6 +32,5 @@ for my $md_file ( sort @md_files ) {
     my $desc = basename($md_file);
     $desc =~ s/\.text$//;
 
-    html_output_ok( $markdown, $expect_html, $desc )
-        or exit;
+    html_output_ok( $markdown, $expect_html, $desc );
 }
