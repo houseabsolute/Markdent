@@ -1,9 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
-
-plan 'no_plan';
+use Test::More tests => 4;
 
 use lib 't/lib';
 
