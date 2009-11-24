@@ -13,6 +13,11 @@
 
   <em>This</em> <em>is a test</em>*.
 
+- Added some missing test dependencies.
+
+- There is now a separate class for each type of event, all of which do the
+  Markdent::Role::Event role.
+
 
 0.01   2009-11-21
 
