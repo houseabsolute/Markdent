@@ -10,7 +10,7 @@ plan skip_all => "Test::Pod::Coverage 1.04 required for testing POD coverage"
     if $@;
 
 eval "use Pod::Coverage::Moose 0.02";
-plan skip_all => "Pod::Coverage::Moose 0.02.04 required for testing POD coverage"
+plan skip_all => "Pod::Coverage::Moose 0.02 required for testing POD coverage"
     if $@;
 
 my %skip = map { $_ => 1 } qw( Markdent::Types Markdent::Types::Internal );
