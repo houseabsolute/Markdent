@@ -47,10 +47,6 @@ internals need to be reworked to make creating additional Markdown dialects
 easier, and the L<Markdown::Event> classes will probably expand into a
 hierarchy of classes in the future.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-markdent@rt.cpan.org>,
