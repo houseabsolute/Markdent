@@ -18,7 +18,7 @@ use Markdent::Simple;
 
 use Exporter qw( import );
 
-our @EXPORT = qw( parse_ok html_output_ok );
+our @EXPORT = qw( tree_from_handler parse_ok html_output_ok );
 
 sub parse_ok {
     my $markdown    = shift;
@@ -31,17 +31,23 @@ sub parse_ok {
 
     $parser->parse( markdown => $markdown );
 
-    my $visitor = Tree::Simple::Visitor::ToNestedArray->new();
-    $handler->tree()->accept($visitor);
-
-    # The top level of this data structure is always a one element array ref
-    # containing the document contents.
-    my $results = $visitor->getResults()->[0];
+    my $results = tree_from_handler($handler);
 
     diag( Dumper($results) )
         if $ENV{MARKDENT_TEST_VERBOSE};
 
     cmp_deeply( $results, $expect_tree, $desc );
+}
+
+sub tree_from_handler {
+    my $handler = shift;
+
+    my $visitor = Tree::Simple::Visitor::ToNestedArray->new();
+    $handler->tree()->accept($visitor);
+
+    # The top level of this data structure is always a one element array ref
+    # containing the document contents.
+    return $visitor->getResults()->[0];
 }
 
 sub html_output_ok {
