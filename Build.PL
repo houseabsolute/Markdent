@@ -1,9 +1,10 @@
 use strict;
 use warnings;
 
-use Module::Build;
+use lib 'inc';
+use Markdent::Build;
 
-my $builder = Module::Build->new(
+my $builder = Markdent::Build->new(
     module_name => 'Markdent',
     license     => 'perl',
     requires    => {

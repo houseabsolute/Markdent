@@ -1,5 +1,5 @@
 # auto-generated shipit config file.
-steps = FindVersion, ChangeVersion, CheckChangeLog, CheckVersionsMatch, DistTest, Commit, Tag, MakeDist, DistClean
+steps = FindVersion, ChangeVersion, CheckChangeLog, CheckVersionsMatch, DistTestExtra, Commit, Tag, MakeDist, DistClean
 
 hg.tagpattern = %v
 hg.push = 1
