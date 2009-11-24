@@ -1,4 +1,4 @@
-0.02
+0.02   2009-11-24
 
 - Fixed some cases of nested strong and em in the Standard dialect's
   parser. It was broken for cases like this:
