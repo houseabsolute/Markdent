@@ -3,7 +3,7 @@ package Markdent::Handler::HTMLStream;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use HTML::Stream;
 use MooseX::Params::Validate qw( validated_list validated_hash );
