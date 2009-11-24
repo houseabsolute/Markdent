@@ -16,11 +16,22 @@ has _events => (
     is       => 'ro',
     isa      => ArrayRef[EventObject],
     init_arg => 'events',
-    required => 1,
+    default  => sub { [] },
 );
 
 sub events {
     @{ $_[0]->_events() };
+}
+
+sub add_events {
+    my $self   = shift;
+    my @events = pos_validated_list(
+        \@_,
+        ( { does => 'Markdent::Role::Event' } ) x ( @_ ? @_ : 1 ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
+
+    push @{ $self->_events() }, @_;
 }
 
 sub replay_events {
