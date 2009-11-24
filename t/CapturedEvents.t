@@ -2,10 +2,10 @@ use strict;
 use warnings;
 
 use Test::More tests => 2;
+use Test::Deep;
 
 use lib 't/lib';
 
-use Test::Deep;
 use Test::Markdent;
 
 use Markdent::CapturedEvents;
