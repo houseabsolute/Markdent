@@ -20,10 +20,13 @@ all_pod_files_spelling_ok;
 
 __DATA__
 blockquote
+html
 inline
 Markdent
 Markdown
 mdtest
+parameterized
 PayPal
 preformatted
+uri
 XML's
