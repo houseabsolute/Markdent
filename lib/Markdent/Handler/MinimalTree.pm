@@ -329,7 +329,7 @@ __END__
 
 =head1 NAME
 
-Markdent::Handler::HTMLStream - A Markdent handler which builds a tree
+Markdent::Handler::MinimalTree - A Markdent handler which builds a tree
 
 =head1 DESCRIPTION
 
