@@ -1,8 +1,21 @@
 use strict;
 use warnings;
 
-use lib 'inc';
-use Markdent::Build;
+my $subclass = Module::Build->subclass(
+    class => 'Markdent::Build',
+    code  => <<'EOF';
+sub find_test_files {
+    my $self = shift;
+
+    my $tests = $self->SUPER::find_test_files(@_);
+
+    push @{$tests}, $self->expand_test_dir('xt')
+        if $ENV{AUTHOR_TESTING};
+
+    return $tests;
+}
+EOF
+);
 
 my $builder = Markdent::Build->new(
     module_name => 'Markdent',
