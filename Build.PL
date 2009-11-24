@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 
+use Module::Build;
+
 my $subclass = Module::Build->subclass(
     class => 'Markdent::Build',
     code  => <<'EOF',
