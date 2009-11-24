@@ -14,6 +14,7 @@ use Markdent::Event::EndHTMLTag;
 use Markdent::Event::EndLink;
 use Markdent::Event::EndStrong;
 use Markdent::Event::HTMLEntity;
+use Markdent::Event::HTMLTag;
 use Markdent::Event::Image;
 use Markdent::Event::StartCode;
 use Markdent::Event::StartEmphasis;
@@ -549,6 +550,9 @@ sub _link_match_results {
     return ( $text, \%attr );
 }
 
+my %InlineTags = map { $_ => 1 }
+    qw( area base basefont br col frame hr img input link meta param );
+
 sub _match_html {
     my $self = shift;
     my $text = shift;
@@ -565,6 +569,9 @@ sub _match_html {
         $tag =~ s/^<|>$//g;
 
         my ( $name, $attr ) = split /\s+/, $tag, 2;
+
+        $attr =~ s{/\s*$}{}
+            if defined $attr;
 
         my %attr;
         if ( defined $attr && $attr =~ /\S/ ) {
@@ -584,12 +591,22 @@ sub _match_html {
             }
         }
 
-        $event = $self->_make_event(
-            StartHTMLTag => (
-                tag        => $name,
-                attributes => \%attr,
-            ),
-        );
+        if ( $InlineTags{$name} ) {
+            $event = $self->_make_event(
+                HTMLTag => (
+                    tag        => $name,
+                    attributes => \%attr,
+                ),
+            );
+        }
+        else {
+            $event = $self->_make_event(
+                StartHTMLTag => (
+                    tag        => $name,
+                    attributes => \%attr,
+                ),
+            );
+        }
     }
 
     $self->_markup_event($event);

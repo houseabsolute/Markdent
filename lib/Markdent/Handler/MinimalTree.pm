@@ -246,6 +246,25 @@ sub end_html_tag {
     $self->_set_current_up_one_level();
 }
 
+sub html_tag {
+    my $self = shift;
+    my ( $tag, $attributes ) = validated_list(
+        \@_,
+        tag        => { isa => Str },
+        attributes => { isa => HashRef },
+    );
+
+    my $tag_node = Tree::Simple->new(
+        {
+            type       => 'html_tag',
+            tag        => $tag,
+            attributes => $attributes,
+        }
+    );
+
+    $self->_current_node()->addChild($tag_node);
+}
+
 sub html_entity {
     my $self = shift;
     my ($entity) = validated_list( \@_, entity => { isa => Str }, );

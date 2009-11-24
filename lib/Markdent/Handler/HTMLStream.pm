@@ -244,6 +244,16 @@ sub start_html_tag {
     $self->_stream()->tag( $tag, %{$attributes} );
 }
 
+sub html_tag {
+    my $self = shift;
+    my ( $tag, $attributes ) = validated_list(
+        \@_,
+        tag        => { isa => Str },
+        attributes => { isa => HashRef },
+    );
+
+    $self->_stream()->tag( $tag, %{$attributes} );
+}
 
 sub end_html_tag {
     my $self = shift;

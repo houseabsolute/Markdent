@@ -31,13 +31,15 @@ __PACKAGE__->meta()->make_immutable();
 
 __END__
 
+=pod
+
 =head1 NAME
 
 Markdent::Event::StartHTMLTag - An event for the start of an inline HTML tag
 
 =head1 DESCRIPTION
 
-This class represents the start of an inline HTML tag
+This class represents the start of an inline HTML tag.
 
 =head1 ATTRIBUTES
 

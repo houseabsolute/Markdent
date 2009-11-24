@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use lib 't/lib';
 
@@ -358,4 +358,31 @@ EOF
     ];
 
     parse_ok( $text, $expect, 'html inside code block is not treated as html' );
+}
+
+{
+    my $text = <<'EOF';
+Some self-closing <img src="foo" /> HTML.
+EOF
+
+    my $expect = [
+        {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => 'Some self-closing ',
+            }, {
+                type       => 'html_tag',
+                tag        => 'img',
+                attributes => { src => 'foo' },
+            }, {
+                type => 'text',
+                text => " HTML.\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'a self-closing html tag (img)' );
 }
