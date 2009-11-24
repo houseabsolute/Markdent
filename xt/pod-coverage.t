@@ -27,14 +27,15 @@ my @handler_events = qw(
     end_document
     end_emphasis
     end_header
+    end_html_tag
     end_link
     end_list_item
     end_ordered_list
     end_paragraph
     end_strong
     end_unordered_list
-    hr
-    html
+    horizontal_rule
+    html_tag
     html_block
     html_entity
     image
@@ -44,6 +45,7 @@ my @handler_events = qw(
     start_document
     start_emphasis
     start_header
+    start_html_tag
     start_link
     start_list_item
     start_ordered_list
