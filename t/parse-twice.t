@@ -10,6 +10,9 @@ use lib 't/lib';
 
 use Test::Markdent;
 
+# This test is here just to make sure that there's no hidden state preserved
+# in our use of /g matches in the parser.
+
 my $markdown = read_file( 't/mdtest-data/Markdown Documentation - Basics.text' );
 
 my $th1 = Markdent::Handler::MinimalTree->new();
