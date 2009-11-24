@@ -3,7 +3,7 @@ use warnings;
 
 my $subclass = Module::Build->subclass(
     class => 'Markdent::Build',
-    code  => <<'EOF';
+    code  => <<'EOF',
 sub find_test_files {
     my $self = shift;
 
