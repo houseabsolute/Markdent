@@ -35,6 +35,7 @@ my $builder = Markdent::Build->new(
             repository => 'http://hg.urth.org/hg/Markdent',
         },
     },
+    add_to_cleanup => ['Debian_CPANTS.txt'],
 );
 
 $builder->create_build_script();
