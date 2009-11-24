@@ -80,10 +80,6 @@ C<< $object->_print_debug() >>.
 
 This warns out the provided text along with a delimiter above the message.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.

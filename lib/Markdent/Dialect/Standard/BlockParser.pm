@@ -744,10 +744,6 @@ parsed for span-level markup using this object's C<span_parser>.
 This class does the L<Markdent::Role::BlockParser>,
 L<Markdent::Role::AnyParser>, and L<Markdent::Role::DebugPrinter> roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.

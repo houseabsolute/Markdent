@@ -47,10 +47,6 @@ The uri in the auto-link.
 
 This class does the L<Markdent::Role::Event> role.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.

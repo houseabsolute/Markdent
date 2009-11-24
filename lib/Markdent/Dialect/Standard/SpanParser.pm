@@ -880,10 +880,6 @@ Parses a block for span-level markup.
 This class does the L<Markdent::Role::SpanParser>,
 L<Markdent::Role::AnyParser>, and L<Markdent::Role::DebugPrinter> roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.

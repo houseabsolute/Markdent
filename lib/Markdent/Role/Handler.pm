@@ -32,10 +32,6 @@ This role implements behavior shared by all handlers.
 
 =back
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.

@@ -182,10 +182,6 @@ be present in the hash.
 
 Returns a string representation of the event suitable for debugging output.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.

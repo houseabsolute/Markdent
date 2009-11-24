@@ -355,10 +355,6 @@ Returns the root tree for the document.
 This class does the L<Markdent::Role::EventsAsMethods> and
 L<Markdent::Role::Handler> roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, E<gt>autarch@urth.orgE<lt>
-
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.
