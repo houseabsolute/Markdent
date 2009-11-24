@@ -11,6 +11,7 @@ use Markdent::Types qw( Str );
 use MooseX::Params::Validate qw( validated_list );
 
 use Moose;
+use MooseX::StrictConstructor;
 
 sub markdown_to_html {
     my $self = shift;
