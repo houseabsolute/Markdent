@@ -25,18 +25,15 @@ role {
     my $event_name = join q{_}, map {lc} grep {defined} $type, $name;
     method event_name => sub {$event_name};
 
-    $type = defined $type ? lc $type : 'inline';
-    method type => sub {$type};
-
     method name => sub {$name};
 
-    my $is_start = $type eq 'start';
+    my $is_start = ( $type || q{} ) eq 'Start';
     method is_start => sub {$is_start};
 
-    my $is_end = $type eq 'end';
+    my $is_end = ( $type || q{} ) eq 'End';
     method is_end => sub {$is_end};
 
-    my $is_inline = $type eq 'inline';
+    my $is_inline = ! defined $type;
     method is_inline => sub {$is_inline};
 
     my @required;
@@ -154,39 +151,32 @@ Markdent::Role::Event - Implements behavior shared by all events
 
 =head1 DESCRIPTION
 
-This role provides shared behavior for all event classes.
-
-=head2 Warning
-
-This class is likely to change or become many classes in a future release
+This role provides shared behavior for all event classes. It is actually
+somewhat of a hack, as it is a parameterized role that generates methods for
+each class that consumes it.
 
 =head1 METHODS
 
-This class provides the following methods:
+This role provides the following methods:
 
-=head2 Markdent::Event->new(...)
+=head2 $event->is_start()
 
-This method creates a new event. It accepts the following parameters:
+=head2 $event->is_end()
 
-=over 4
+=head2 $event->is_inline()
 
-=item * type => $type
-
-This a string which is one of 'start', 'stop', or 'inline'.
-
-=item * name => $name
-
-The event name, such as 'strong', 'blockquote', or 'text'.
-
-=item * attributes => { ... }
-
-An arbitrary hash reference of attributes for the event.
-
-=back
+These all returns booleans indicating whether the event is of the specified
+type.
 
 =head2 $event->event_name()
 
-This returns a name like 'start_blockquote', 'end_strong', or 'text'.
+This returns a name like "start_blockquote", "end_strong", or "text".
+
+=head2 $event->kv_pairs_for_attributes()
+
+This returns a hash representing the data stored in the object's
+attributes. If an attribute is not required and has not been set, it will not
+be present in the hash.
 
 =head2 $event->debug_dump()
 
