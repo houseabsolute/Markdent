@@ -7,6 +7,7 @@ our $VERSION = '0.02';
 
 use Markdent::Types qw( Bool );
 
+use namespace::autoclean;
 use Moose::Role;
 
 has debug => (
@@ -37,8 +38,6 @@ sub _debug_parse_result {
 sub _print_debug {
     warn $HR1 . "\n" . ( ref $_[0] ) . "\n" . $_[1] . "\n";
 }
-
-no Moose::Role;
 
 1;
 

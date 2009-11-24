@@ -10,6 +10,7 @@ use Markdent::Parser;
 use Markdent::Types qw( Str );
 use MooseX::Params::Validate qw( validated_list );
 
+use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

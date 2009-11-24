@@ -8,6 +8,7 @@ our $VERSION = '0.02';
 use Markdent::Types qw( ArrayRef EventObject );
 use MooseX::Params::Validate qw( pos_validated_list );
 
+use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

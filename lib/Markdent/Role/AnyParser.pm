@@ -5,6 +5,7 @@ use warnings;
 
 our $VERSION = '0.02';
 
+use namespace::autoclean;
 use Moose::Role;
 
 with 'Markdent::Role::DebugPrinter';
@@ -43,8 +44,6 @@ sub _detab_text {
 
     return;
 }
-
-no Moose::Role;
 
 1;
 

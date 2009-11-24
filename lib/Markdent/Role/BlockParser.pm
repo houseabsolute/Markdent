@@ -5,6 +5,7 @@ use warnings;
 
 our $VERSION = '0.02';
 
+use namespace::autoclean;
 use Moose::Role;
 
 with 'Markdent::Role::AnyParser';
@@ -17,8 +18,6 @@ has _span_parser => (
     init_arg => 'span_parser',
     required => 1,
 );
-
-no Moose::Role;
 
 1;
 

@@ -5,13 +5,12 @@ use warnings;
 
 our $VERSION = '0.02';
 
+use namespace::autoclean;
 use Moose::Role;
 
 with 'Markdent::Role::AnyParser';
 
 requires 'parse_block';
-
-no Moose::Role;
 
 1;
 
