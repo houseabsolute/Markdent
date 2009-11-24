@@ -1,3 +1,11 @@
+0.03
+
+- Added Markdent::Handler::CaptureEvents and Markdent::CapturedEvents. In my
+  benchmarks, thawing a Markdent::CaptureEvents object and replaying its
+  events to generate HTML for a bunch of documents was about 6x faster than
+  parsing from scratch.
+
+
 0.02   2009-11-24
 
 - Fixed some cases of nested strong and em in the Standard dialect's
