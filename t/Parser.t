@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::Exception;
-use Test::More 'no_plan';
+use Test::More tests => 6;
 
 use Markdent::Dialect::Theory::BlockParser;
 use Markdent::Handler::MinimalTree;
