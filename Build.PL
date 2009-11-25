@@ -25,6 +25,7 @@ my $builder = Markdent::Build->new(
     requires    => {
         'Digest::SHA1'                   => '0',
         'HTML::Stream'                   => '0',
+        'List::AllUtils'                 => '0',
         'Moose'                          => '0.92',
         'MooseX::Params::Validate'       => '0.12',
         'MooseX::SemiAffordanceAccessor' => '0.05',
