@@ -167,23 +167,15 @@ sub _parse_text {
 
         my @look_for = $self->_possible_span_matches();
 
-        if ( $self->debug() ) {
-            my @look_debug = map { ref $_ ? "$_->[0] ($_->[1])" : $_ } @look_for;
-
-            my $msg = "Looking for the following possible matches:\n";
-            $msg .= "  - $_\n" for @look_debug;
-
-            $self->_print_debug($msg);
-        }
+        $self->_debug_look_for(@look_for);
 
         for my $span (@look_for) {
             my ( $markup, @args ) = ref $span ? @{$span} : $span;
 
             my $meth = '_match_' . $markup;
 
-            if ( $self->$meth( $text, @args ) ) {
-                next PARSE;
-            }
+            $self->$meth( $text, @args )
+                and next PARSE;
         }
 
         $self->_match_plain_text($text);

@@ -45,6 +45,19 @@ sub _detab_text {
     return;
 }
 
+sub _debug_look_for {
+    my $self = shift;
+
+    return unless $self->debug();
+
+    my @look_debug = map { ref $_ ? "$_->[0] ($_->[1])" : $_ } @_;
+
+    my $msg = "Looking for the following possible matches:\n";
+    $msg .= "  - $_\n" for @look_debug;
+
+    $self->_print_debug($msg);
+}
+
 1;
 
 __END__

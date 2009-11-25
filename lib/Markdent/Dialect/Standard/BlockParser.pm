@@ -133,6 +133,7 @@ sub _parse_text {
 
     my $last_pos;
 
+ PARSE:
     while (1) {
         if ( $self->debug() && pos ${$text} ) {
             $self->_print_debug( "Remaining text:\n[\n"
@@ -153,30 +154,38 @@ sub _parse_text {
             die $msg;
         }
 
-        $self->_match_hashed_html($text) and next;
+        my @look_for = $self->_possible_block_matches();
 
-        $self->_match_atx_header($text) and next;
+        $self->_debug_look_for(@look_for);
 
-        $self->_match_two_line_header($text) and next;
+        for my $block (@look_for) {
+            my $meth = '_match_' . $block;
 
-        unless ( $self->_list_level() ) {
-            $self->_match_horizontal_rule($text) and next;
+            $self->$meth($text)
+                and next PARSE;
         }
-
-        $self->_match_blockquote($text) and next;
-
-        $self->_match_preformatted($text) and next;
-
-        $self->_match_list($text) and next;
-
-        if ( $self->_list_level() ) {
-            $self->_match_list_item($text) and next;
-        }
-
-        $self->_match_paragraph($text) and next;
 
         $last_pos = pos ${$text};
     }
+}
+
+sub _possible_block_matches {
+    my $self = shift;
+
+    my @look_for;
+
+    push @look_for, qw( hashed_html horizontal_rule )
+        unless $self->_list_level();
+
+    push @look_for,
+        qw( atx_header two_line_header blockquote preformatted list );
+
+    push @look_for, 'list_item'
+        if $self->_list_level();
+
+    push @look_for, 'paragraph';
+
+    return @look_for;
 }
 
 sub _match_hashed_html {
