@@ -5,10 +5,12 @@ use warnings;
 
 our $VERSION = '0.02';
 
+use Class::MOP;
 use Markdent::Dialect::Standard::BlockParser;
 use Markdent::Dialect::Standard::SpanParser;
 use Markdent::Types qw( Str HashRef BlockParserClass SpanParserClass );
 use MooseX::Params::Validate qw( validated_list );
+use Try::Tiny;
 
 use namespace::autoclean;
 use Moose;
@@ -18,7 +20,7 @@ use MooseX::StrictConstructor;
 with 'Markdent::Role::AnyParser';
 
 has _block_parser_class => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => BlockParserClass,
     init_arg => 'block_parser_class',
     default  => 'Markdent::Dialect::Standard::BlockParser',
@@ -39,7 +41,7 @@ has _block_parser_args => (
 );
 
 has _span_parser_class => (
-    is       => 'ro',
+    is       => 'rw',
     does     => SpanParserClass,
     init_arg => 'span_parser_class',
     default  => 'Markdent::Dialect::Standard::SpanParser',
@@ -62,6 +64,8 @@ has _span_parser => (
 sub BUILD {
     my $self = shift;
     my $args = shift;
+
+    $self->_set_classes_for_dialect($args);
 
     my %sp_args;
     for my $key (
@@ -93,6 +97,60 @@ sub BUILD {
     $bp_args{span_parser} = $self->_span_parser();
 
     $self->_set_block_parser_args(\%bp_args);
+}
+
+sub _set_classes_for_dialect {
+    my $self    = shift;
+    my $args    = shift;
+
+    my $dialect = delete $args->{dialect}
+        or return;
+
+    for my $pair (
+        map { [ $_, $self->_class_name_for_dialect( $dialect, $_ ) ] }
+        qw( block_parser span_parser ) ) {
+
+        my ( $thing, $class ) = @{$pair};
+
+        my $loaded;
+        try {
+            Class::MOP::load_class($class);
+            $loaded = 1;
+        }
+        catch {
+
+            # XXX - This is kind of broken, since a user can typo a dialect
+            # and that will just get ignored.
+            die $_ unless $_ =~ /Can't locate/;
+        };
+
+        next unless $loaded;
+
+        if ( exists $args->{ $thing . '_class' } ) {
+            die
+                "You specified a dialect ($dialect) which has its own $thing class"
+                . " and you also specified an explicit $thing class."
+                . " You cannot specify both when creating a Markdent::Parser.";
+        }
+
+        my $meth = '_set_' . $thing . '_class';
+        $self->$meth($class);
+    }
+}
+
+sub _class_name_for_dialect {
+    my $self    = shift;
+    my $dialect = shift;
+    my $type    = shift;
+
+    my $suffix = join q{}, map {ucfirst} split /_/, $type;
+
+    if ( $dialect =~ /::/ ) {
+        return join '::', $dialect, $suffix;
+    }
+    else {
+        return join '::', 'Markdent::Dialect', $dialect, $suffix;
+    }
 }
 
 sub _build_block_parser {
