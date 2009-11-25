@@ -1,8 +1,6 @@
 use strict;
 use warnings;
 
-use inc::latest 'Module::Build';
-
 use lib 'inc';
 
 use Markdent::Build;
