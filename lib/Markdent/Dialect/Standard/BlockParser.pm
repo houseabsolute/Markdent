@@ -23,6 +23,7 @@ use Markdent::Event::EndUnorderedList;
 use Markdent::Event::HorizontalRule;
 use Markdent::Event::HTMLBlock;
 use Markdent::Event::Preformatted;
+use Markdent::Regexes qw( :block );
 use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
 
 use namespace::autoclean;
@@ -80,13 +81,6 @@ sub parse_document {
     $self->_parse_text($text);
 }
 
-my $HorizontalWS = qr/(?: \p{SpaceSeparator} | \t )/x;
-my $EmptyLine = qr/(?: ^ $HorizontalWS* \n ) /xm;
-my $EmptyLines = qr/ (?: $EmptyLine )+ /xm;
-
-my $BlockStart = qr/(?: \A | $EmptyLines )/xm;
-my $BlockEnd = qr/(?=(?: $EmptyLines | \z ) )/xm;
-
 {
     # Stolen from Text::Markdown, along with the whole "extract and replace
     # with hash" concept.
@@ -132,7 +126,7 @@ sub _parse_text {
     my $text = shift;
 
     my $last_pos;
-
+    my $x = 1;
  PARSE:
     while (1) {
         if ( $self->debug() && pos ${$text} ) {
@@ -145,8 +139,9 @@ sub _parse_text {
             last;
         }
 
-        if ( $last_pos && $last_pos == pos ${$text} ) {
-            my $msg = "About to enter an endless loop!\n";
+        my $current_pos = pos ${$text} || 0;
+        if ( defined $last_pos && $last_pos == $current_pos ) {
+            my $msg = "About to enter an endless loop (pos = $current_pos)!\n";
             $msg .= "\n";
             $msg .= substr( ${$text}, $last_pos );
             $msg .= "\n";
@@ -165,7 +160,7 @@ sub _parse_text {
                 and next PARSE;
         }
 
-        $last_pos = pos ${$text};
+        $last_pos = pos ${$text} || 0;
     }
 }
 
@@ -594,7 +589,7 @@ sub _split_list_items {
     return @items;
 }
 
-# A list item matches a multiple lines of text without any separating
+# A list item matches multiple lines of text without any separating
 # newlines. These lines stop when we see a blockquote or indented list
 # bullet. This match is only done inside a list, and lets us distinguish
 # between list items which contain paragraphs and those which don't.

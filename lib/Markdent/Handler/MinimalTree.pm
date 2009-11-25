@@ -6,7 +6,10 @@ use warnings;
 our $VERSION = '0.02';
 
 use MooseX::Params::Validate qw( validated_list validated_hash );
-use Markdent::Types qw( HeaderLevel Str Bool HashRef );
+use Markdent::Types qw(
+    HeaderLevel Str Bool HashRef
+    TableCellAlignment PosInt
+);
 use Tree::Simple;
 
 use namespace::autoclean;
@@ -138,6 +141,91 @@ sub start_paragraph {
 }
 
 sub end_paragraph {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub start_table {
+    my $self = shift;
+    my %p    = validated_hash(
+        \@_,
+        caption => { isa => Str, optional => 1 },
+    );
+
+    my $para = Tree::Simple->new( { type => 'table', %p } );
+    $self->_current_node()->addChild($para);
+
+    $self->_set_current_node($para);
+}
+
+sub end_table {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub start_table_header {
+    my $self  = shift;
+
+    my $para = Tree::Simple->new( { type => 'table_header' } );
+    $self->_current_node()->addChild($para);
+
+    $self->_set_current_node($para);
+}
+
+sub end_table_header {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub start_table_body {
+    my $self  = shift;
+
+    my $para = Tree::Simple->new( { type => 'table_body' } );
+    $self->_current_node()->addChild($para);
+
+    $self->_set_current_node($para);
+}
+
+sub end_table_body {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub start_table_row {
+    my $self  = shift;
+
+    my $para = Tree::Simple->new( { type => 'table_row' } );
+    $self->_current_node()->addChild($para);
+
+    $self->_set_current_node($para);
+}
+
+sub end_table_row {
+    my $self  = shift;
+
+    $self->_set_current_up_one_level();
+}
+
+sub start_table_cell {
+    my $self = shift;
+    my %p    = validated_hash(
+        \@_,
+        alignment      => { isa => TableCellAlignment, optional => 1 },
+        colspan        => { isa => PosInt },
+        is_header_cell => { isa => Bool },
+    );
+
+    my $para = Tree::Simple->new( { type => 'table_cell', %p } );
+    $self->_current_node()->addChild($para);
+
+    $self->_set_current_node($para);
+}
+
+sub end_table_cell {
     my $self  = shift;
 
     $self->_set_current_up_one_level();

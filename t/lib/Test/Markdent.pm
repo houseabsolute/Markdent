@@ -21,13 +21,14 @@ use Exporter qw( import );
 our @EXPORT = qw( tree_from_handler parse_ok html_output_ok );
 
 sub parse_ok {
+    my $parser_p    = ref $_[0] ? shift : {};
     my $markdown    = shift;
     my $expect_tree = shift;
     my $desc        = shift;
 
     my $handler = Markdent::Handler::MinimalTree->new();
 
-    my $parser = Markdent::Parser->new( handler => $handler );
+    my $parser = Markdent::Parser->new( %{$parser_p}, handler => $handler );
 
     $parser->parse( markdown => $markdown );
 
