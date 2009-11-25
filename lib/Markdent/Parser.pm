@@ -236,6 +236,23 @@ This method creates a new parser. It accepts the following parameters:
 
 =over 4
 
+=item * dialect => $name
+
+You can use this as a shorthand to pick a block and/or span parser class.
+
+If the dialect parameter does not contain a namespace separator (::), the
+constructor looks for classes named
+C<Markdent::Dialect::${dialect}::BlockParser> and
+C<Markdent::Dialect::${dialect}::SpanParser>.
+
+If the dialect parameter does contain a namespace separator, it is used a
+prefix - C<$dialect::BlockParser> and C<$dialect::SpanParser>.
+
+If any relevant classes are found, they will be used by the parser.
+
+You can I<also> specify an explicit block or span parser, but if the dialect
+has its own class of that type, an error will be thrown.
+
 =item * block_parser_class => $class
 
 This default to L<Markdent::Dialect::Standard::BlockParser>, but can be any
