@@ -19,6 +19,7 @@ my $builder = Markdent::Build->new(
         'MooseX::Types'                  => '0.20',
         'namespace::autoclean'           => '0.09',
         'Tree::Simple'                   => '0',
+        'Try::Tiny'                      => '0',
     },
     build_requires => {
         'File::Slurp'                          => '0',
