@@ -52,6 +52,7 @@ sub tree_from_handler {
 }
 
 sub html_output_ok {
+    my $dialect     = ref $_[0] ? shift : {};
     my $markdown    = shift;
     my $expect_html = shift;
     my $desc        = shift;
@@ -62,8 +63,11 @@ sub html_output_ok {
         return;
     }
 
-    my $html = Markdent::Simple->new()
-        ->markdown_to_html( title => 'Test', markdown => $markdown );
+    my $html = Markdent::Simple->new()->markdown_to_html(
+        %{$dialect},
+        title    => 'Test',
+        markdown => $markdown,
+    );
 
     diag($html)
         if $ENV{MARKDENT_TEST_VERBOSE};

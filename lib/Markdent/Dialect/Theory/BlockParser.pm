@@ -119,10 +119,25 @@ sub _match_table {
 
     my $caption = defined $2 ? $2 : $5;
 
+    $self->_debug_parse_result(
+        $caption,
+        'table caption',
+    ) if defined $caption && $self->debug();
+
     my $header = $3;
     my $body = $4;
 
-    my @header = $self->_parse_rows( qr/\+?(?:-+\+)+(?:-+)?\n/m, $header );
+    $self->_debug_parse_result(
+        $header,
+        'table header',
+    ) if $self->debug();
+
+    $self->_debug_parse_result(
+        $body,
+        'table body',
+    ) if $self->debug();
+
+    my @header = $self->_parse_rows( qr/[\-\+]+\n/m, $header );
     $_->{is_header_cell} = 1 for map { @{$_} } @header;
 
     my @body = $self->_parse_rows( qr/\n/, $body );
@@ -235,7 +250,7 @@ sub _split_cells {
 
     # If the line has just one divider as the line-ending, it should not be
     # treated as marking an empty cell.
-    if ( $cells[-1] eq q{} && $line !~ /\Q$div$div\E/ ) {
+    if ( $cells[-1] eq q{} && $line =~ /\Q$div\E$HorizontalWS*$/ ) {
         pop @cells;
     }
 
@@ -356,7 +371,10 @@ sub _events_for_rows {
                 $self->_parse_text(\$content);
             }
 
-            $self->_send_event('EndTableCell');
+            $self->_send_event(
+                'EndTableCell',
+                is_header_cell => $cell->{is_header_cell},
+            );
         }
 
         $self->_send_event('EndTableRow');

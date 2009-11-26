@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use lib 't/lib';
 
@@ -1394,5 +1394,138 @@ EOF
         $text,
         $expect,
         'simple table with empty first header cell, so first col is header cells'
+    );
+}
+
+{
+    my $text = <<'EOF';
+| Header 1 and 2     || Nothing  |
++--------------------++----------+
+| Header 1 | Header 2 | Header 3 |
++----------+----------+----------+
+| B1       | B2       | B3       |
+EOF
+
+    my $expect = [
+        {
+            type => 'table',
+        },
+        [
+            {
+                type => 'table_header',
+            },
+            [
+                { type => 'table_row' },
+                [
+                    {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 2,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'Header 1 and 2',
+                        }
+                    ], {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'Nothing',
+                        },
+                    ],
+                ],
+                { type => 'table_row' },
+                [
+                    {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'Header 1',
+                        }
+                    ], {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'Header 2',
+                        },
+                    ], {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'Header 3',
+                        },
+                    ],
+                ],
+            ],
+            { type => 'table_body' },
+            [
+                { type => 'table_row' },
+                [
+                    {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 0,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'B1',
+                        },
+                    ], {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 0,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'B2',
+                        },
+                    ], {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 0,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'B3',
+                        },
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    parse_ok(
+        { dialect => 'Theory' },
+        $text,
+        $expect,
+        'first header row should have 3 columns'
     );
 }

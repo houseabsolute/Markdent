@@ -62,8 +62,8 @@ The colspan for the cell. This will be a positive integer.
 =head2 is_header_cell
 
 A boolean indicating whether the cell is a header cell. This will be true for
-all cells, in the table's header, but can also be true for cells in the
-table's body.
+all cells in the table's header, but can also be true for cells in the table's
+body.
 
 =head1 ROLES
 
