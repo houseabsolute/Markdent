@@ -580,7 +580,11 @@ sub _match_html_comment {
                                 $HTMLComment
                               /xgcs;
 
-    my $event = $self->_make_event( HTMLComment => text => $1 );
+    my $comment = $1;
+
+    $self->_detab_text(\$comment);
+
+    my $event = $self->_make_event( HTMLComment => text => $comment );
 
     $self->_markup_event($event);
 }

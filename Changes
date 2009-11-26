@@ -12,7 +12,9 @@
 
     my $parser = Markdent::Parser->new( dialect => 'Theory' );
 
-- HTML comments are now parsed as comments, not text or HTML tags.
+- HTML comments are now parsed as comments, not text or HTML tags. There are
+  two events for this, HTMLCommentBlock and HTMLComment. The block version is
+  for standalone comments, the other is for comments embedded in text.
 
 - Made tag balancing a bit more generic with the Markdent::Role::BalancedEvent
   role, which makes it easier to compare start & end events to see if they're

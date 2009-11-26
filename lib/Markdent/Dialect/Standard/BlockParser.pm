@@ -229,12 +229,16 @@ sub _match_html_comment {
                                 \n
                               /xmgc;
 
+    my $comment = $1;
+
     $self->_debug_parse_result(
-        $1,
+        $comment,
         'html comment block',
     ) if $self->debug();
 
-    $self->_send_event( HTMLCommentBlock => text => $1 );
+    $self->_detab_text(\$comment);
+
+    $self->_send_event( HTMLCommentBlock => text => $comment );
 }
 
 my $AtxHeader = qr/ ^
