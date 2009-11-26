@@ -3,7 +3,7 @@ package Markdent::Dialect::Theory::SpanParser;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use namespace::autoclean;
 use Moose;
@@ -36,7 +36,7 @@ Markdent::Dialect::Standard::SpanParser - Span parser for Theory's Markdown
 This class extends the L<Markdent::Dialect::Standard::SpanParser> class in
 order to allow the pipe (|) and colon (:) characters to be
 backslash-escaped. These are used to mark tables, so they need to be
-escapable.
+escapeable.
 
 =head1 METHODS
 
