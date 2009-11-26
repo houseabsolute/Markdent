@@ -70,9 +70,10 @@ my @handler_events = qw(
 );
 
 my %trustme = (
-    'Markdent::Handler::HTMLStream'  => \@handler_events,
-    'Markdent::Handler::MinimalTree' => \@handler_events,
-    'Markdent::Parser'               => ['BUILD'],
+    'Markdent::Handler::CaptureEvents' => ['handle_event'],
+    'Markdent::Handler::HTMLStream'    => \@handler_events,
+    'Markdent::Handler::MinimalTree'   => \@handler_events,
+    'Markdent::Parser'                 => ['BUILD'],
 );
 
 for my $module ( sort @modules ) {
