@@ -66,6 +66,8 @@ This role accepts the following parameters:
 This should be a list of attribute names which will be compared between the
 start and end events.
 
+=back
+
 =head1 METHODS
 
 This role provides the following methods:
