@@ -47,13 +47,13 @@ __END__
 
 =head1 NAME
 
-Markdent::Role::BalancedEvent - A parameterized role for end events which can check if the match a start event
+Markdent::Role::BalancedEvent - A parameterized role for events which can check if they match balance another event
 
 =head1 DESCRIPTION
 
-This role provides behavior for end events which can be checked for a matching
-start event. This includes things like strong, emphasis, code, and html tag
-events, all of which can be compared to a start event.
+This role provides behavior for start and end events which can be checked for
+a balancing event. This includes things like strong, emphasis, and code
+start/end events.
 
 =head1 ROLE PARAMETERS
 
