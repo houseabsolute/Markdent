@@ -36,7 +36,7 @@ If you're only interested in converting Markdown to HTML, you can use the
 L<Markdent::Simple> class to do this, although you can just as well use better
 battle-tested tools like L<Test::Markdown>.
 
-Otherwise, see L<Markdown::Parser> for more details on how to connect your
+Otherwise, see L<Markdent::Parser> for more details on how to connect your
 handlers to a parser.
 
 =head1 ALPHA WARNING

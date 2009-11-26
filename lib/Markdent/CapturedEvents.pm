@@ -62,9 +62,9 @@ them with a handle.
 
 This class provides the following methods:
 
-=head2 Markdown::CapturedEvents->new( events => \@events );
+=head2 Markdent::CapturedEvents->new( events => \@events );
 
-Creates a new Markdown::CapturedEvents object.
+Creates a new Markdent::CapturedEvents object.
 
 =head2 $captured->events()
 
