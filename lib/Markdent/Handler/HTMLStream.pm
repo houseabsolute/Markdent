@@ -244,6 +244,17 @@ sub start_html_tag {
     $self->_stream()->tag( $tag, %{$attributes} );
 }
 
+sub html_comment_block {
+    my $self = shift;
+    my ($text) = validated_list(
+        \@_,
+        text => { isa => Str },
+    );
+
+    # HTML::Stream->comment() adds extra whitespace for no good reason.
+    $self->_output()->print( '<!--' . $text . '-->' . "\n" );
+}
+
 sub html_comment {
     my $self = shift;
     my ($text) = validated_list(

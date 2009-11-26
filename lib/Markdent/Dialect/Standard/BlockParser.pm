@@ -22,6 +22,7 @@ use Markdent::Event::StartUnorderedList;
 use Markdent::Event::EndUnorderedList;
 use Markdent::Event::HorizontalRule;
 use Markdent::Event::HTMLBlock;
+use Markdent::Event::HTMLCommentBlock;
 use Markdent::Event::Preformatted;
 use Markdent::Regexes qw( :block $HTMLComment );
 use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
@@ -220,16 +221,20 @@ sub _match_html_comment {
     my $text = shift;
 
     return unless ${$text} =~ / \G
-                                $BlockStart
+                                $EmptyLine*?
                                 ^
                                 \p{SpaceSeparator}{0,3}
                                 $HTMLComment
                                 $HorizontalWS*
                                 \n
-                                $BlockEnd
                               /xmgc;
 
-    $self->_send_event( HTMLComment => text => $1 );
+    $self->_debug_parse_result(
+        $1,
+        'html comment block',
+    ) if $self->debug();
+
+    $self->_send_event( HTMLCommentBlock => text => $1 );
 }
 
 my $AtxHeader = qr/ ^

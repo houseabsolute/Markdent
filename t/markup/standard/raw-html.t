@@ -391,7 +391,8 @@ EOF
     my $text = <<'EOF';
 A paragraph
 
-<!-- html comment -->
+<!-- html comment 1 -->
+<!-- html comment 2 -->
 
 Inline <!-- comment --> here
 EOF
@@ -405,22 +406,23 @@ EOF
                 type => 'text',
                 text => "A paragraph\n",
             },
-        ],
-                  { type => 'html_comment',
-                    text => ' html comment ',
-                  },
-        {
+        ], {
+            type => 'html_comment_block',
+            text => ' html comment 1 ',
+        }, {
+            type => 'html_comment_block',
+            text => ' html comment 2 ',
+        }, {
             type => 'paragraph',
         },
         [
             {
                 type => 'text',
                 text => 'Inline ',
-            },
-                  { type => 'html_comment',
-                    text => ' comment ',
-                  },
-            {
+            }, {
+                type => 'html_comment',
+                text => ' comment ',
+            }, {
                 type => 'text',
                 text => " here\n",
             },
