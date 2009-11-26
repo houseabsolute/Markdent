@@ -37,6 +37,8 @@ my @handler_events = qw(
     horizontal_rule
     html_tag
     html_block
+ 	html_comment
+ 	html_comment_block
     html_entity
     image
     preformatted
@@ -53,6 +55,17 @@ my @handler_events = qw(
     start_strong
     start_unordered_list
     text
+
+ 	end_table
+ 	end_table_body
+ 	end_table_cell
+ 	end_table_header
+ 	end_table_row
+ 	start_table
+ 	start_table_body
+ 	start_table_cell
+ 	start_table_header
+ 	start_table_row
 );
 
 my %trustme = (
