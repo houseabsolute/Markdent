@@ -68,7 +68,12 @@ sub html_output_ok {
     diag($html)
         if $ENV{MARKDENT_TEST_VERBOSE};
 
-    my $tidy = HTML::Tidy->new( { doctype => 'transitional' } );
+    my $tidy = HTML::Tidy->new(
+        {
+            doctype           => 'transitional',
+            'sort-attributes' => 'alpha',
+        }
+    );
 
     my $real_expect_html = <<"EOF";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
