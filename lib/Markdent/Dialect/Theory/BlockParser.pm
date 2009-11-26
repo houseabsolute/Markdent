@@ -81,6 +81,7 @@ my $TableRow = qr{ ^
                        :
                      )+
                      .*?
+                     \n
                    )*             # ... can have 0+ continuation lines
                  }xm;
 
@@ -173,12 +174,12 @@ sub _parse_rows {
                 die "Continuation of a row before we've seen a row start?!"
                     unless @rows;
 
-                my @cells = $self->_cells_from_line( $line, ':' );
+                my $cells = $self->_cells_from_line( $line, ':' );
 
-                for my $i ( 0 .. $#cells ) {
-                    if ( defined $cells[$i]{content}
-                        && $cells[$i]{content} =~ /\S/ ) {
-                        $rows[-1][$i]{content} .= "\n" . $cells[$i]{content};
+                for my $i ( 0 .. $#{$cells} ) {
+                    if ( defined $cells->[$i]{content}
+                        && $cells->[$i]{content} =~ /\S/ ) {
+                        $rows[-1][$i]{content} .= "\n" . $cells->[$i]{content};
                     }
                 }
             }
@@ -382,6 +383,7 @@ sub _match_table_cell {
                                   \S
                                   .*
                                 )
+                                \z
                               /xmgc;
 
     $self->_debug_parse_result(
