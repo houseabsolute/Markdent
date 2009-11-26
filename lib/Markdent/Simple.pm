@@ -16,8 +16,9 @@ use MooseX::StrictConstructor;
 
 sub markdown_to_html {
     my $self = shift;
-    my ( $title, $markdown ) = validated_list(
+    my ( $dialect, $title, $markdown ) = validated_list(
         \@_,
+        dialect  => { isa => Str, default => 'Standard' },
         title    => { isa => Str },
         markdown => { isa => Str },
     );
@@ -31,7 +32,8 @@ sub markdown_to_html {
         output => $fh,
     );
 
-    my $parser = Markdent::Parser->new( handler => $handler );
+    my $parser
+        = Markdent::Parser->new( dialect => $dialect, handler => $handler );
 
     $parser->parse( markdown => $markdown );
 
@@ -74,6 +76,8 @@ Creates a new Markdent::Simple object.
 
 This method turns Markdown into HTML. You must provide a title as well, which
 will be used as the C<< <title> >> for the resulting HTML document.
+
+You can also provide an optional "dialect" parameter.
 
 =head1 BUGS
 
