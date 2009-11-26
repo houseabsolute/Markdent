@@ -25,26 +25,6 @@ has attributes => (
 
 with 'Markdent::Role::Event';
 
-with 'Markdent::Role::BalancedEvent' => { compare => [ 'tag' ] };
-
-sub as_text {
-    my $self = shift;
-
-    my $html = '<' . $self->tag();
-
-    my $attr = $self->attributes();
-
-    for my $key ( keys %{ $attr } ) {
-        my $quote = $attr->{$key} =~ /\"/ ? q{'} : q{"};
-
-        $html .= qq{ $key=} . $quote . $attr->{$key} . $quote;
-    }
-
-    $html .= '>';
-
-    return $html;
-}
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
@@ -76,8 +56,7 @@ value will have a value of C<undef> in the hash reference.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::Event> and
-L<Markdent::Role::BalancedEvent> roles.
+This class does the L<Markdent::Role::Event> role.
 
 =head1 BUGS
 

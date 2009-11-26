@@ -755,6 +755,8 @@ EVENT:
     for my $i ( 0 .. $#{$events} ) {
         my $event = $events->[$i];
 
+        next unless $event->does('Markdent::Role::BalancedEvent');
+
         if ( $event->is_start() ) {
             push @starts, [ $i, $event ];
         }
@@ -780,13 +782,17 @@ sub _convert_start_event_to_text {
     my $self  = shift;
     my $event = shift;
 
-    $self->_print_debug( 'Found bad start event for '
-            . $event->name()
-            . q{ with "}
-            . $event->delimiter()
-            . q{" as the delimiter}
-            . "\n" )
-        if $self->debug();
+    if ( $self->debug() ) {
+        my $msg = 'Found bad start event for ' . $event->name();
+
+        if ( $event->can('delimiter') ) {
+            $msg .= q{ with "} . $event->delimiter() . q{" as the delimiter};
+        }
+
+        $msg .= "\n";
+
+        $self->_print_debug($msg);
+    }
 
     return $self->_make_event(
         Text => (

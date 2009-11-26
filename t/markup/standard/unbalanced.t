@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use lib 't/lib';
 
@@ -177,4 +177,42 @@ EOF
     ];
 
     parse_ok( $text, $expect, 'bad strong start, good emphasis and good code' );
+}
+
+{
+    my $text = <<'EOF';
+Some <em><span class="foo">unbalanced</em></span> html.
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                type => 'text',
+                text => 'Some ',
+            }, {
+                type       => 'start_html_tag',
+                tag        => 'em',
+                attributes => {},
+            },
+            [
+                {
+                    type       => 'start_html_tag',
+                    tag        => 'span',
+                    attributes => { class => 'foo' },
+                },
+                [
+                    {
+                        type => 'text',
+                        text => 'unbalanced',
+                    },
+                ],
+            ], {
+                type => 'text',
+                text => " html.\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'unbalanced inline html tags are not detected' );
 }
