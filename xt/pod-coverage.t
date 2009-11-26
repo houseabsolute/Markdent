@@ -13,7 +13,8 @@ eval "use Pod::Coverage::Moose 0.02";
 plan skip_all => "Pod::Coverage::Moose 0.02 required for testing POD coverage"
     if $@;
 
-my %skip = map { $_ => 1 } qw( Markdent::Types Markdent::Types::Internal );
+my %skip = map { $_ => 1 }
+    qw( Markdent::Regexes Markdent::Types Markdent::Types::Internal );
 
 # This is a stripped down version of all_pod_coverage_ok which lets us
 # vary the trustme parameter per module.
