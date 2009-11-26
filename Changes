@@ -5,6 +5,15 @@
   events to generate HTML for a bunch of documents was about 6x faster than
   parsing from scratch.
 
+- Started implementing some Markdown extensions proposed by David Wheeler as
+  the "Theory" dialect. This includes a nice syntax for tables.
+
+- Made it easy to specify a dialect for a parser by writing
+
+    my $parser = Markdent::Parser->new( dialect => 'Theory' );
+
+- Refactored some parser internals to improve subclassability.
+
 
 0.02   2009-11-24
 
