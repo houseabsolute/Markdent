@@ -244,6 +244,16 @@ sub start_html_tag {
     $self->_stream()->tag( $tag, %{$attributes} );
 }
 
+sub html_comment {
+    my $self = shift;
+    my ($text) = validated_list(
+        \@_,
+        text => { isa => Str },
+    );
+
+    $self->_stream()->comment($text);
+}
+
 sub html_tag {
     my $self = shift;
     my ( $tag, $attributes ) = validated_list(
