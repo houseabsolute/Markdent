@@ -6,7 +6,8 @@
   parsing from scratch.
 
 - Started implementing some Markdown extensions proposed by David Wheeler as
-  the "Theory" dialect. This includes a nice syntax for tables.
+  the "Theory" dialect. This includes a nice syntax for tables. For now this
+  only includes the table extension.
 
 - Made it easy to specify a dialect for a parser by writing
 
