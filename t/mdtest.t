@@ -33,7 +33,7 @@ find(
 
 plan tests => scalar @files;
 
-for my $pair ( sort @files ) {
+for my $pair ( sort { $a->[0] cmp $b->[0] } @files ) {
     my ( $md_file, $html_file ) = @{$pair};
 
     my $markdown    = read_file($md_file);
