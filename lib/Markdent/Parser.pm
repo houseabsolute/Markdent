@@ -211,9 +211,8 @@ Markdent::Parser - A markdown parser
   my $handler = Markdent::Handler::HTMLStream->new( ... );
 
   my $parser = Markdent::Parser->new(
-      block_parser_class => '...',
-      span_parser_class  => '...',
-      handler            => $handler,
+      dialect => ...,
+      handler => $handler,
   );
 
   $parse->parse( markdown => $markdown );
