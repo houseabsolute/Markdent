@@ -20,13 +20,22 @@ all_pod_files_spelling_ok;
 
 __DATA__
 blockquote
+colspan
+escapeable
+Gruber
+Gruber's
 html
 inline
 Markdent
+Markdent's
 Markdown
 mdtest
+namespace
 parameterized
 PayPal
 preformatted
 uri
 XML's
+
+EndCode
+StartCode
