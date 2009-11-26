@@ -11,6 +11,8 @@ use MooseX::StrictConstructor;
 
 with 'Markdent::Role::Event';
 
+with 'Markdent::Role::BalancedEvent';
+
 __PACKAGE__->meta()->make_immutable();
 
 1;
@@ -29,7 +31,8 @@ This class represents the end of a link.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::Event> role.
+This class does the L<Markdent::Role::Event> and
+L<Markdent::Role::BalancedEvent> roles.
 
 =head1 BUGS
 

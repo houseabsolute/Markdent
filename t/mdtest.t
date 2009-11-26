@@ -18,6 +18,10 @@ find(
 
             ( my $html_file = $File::Find::name ) =~ s/\.text$/.xhtml/;
 
+            unless ( -f $html_file ) {
+                ( $html_file = $File::Find::name ) =~ s/\.text$/.html/;
+            }
+
             return unless -f $html_file;
 
             push @files, [ $File::Find::name, $html_file ];

@@ -37,6 +37,8 @@ has is_implicit_id => (
 
 with 'Markdent::Role::Event';
 
+with 'Markdent::Role::BalancedEvent';
+
 __PACKAGE__->meta()->make_immutable();
 
 1;
@@ -76,7 +78,8 @@ Markdown text.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::Event> role.
+This class does the L<Markdent::Role::Event> and
+L<Markdent::Role::BalancedEvent> roles.
 
 =head1 BUGS
 

@@ -19,6 +19,14 @@ has tag => (
 
 with 'Markdent::Role::Event';
 
+with 'Markdent::Role::BalancedEvent' => { compare => [ 'tag' ] };
+
+sub as_text {
+    my $self = shift;
+
+    return '</' . $self->tag() . '>';
+}
+
 __PACKAGE__->meta()->make_immutable();
 
 1;
@@ -43,7 +51,8 @@ The tag that is ending.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::Event> role.
+This class does the L<Markdent::Role::Event> and
+L<Markdent::Role::BalancedEvent> roles.
 
 =head1 BUGS
 

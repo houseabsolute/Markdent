@@ -19,6 +19,10 @@ has delimiter => (
 
 with 'Markdent::Role::Event';
 
+with 'Markdent::Role::BalancedEvent' => { compare => [ 'delimiter' ] };
+
+sub as_text { $_[0]->delimiter() }
+
 __PACKAGE__->meta()->make_immutable();
 
 1;
@@ -45,7 +49,8 @@ The delimiter for the strong span.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::Event> role.
+This class does the L<Markdent::Role::Event> and
+L<Markdent::Role::BalancedEvent> roles.
 
 =head1 BUGS
 

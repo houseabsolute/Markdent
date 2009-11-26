@@ -761,7 +761,7 @@ EVENT:
         elsif ( $event->is_end() ) {
             while ( my $start = pop @starts ) {
                 next EVENT
-                    if $start->[1]->name() eq $event->name();
+                    if $event->balances_event( $start->[1] );
 
                 $events->[ $start->[0] ]
                     = $self->_convert_start_event_to_text( $start->[1] );
@@ -790,7 +790,7 @@ sub _convert_start_event_to_text {
 
     return $self->_make_event(
         Text => (
-            text            => $event->delimiter(),
+            text            => $event->as_text(),
             _converted_from => $event->event_name(),
         )
     );
