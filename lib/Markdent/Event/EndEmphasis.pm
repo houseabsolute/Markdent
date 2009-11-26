@@ -21,6 +21,8 @@ with 'Markdent::Role::Event';
 
 with 'Markdent::Role::BalancedEvent' => { compare => [ 'delimiter' ] };
 
+with 'Markdent::Role::EventAsText';
+
 sub as_text { $_[0]->delimiter() }
 
 __PACKAGE__->meta()->make_immutable();
@@ -46,6 +48,14 @@ This class has the following attributes:
 =head2 delimiter
 
 The delimiter for the emphasis span.
+
+=head1 METHODS
+
+This class has the following methods:
+
+=head2 $event->as_text()
+
+Returns the event's delimiter.
 
 =head1 ROLES
 
