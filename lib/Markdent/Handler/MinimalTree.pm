@@ -334,6 +334,14 @@ sub end_html_tag {
     $self->_set_current_up_one_level();
 }
 
+sub html_comment {
+    my $self = shift;
+    my ($text) = validated_list( \@_, text => { isa => Str }, );
+
+    my $html_node = Tree::Simple->new( { type => 'html_comment', text => $text } );
+    $self->_current_node()->addChild($html_node);
+}
+
 sub html_tag {
     my $self = shift;
     my ( $tag, $attributes ) = validated_list(

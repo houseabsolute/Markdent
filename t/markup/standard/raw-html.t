@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use lib 't/lib';
 
@@ -385,4 +385,47 @@ EOF
     ];
 
     parse_ok( $text, $expect, 'a self-closing html tag (img)' );
+}
+
+{
+    my $text = <<'EOF';
+A paragraph
+
+<!-- html comment -->
+
+Inline <!-- comment --> here
+EOF
+
+    my $expect = [
+        {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => "A paragraph\n",
+            },
+        ],
+                  { type => 'html_comment',
+                    text => ' html comment ',
+                  },
+        {
+            type => 'paragraph',
+        },
+        [
+            {
+                type => 'text',
+                text => 'Inline ',
+            },
+                  { type => 'html_comment',
+                    text => ' comment ',
+                  },
+            {
+                type => 'text',
+                text => " here\n",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'html comments, standalone and inline' );
 }

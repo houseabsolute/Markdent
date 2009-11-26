@@ -23,7 +23,7 @@ use Markdent::Event::EndUnorderedList;
 use Markdent::Event::HorizontalRule;
 use Markdent::Event::HTMLBlock;
 use Markdent::Event::Preformatted;
-use Markdent::Regexes qw( :block );
+use Markdent::Regexes qw( :block $HTMLComment );
 use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
 
 use namespace::autoclean;
@@ -173,7 +173,9 @@ sub _possible_block_matches {
         unless $self->_list_level();
 
     push @look_for,
-        qw( atx_header two_line_header blockquote preformatted list );
+        qw( html_comment
+            atx_header two_line_header
+            blockquote preformatted list );
 
     push @look_for, 'list_item'
         if $self->_list_level();
@@ -211,6 +213,23 @@ sub _match_hashed_html {
     );
 
     return 1;
+}
+
+sub _match_html_comment {
+    my $self = shift;
+    my $text = shift;
+
+    return unless ${$text} =~ / \G
+                                $BlockStart
+                                ^
+                                $HorizontalWS*
+                                $HTMLComment
+                                $HorizontalWS*
+                                \n
+                                $BlockEnd
+                              /xmgc;
+
+    $self->_send_event( HTMLComment => text => $1 );
 }
 
 my $AtxHeader = qr/ ^

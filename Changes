@@ -12,6 +12,8 @@
 
     my $parser = Markdent::Parser->new( dialect => 'Theory' );
 
+- HTML comments are now parsed as comments, not text or HTML tags.
+
 - Refactored some parser internals to improve subclassability.
 
 

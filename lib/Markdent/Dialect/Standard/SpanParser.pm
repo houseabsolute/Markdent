@@ -14,6 +14,7 @@ use Markdent::Event::EndEmphasis;
 use Markdent::Event::EndHTMLTag;
 use Markdent::Event::EndLink;
 use Markdent::Event::EndStrong;
+use Markdent::Event::HTMLComment;
 use Markdent::Event::HTMLEntity;
 use Markdent::Event::HTMLTag;
 use Markdent::Event::Image;
@@ -23,6 +24,7 @@ use Markdent::Event::StartHTMLTag;
 use Markdent::Event::StartLink;
 use Markdent::Event::StartStrong;
 use Markdent::Event::Text;
+use Markdent::Regexes qw( $HTMLComment );
 use Markdent::Types qw( Str ArrayRef HashRef RegexpRef EventObject );
 
 use namespace::autoclean;
@@ -215,7 +217,7 @@ sub _possible_span_matches {
         push @look_for, qw( auto_link link image );
     }
 
-    push @look_for, 'html', 'html_entity';
+    push @look_for, 'html_comment', 'html_tag', 'html_entity';
 
     return @look_for;
 }
@@ -570,10 +572,23 @@ sub _link_match_results {
     return ( $text, \%attr );
 }
 
+sub _match_html_comment {
+    my $self = shift;
+    my $text = shift;
+
+    return unless ${$text} =~ / \G
+                                $HTMLComment
+                              /xgcs;
+
+    my $event = $self->_make_event( HTMLComment => text => $1 );
+
+    $self->_markup_event($event);
+}
+
 my %InlineTags = map { $_ => 1 }
     qw( area base basefont br col frame hr img input link meta param );
 
-sub _match_html {
+sub _match_html_tag {
     my $self = shift;
     my $text = shift;
 
