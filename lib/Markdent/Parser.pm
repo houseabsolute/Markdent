@@ -252,6 +252,9 @@ If any relevant classes are found, they will be used by the parser.
 You can I<also> specify an explicit block or span parser, but if the dialect
 has its own class of that type, an error will be thrown.
 
+If the dialect only specifies a block or span parser, but not both, then we
+fall back to using the appropriate parser for the Standard dialect.
+
 =item * block_parser_class => $class
 
 This default to L<Markdent::Dialect::Standard::BlockParser>, but can be any
