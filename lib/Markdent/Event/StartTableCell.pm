@@ -12,9 +12,9 @@ use Moose;
 use MooseX::StrictConstructor;
 
 has alignment => (
-    is        => 'ro',
-    isa       => TableCellAlignment,
-    predicate => 'has_alignment',
+    is       => 'ro',
+    isa      => TableCellAlignment,
+    required => 1,
 );
 
 has colspan => (
@@ -53,8 +53,7 @@ This class has the following attributes:
 
 =head2 alignment
 
-The alignment for the cell. This can be one of "left", "right", or
-"center". It is optional.
+The alignment for the cell. This will be one of "left", "right", or "center".
 
 =head2 colspan
 
