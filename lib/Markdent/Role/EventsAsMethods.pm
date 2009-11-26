@@ -49,6 +49,16 @@ hash reference returned by C<< $event->attributes() >> is turned into a set of
 named parameters for the method. However, any keys starting with "!" in the
 attributes will not be passed to the method.
 
+So, for example, a L<Markdown::Event::StartLink> event turns into a method
+call like this:
+
+  $handler->start_link(
+      uri            => $event->uri(),
+      title          => $title,                     # optional
+      id             => $id,                        # optional
+      is_implicit_id => $event->is_implicit_id(),
+  );
+
 =head1 ROLES
 
 This class does the L<Markdent::Role::Handler> role.
