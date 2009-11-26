@@ -397,3 +397,49 @@ sub _match_table_cell {
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Markdent::Dialect::Standard::BlockParser - Block parser for Theory's Markdown
+
+=head1 DESCRIPTION
+
+This class adds parsing for Markdown extensions proposed by David Wheeler (aka
+Theory). See
+L<http://justatheory.com/computers/markup/markdown-table-rfc.html> and
+L<http://justatheory.com/computers/markup/modest-markdown-proposal.html> for
+details.
+
+For now, this class handles tables only.
+
+This class extends the L<Markdent::Dialect::Standard::BlockParser> class.
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::BlockParser>,
+L<Markdent::Role::AnyParser>, and L<Markdent::Role::DebugPrinter> roles.
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
