@@ -42,10 +42,7 @@ handlers to a parser.
 =head1 ALPHA WARNING
 
 This code is still quite new. While the Markdown to HTML conversion seems to
-work fine, the internals are subject to change. In particular, the parser
-internals need to be reworked to make creating additional Markdown dialects
-easier, and the L<Markdown::Event> classes will probably expand into a
-hierarchy of classes in the future.
+work fine, the internals are subject to change.
 
 =head1 BUGS
 
