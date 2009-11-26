@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use lib 't/lib';
 
@@ -1094,7 +1094,7 @@ EOF
 
     my $expect = [
         {
-            type    => 'table',
+            type => 'table',
         },
         [
             {
@@ -1139,13 +1139,13 @@ EOF
                         is_header_cell => 0,
                     },
                     [
-                     {type => 'paragraph' },
-                     [
-                        {
-                            type => 'text',
-                            text => "b1\ncontinues:\nhere\n",
-                        },
-                      ]
+                        { type => 'paragraph' },
+                        [
+                            {
+                                type => 'text',
+                                text => "b1\ncontinues:\nhere\n",
+                            },
+                        ]
                     ], {
                         type           => 'table_cell',
                         alignment      => 'left',
@@ -1194,5 +1194,99 @@ EOF
         $text,
         $expect,
         'simple table with continuation lines'
+    );
+}
+
+{
+    my $text = <<'EOF';
+| th1         | th2 |
++-------------+-----+
+| * list           ||
+: * l2             ::
+: * l3             ::
+EOF
+
+    my $expect = [
+        {
+            type => 'table',
+        },
+        [
+            {
+                type => 'table_header',
+            },
+            [
+                { type => 'table_row' },
+                [
+                    {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'th1',
+                        },
+                    ], {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 1,
+                        is_header_cell => 1,
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => 'th2',
+                        },
+                    ],
+                ],
+            ],
+            { type => 'table_body' },
+            [
+                { type => 'table_row' },
+                [
+                    {
+                        type           => 'table_cell',
+                        alignment      => 'left',
+                        colspan        => 2,
+                        is_header_cell => 0,
+                    },
+                    [
+                        { type => 'unordered_list' },
+                        [
+                            { type => 'list_item' },
+                            [
+                                {
+                                    type => 'text',
+                                    text => "list\n",
+                                }
+                            ],
+                            { type => 'list_item' },
+                            [
+                                {
+                                    type => 'text',
+                                    text => "l2\n",
+                                }
+                            ],
+                            { type => 'list_item' },
+                            [
+                                {
+                                    type => 'text',
+                                    text => "l3\n",
+                                }
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    parse_ok(
+        { dialect => 'Theory' },
+        $text,
+        $expect,
+        'table with a list inside a cell'
     );
 }
