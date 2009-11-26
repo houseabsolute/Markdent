@@ -1,0 +1,64 @@
+=pod
+
+=head1 NAME
+
+Markdent::Dialect::Theory - Markdown extensions proposed by David Wheeler (aka Theory)
+
+=head1 SYNOPSIS
+
+  use Markdent::Parser;
+
+  my $parser = Markdent::Parser->new( dialect => 'Theory', handler => ... );
+
+=head1 DESCRIPTION
+
+This class adds parsing for Markdown extensions proposed by David Wheeler (aka
+Theory). See
+L<http://justatheory.com/computers/markup/markdown-table-rfc.html> and
+L<http://justatheory.com/computers/markup/modest-markdown-proposal.html> for
+details.
+
+=head2 DEVIATIONS
+
+The dialect differs from David Wheeler's proposals in a couple ways:
+
+=over 4
+
+=item
+
+Currently it just does tables, not definition lists. This will be fixed in a
+future release.
+
+=item
+
+Table continuation lines are expected to have the same number of cells as the
+line being continued. In other words, this doesn't work:
+
+ | cell1 | cell2     |
+         : continues
+
+Instead, you must write this:
+
+ | cell1 | cell2     |
+ :       : continues :
+
+This may be corrected in a future release.
+
+=back
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=head1 AUTHOR
+
+Dave Rolsky, E<lt>autarch@urth.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Dave Rolsky, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

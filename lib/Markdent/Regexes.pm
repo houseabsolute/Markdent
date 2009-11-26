@@ -34,5 +34,3 @@ our $BlockEnd = qr/(?=(?: $EmptyLines | \z ) )/xm;
 our $HTMLComment = qr{<!--(.+?)-->}s;
 
 1;
-
-__END__
