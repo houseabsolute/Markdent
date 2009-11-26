@@ -21,7 +21,7 @@ has captured_events => (
 );
 
 sub handle_event {
-    $_[0]->captured_events()->add_events( $_[1] );
+    $_[0]->captured_events()->capture_events( $_[1] );
 }
 
 __PACKAGE__->meta()->make_immutable();
