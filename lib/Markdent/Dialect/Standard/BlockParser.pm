@@ -222,7 +222,7 @@ sub _match_html_comment {
     return unless ${$text} =~ / \G
                                 $BlockStart
                                 ^
-                                $HorizontalWS*
+                                \p{SpaceSeparator}{0,3}
                                 $HTMLComment
                                 $HorizontalWS*
                                 \n
