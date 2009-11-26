@@ -87,12 +87,7 @@ my $TableRow = qr{ ^
 
 my $TableHeader = qr{ $TableRow
                       ^
-                      \+?
-                      (?:
-                        -+
-                        \+
-                      )+
-                      -*
+                      [\-\+]+
                       \n
                     }xm;
 
