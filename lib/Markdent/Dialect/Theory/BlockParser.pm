@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.02';
 
-use List::AllUtils qw( insert_after_string );
+use List::AllUtils qw( insert_after_string sum );
 use Markdent::Event::StartTable;
 use Markdent::Event::EndTable;
 use Markdent::Event::StartTableHeader;
@@ -66,17 +66,21 @@ my $TableCaption = qr{ ^
 my $TableRow = qr{ ^
                    [|]?            # a regular pipe-separated row
                    (?:
-                     [^|]*
-                     \|
+                     .*?
+                     (?<!\\)
+                     [|]
                    )+
+                   .*?
                    \n
                    (?:
                      ^
-                     :            # a colon-separated row continuation line
+                     :?           # a colon-separated row continuation line
                      (?:
-                       [^:]*
+                       .*?
+                       (?<!\\)
                        :
                      )+
+                     .*?
                    )*             # ... can have 0+ continuation lines
                  }xm;
 
@@ -87,9 +91,7 @@ my $TableHeader = qr{ $TableRow
                         -+
                         \+
                       )+
-                      (?:
-                        -+
-                      )?
+                      -*
                       \n
                     }xm;
 
@@ -129,6 +131,8 @@ sub _match_table {
 
     my @body = $self->_parse_rows( qr/\n/, $body );
 
+    $self->_normalize_cell_count_and_alignments( @header, @body );
+
     my $first_header_cell_content = $header[0][0]{content};
     unless ( defined $first_header_cell_content
         && $first_header_cell_content =~ /\S/ ) {
@@ -156,8 +160,10 @@ sub _parse_rows {
     my @rows;
 
     for my $chunk ( split $split_re, $rows ) {
-        for my $line ( split /\n/, $chunk ) {
-            if ( $line =~ /$EmptyLine/ ) {
+        # Splitting on an empty string returns nothing, so we need to
+        # special-case that, as we want to preserve empty lines.
+        for my $line ( length $chunk ? ( split /\n/, $chunk ) : $chunk ) {
+            if ( $line =~ /^$HorizontalWS*$/ ) {
                 push @rows, undef;
             }
             elsif ( $self->_is_continuation_line($line) ) {
@@ -167,7 +173,7 @@ sub _parse_rows {
                 die "Continuation of a row before we've seen a row start?!"
                     unless @rows;
 
-                my @cells = $self->_cells_from_line($line);
+                my @cells = $self->_cells_from_line( $line, ':' );
 
                 for my $i ( 0 .. $#cells ) {
                     if ( defined $cells[$i]{content}
@@ -177,20 +183,7 @@ sub _parse_rows {
                 }
             }
             else {
-                push @rows, $self->_cells_from_line($line);
-            }
-        }
-    }
-
-    # Alignments are inherited from the cell above, or they default to "left".
-    my %alignments;
-    for my $row ( grep { @{$_} } @rows) {
-        for my $i ( 0..$#{$row} ) {
-            if ( $row->[$i]{alignment} ) {
-                $alignments{$i} = $row->[$i]{alignment};
-            }
-            else {
-                $row->[$i]{alignment} = $alignments{$i} || 'left';
+                push @rows, $self->_cells_from_line( $line, '|' );
             }
         }
     }
@@ -203,11 +196,10 @@ sub _is_continuation_line {
     my $line = shift;
 
     return 0
-        if $line
-            =~ / (?: \p{SpaceSeparator}+ [|] | [|] \p{SpaceSeparator}+ ) /x;
+        if $line =~ /(?<!\\)[|]/x;
 
     return 1
-        if $line =~ / (?: \p{SpaceSeparator}+ : | : \p{SpaceSeparator}+ ) /x;
+        if $line =~ /(?<!\\):/x;
 
     # a blank line, presumably
     return 0;
@@ -216,19 +208,17 @@ sub _is_continuation_line {
 sub _cells_from_line {
     my $self = shift;
     my $line = shift;
+    my $div  = shift;
 
     my @row;
-    my $colspan = 1;
 
-    for my $cell ( $self->_split_cells($line) ) {
-        # If the first cell is empty (|| ...) we treat it as empty, as opposed
-        # to a colspan indicator.
-        if ( ! defined $cell && @row ) {
-            $row[-1]{colspan}++;
+    for my $cell ( $self->_split_cells($line, $div) ) {
+        if ( length $cell ) {
+            push @row, $self->_cell_params($cell);
         }
-        else {
-            push @row, $self->_cell_params( $cell, $colspan );
-            $colspan = 1;
+        # If the first cell is empty, we just treat it as an empty cell.
+        elsif (@row) {
+            $row[-1]{colspan}++;
         }
     }
 
@@ -238,18 +228,27 @@ sub _cells_from_line {
 sub _split_cells {
     my $self = shift;
     my $line = shift;
+    my $div  = shift;
 
-    $line =~ s/^[|]|[|]$//g;
+    $line =~ s/^\Q$div//;
+    $line =~ s/\Q$div\E\p{SpaceSeparator}*$/$div/;
 
-    # The inclusion of surrounding space means that we will not split on
-    # escaped pipes (which is good).
-    return split /\p{SpaceSeparator}+[|]\p{SpaceSeparator}+/, $line;
+    # We don't want to split on a backslash-escaped divider, thus the
+    # lookbehind. The -1 ensures that Perl gives us the trailing empty fields.
+    my @cells = split /(?<!\\)\Q$div/, $line, -1;
+
+    # If the line has just one divider as the line-ending, it should not be
+    # treated as marking an empty cell.
+    if ( $cells[-1] eq q{} && $line !~ /\Q$div$div\E/ ) {
+        pop @cells;
+    }
+
+    return @cells;
 }
 
 sub _cell_params {
-    my $self    = shift;
-    my $cell    = shift;
-    my $colspan = shift;
+    my $self = shift;
+    my $cell = shift;
 
     my $alignment;
     my $content;
@@ -262,7 +261,7 @@ sub _cell_params {
     }
 
     my %p = (
-        colspan => $colspan,
+        colspan => 1,
         content => $content,
     );
 
@@ -280,12 +279,48 @@ sub _alignment_for_cell {
         if $cell =~ /^\p{SpaceSeparator}{2,}.+?\p{SpaceSeparator}{2,}$/;
 
     return 'left'
-        if $cell =~ /^\p{SpaceSeparator}\S.+?\p{SpaceSeparator}{2,}$/;
+        if $cell =~ /\p{SpaceSeparator}{2,}$/;
 
     return 'right'
-        if $cell =~ /^\p{SpaceSeparator}{2,}.+?\S\p{SpaceSeparator}$/;
+        if $cell =~ /^\p{SpaceSeparator}{2,}/;
 
     return undef;
+}
+
+sub _normalize_cell_count_and_alignments {
+    my $self = shift;
+    my @rows = @_;
+
+    # We use the first header row as an indicator for how many cells we expect
+    # on each line.
+    my $default_cells = sum( map { $_->{colspan} } @{ $rows[0] } );
+
+    # Alignments are inherited from the cell above, or they default to
+    # "left". We loop through all the rules and set alignments accordingly.
+    my %alignments;
+
+    for my $row ( grep { defined } @rows ) {
+        # If we have one extra column and the final cell has a colspan > 1 it
+        # means we misinterpreted a trailing divider as indicating that the
+        # prior cell had a colspan > 1. We adjust for that by comparing it to
+        # the number of columns in the first row.
+        if ( sum( map { $_->{colspan} } @{$row} ) == $default_cells + 1
+             && $row->[-1]{colspan} > 1 ) {
+            $row->[-1]{colspan}--;
+        }
+
+        my $i = 0;
+        for my $cell ( @{$row} ) {
+            if ( $cell->{alignment} ) {
+                $alignments{$i} = $cell->{alignment};
+            }
+            else {
+                $cell->{alignment} = $alignments{$i} || 'left';
+            }
+
+            $i += $cell->{colspan};
+        }
+    }
 }
 
 sub _events_for_rows {
@@ -299,7 +334,7 @@ sub _events_for_rows {
     $self->_send_event($start);
 
     for my $row ( @{$rows} ) {
-        if ( ! @{$row} ) {
+        if ( ! defined $row ) {
             $self->_send_event($end);
             $self->_send_event($start);
             next;
@@ -315,14 +350,15 @@ sub _events_for_rows {
                 %{$cell}
             );
 
-            # If the content has newlines, it should be matched as a
-            # block-level construct (blockquote, list, etc), but to make that
-            # work, it has to have a trailing newline.
-            $content .= "\n"
-                if $content =~ /\n/;
+            if ( defined $content ) {
+                # If the content has newlines, it should be matched as a
+                # block-level construct (blockquote, list, etc), but to make
+                # that work, it has to have a trailing newline.
+                $content .= "\n"
+                    if $content =~ /\n/;
 
-            $self->_parse_text(\$content)
-                if defined $content;
+                $self->_parse_text(\$content);
+            }
 
             $self->_send_event('EndTableCell');
         }

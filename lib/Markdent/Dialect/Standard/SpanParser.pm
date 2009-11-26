@@ -7,6 +7,7 @@ our $VERSION = '0.02';
 
 use re 'eval';
 
+use List::AllUtils qw( uniq );
 use Markdent::Event::AutoLink;
 use Markdent::Event::EndCode;
 use Markdent::Event::EndEmphasis;
@@ -22,7 +23,7 @@ use Markdent::Event::StartHTMLTag;
 use Markdent::Event::StartLink;
 use Markdent::Event::StartStrong;
 use Markdent::Event::Text;
-use Markdent::Types qw( Str ArrayRef HashRef EventObject );
+use Markdent::Types qw( Str ArrayRef HashRef RegexpRef EventObject );
 
 use namespace::autoclean;
 use Moose;
@@ -67,6 +68,21 @@ has _links_by_id => (
         _add_link_by_id => 'set',
         _get_link_by_id => 'get',
     },
+);
+
+has _escape_re => (
+    is       => 'ro',
+    isa      => RegexpRef,
+    lazy     => 1,
+    builder  => '_build_escape_re',
+    init_arg => undef,
+);
+
+has _escapable_chars => (
+    is      => 'ro',
+    isa     => ArrayRef [Str],
+    lazy    => 1,
+    builder => '_build_escapable_chars',
 );
 
 sub extract_link_ids {
@@ -264,14 +280,26 @@ sub _open_start_event_for_span {
     return $in;
 }
 
-my $Escape = qr/\\([\\`*_{}[\]()#+\-.!<>])/;
+sub _build_escapable_chars {
+    return [ qw( \ ` * _ { } [ \ ] ( ) + \ - . ! < > ), '#' ];
+}
+
+sub _build_escape_re {
+    my $self = shift;
+
+    my $chars = join q{}, uniq( @{ $self->_escapable_chars() } );
+
+    return qr/\\([\Q$chars\E])/;
+}
 
 sub _match_escape {
     my $self = shift;
     my $text = shift;
 
+    my $escape_re = $self->_escape_re();
+
     return unless ${$text} =~ / \G
-                                ($Escape)
+                                ($escape_re)
                               /xgc;
 
     $self->_print_debug( "Interpreting as escaped character\n\n[$1]\n" )
@@ -623,6 +651,8 @@ sub _match_plain_text {
     my $self = shift;
     my $text = shift;
 
+    my $escape_re = $self->_escape_re();
+
     # Note that we're careful not to consume any of the characters marking the
     # (possible) end of the plain text. If those things turn out to _not_ be
     # markup, we'll get them on the next pass, because we always match at
@@ -631,7 +661,7 @@ sub _match_plain_text {
         ${$text} =~ /\G
                      ( .+? )              # at least one character followed by ...
                      (?=
-                       $Escape
+                       $escape_re
                        |
                        \*                 #   possible span markup
                        |
