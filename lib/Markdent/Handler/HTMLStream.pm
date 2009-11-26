@@ -251,7 +251,8 @@ sub html_comment {
         text => { isa => Str },
     );
 
-    $self->_stream()->comment($text);
+    # HTML::Stream->comment() adds extra whitespace for no good reason.
+    $self->_output()->print( '<!--' . $text . '-->' );
 }
 
 sub html_tag {
