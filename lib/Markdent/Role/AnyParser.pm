@@ -88,7 +88,8 @@ This is required for all parsers.
 =head2 $parser->_detab_text(\$text)
 
 This takes a scalar reference to a piece of text that will be outputted and
-replaces tabs with spaces.
+replaces tabs with spaces. This is down I<after> a piece of text is parser for
+markup.
 
 =head1 ROLES
 
