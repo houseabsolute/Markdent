@@ -28,7 +28,10 @@ This role implements an interface shared by all handlers.
 
 =over 4
 
-=item * $handler->handle_event(...)
+=item * $handler->handle_event($event)
+
+This method will always be called with a single object which does the
+L<Markdent::Role::Event> role.
 
 =back
 
