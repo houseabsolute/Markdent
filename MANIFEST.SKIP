@@ -42,3 +42,5 @@
 # No need to ship this
 \.shipit
 ^MYMETA.yml$
+
+^foo
