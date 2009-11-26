@@ -1,4 +1,4 @@
-0.03
+0.03   2009-11-26
 
 - Added Markdent::Handler::CaptureEvents and Markdent::CapturedEvents. In my
   benchmarks, thawing a Markdent::CaptureEvents object and replaying its
