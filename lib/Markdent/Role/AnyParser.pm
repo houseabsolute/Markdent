@@ -74,7 +74,7 @@ This role implements behavior shared by all types of parser.
 
 =head1 ATTRIBUTES
 
-This roles provides the following attributes:
+This role provides the following attributes:
 
 =head2 handler
 
