@@ -85,10 +85,10 @@ my $TableRow = qr{ ^
                    )*             # ... can have 0+ continuation lines
                  }xm;
 
+my $HeaderSecondLine = qr/^[\-\+=]+\n/xm;
+
 my $TableHeader = qr{ $TableRow
-                      ^
-                      [\-\+]+
-                      \n
+                      $HeaderSecondLine
                     }xm;
 
 sub _match_table {
@@ -99,7 +99,7 @@ sub _match_table {
                                 $BlockStart
                                 (
                                   $TableCaption?
-                                  ($TableHeader+)
+                                  ($TableHeader+)?
                                   (
                                     (?:
                                       $TableRow
@@ -137,17 +137,23 @@ sub _match_table {
         'table body',
     ) if $self->debug();
 
-    my @header = $self->_parse_rows( qr/[\-\+]+\n/m, $header );
-    $_->{is_header_cell} = 1 for map { @{$_} } @header;
+    my @header;
+
+    if ( defined $header ) {
+        @header = $self->_parse_rows( qr/$HeaderSecondLine/m, $header );
+        $_->{is_header_cell} = 1 for map { @{$_} } @header;
+    }
 
     my @body = $self->_parse_rows( qr/\n/, $body );
 
     $self->_normalize_cell_count_and_alignments( @header, @body );
 
-    my $first_header_cell_content = $header[0][0]{content};
-    unless ( defined $first_header_cell_content
-        && $first_header_cell_content =~ /\S/ ) {
-        $_->[0]{is_header_cell} = 1 for @body;
+    if (@header) {
+        my $first_header_cell_content = $header[0][0]{content};
+        unless ( defined $first_header_cell_content
+                 && $first_header_cell_content =~ /\S/ ) {
+            $_->[0]{is_header_cell} = 1 for @body;
+        }
     }
 
     $self->_enter_table();
@@ -155,7 +161,8 @@ sub _match_table {
     my %caption = defined $caption ? ( caption => $caption ) : ();
     $self->_send_event( 'StartTable', %caption );
 
-    $self->_events_for_rows( \@header, 'Header' );
+    $self->_events_for_rows( \@header, 'Header' )
+        if @header;
     $self->_events_for_rows( \@body,   'Body' );
 
     $self->_send_event('EndTable');
