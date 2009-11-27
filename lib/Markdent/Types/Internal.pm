@@ -3,7 +3,7 @@ package Markdent::Types::Internal;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use IO::Handle;
 
