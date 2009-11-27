@@ -1,3 +1,12 @@
+0.06   2009-11-27
+
+- Added a new handler, Markdent::Handler::HTMLFilter, which removes all HTML
+  events (except for entities) from the event stream.
+
+- Added a new role, Markdent::Role::FilterHandler, to make it easier to write
+  filtering handlers.
+
+
 0.05   2009-11-27
 
 - Theory-style tables no longer need to have header rows. They can just
