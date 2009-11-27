@@ -161,6 +161,8 @@ sub _match_table {
     $self->_send_event('EndTable');
 
     $self->_leave_table();
+
+    return 1;
 }
 
 sub _parse_rows {

@@ -587,6 +587,8 @@ sub _match_html_comment {
     my $event = $self->_make_event( HTMLComment => text => $comment );
 
     $self->_markup_event($event);
+
+    return 1;
 }
 
 my %InlineTags = map { $_ => 1 }
@@ -664,6 +666,8 @@ sub _match_html_entity {
     my $event = $self->_make_event( HTMLEntity => entity => $1 );
 
     $self->_markup_event($event);
+
+    return 1;
 }
 
 sub _match_plain_text {
