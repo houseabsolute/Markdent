@@ -20,7 +20,9 @@ details.
 
 =head2 DEVIATIONS
 
-The dialect differs from David Wheeler's proposals in a few ways:
+The dialect differs from David Wheeler's proposals in a few ways. Most of
+these deviations were discussed with David Wheeler and included with his
+approval.
 
 =over 4
 
@@ -71,7 +73,8 @@ Instead, you must write this:
  | cell1 | cell2     |
  :       : continues :
 
-This may be corrected in a future release.
+This is not an approved deviation, and may be corrected in a future release if
+I can figure out how to do so (patches welcome).
 
 =back
 
