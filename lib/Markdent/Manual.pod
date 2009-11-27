@@ -110,7 +110,7 @@ dialect's|Markdent::Dialect::Standard> block parser.
 See the Theory dialect for an example of how to extend the core Markdown
 dialect.
 
-=head WHAT DOES THE NAME MEAN?
+=head1 WHAT DOES THE NAME MEAN?
 
 It's a combination of "Markdown" and "event".
 
