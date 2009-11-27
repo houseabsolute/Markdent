@@ -37,7 +37,7 @@
 # Avoid tarballs
 \.(?:tar|tgz|tar\.gz)$
 
-^Text-Markdown-Eventual-
+^Markdent-
 
 # No need to ship this
 \.shipit
