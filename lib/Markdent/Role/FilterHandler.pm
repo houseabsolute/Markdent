@@ -67,7 +67,7 @@ This role provides the following attributes:
 This is a read-only attribute. It is an object which does the
 L<Markdent::Role::Handler> role.
 
-This is the handler to which the fliter passes events after filtering.
+This is the handler to which the filter passes events after filtering.
 
 =head1 BUGS
 
