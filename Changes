@@ -1,4 +1,16 @@
-0.04   2009-11-27
+0.05   2009-11-27
+
+- Theory-style tables no longer need to have header rows. They can just
+  consist of a body.
+
+- Theory-style header rows can use equals signs (=) in the marker:
+  
+  | Header 1 | Header 2 |
+  +==========+==========+
+  | Body 1   | Body 2   |
+
+
+0.04   2009-11-26
 
 - Added Markdent::Manual, a start at more comprehensive high-level docs on how
   to use Markdent.
@@ -10,15 +22,6 @@
 
 - Added a new handler, Multiplexer, which lets you multiplex the event stream
   to more than one handler at a time.
-
-- Theory-style tables no longer need to have header rows. They can just
-  consist of a body.
-
-- Theory-style header rows can use equals signs (=) in the marker:
-  
-  | Header 1 | Header 2 |
-  +==========+==========+
-  | Body 1   | Body 2   |
 
 
 0.03   2009-11-26
