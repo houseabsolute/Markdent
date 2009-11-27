@@ -12,13 +12,15 @@ use MooseX::Types -declare => [
         BlockParserClass
         SpanParserClass
         EventObject
+        HandlerObject
         OutputStream
+        NonEmptyArrayRef
         TableCellAlignment
         PosInt
         )
 ];
 
-use MooseX::Types::Moose qw( Int ClassName Any FileHandle Object );
+use MooseX::Types::Moose qw( Int ArrayRef ClassName Any FileHandle Object );
 
 subtype HeaderLevel,
     as Int,
@@ -36,6 +38,14 @@ subtype SpanParserClass,
 subtype EventObject,
     as Object,
     where { $_->can('does') && $_->does('Markdent::Role::Event') };
+
+subtype HandlerObject,
+    as Object,
+    where { $_->can('does') && $_->does('Markdent::Role::Handler') };
+
+subtype NonEmptyArrayRef,
+    as ArrayRef,
+    where { @{$_} >= 1 };
 
 subtype OutputStream,
     as Any,
