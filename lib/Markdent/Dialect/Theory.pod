@@ -20,9 +20,24 @@ details.
 
 =head2 DEVIATIONS
 
-The dialect differs from David Wheeler's proposals in a couple ways:
+The dialect differs from David Wheeler's proposals in a few ways:
 
 =over 4
+
+=item
+
+The header's "marker" row can use "+====+" as well as "+----+":
+
+  | Header 1 | Header 2 |
+  +==========+==========+
+  | Body 1   | Body 2   |
+
+=item
+
+The table does not require a header:
+
+  | Body 1 | Body 2 |
+  | Body 3 | Body 4 |
 
 =item
 
