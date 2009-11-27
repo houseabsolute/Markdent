@@ -1,3 +1,20 @@
+0.07   2009-11-27
+
+- You can now include a header marker at the beginning and/or end of the
+  table. This matches how MySQL outputs tables from its CLI tool.
+
+  +------+-------------+------------------------------+--------+
+  | id   | name        | description                  | price  |
+  +------+-------------+------------------------------+--------+
+  |    1 | gizmo       | Takes care of the doohickies |   1.99 |
+  |    2 | doodad      | Collects *gizmos*            |  23.80 |
+  |   10 | dojigger    | Foo                          | 102.98 |
+  | 1024 | thingamabob | Self-explanatory, no?        |   0.99 |
+  +------+-------------+------------------------------+--------+
+
+  Suggested by David Wheeler.
+
+
 0.06   2009-11-27
 
 - Added a new handler, Markdent::Handler::HTMLFilter, which removes all HTML
