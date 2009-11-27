@@ -73,6 +73,7 @@ my %trustme = (
     'Markdent::Handler::CaptureEvents' => ['handle_event'],
     'Markdent::Handler::HTMLStream'    => \@handler_events,
     'Markdent::Handler::MinimalTree'   => \@handler_events,
+    'Markdent::Handler::Multiplexer'   => ['handle_event'],
     'Markdent::Parser'                 => ['BUILD'],
 );
 
