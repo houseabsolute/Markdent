@@ -20,14 +20,18 @@ all_pod_files_spelling_ok;
 
 __DATA__
 blockquote
+blockquotes
 colspan
 escapeable
+# wiki-esque
+esque
 Gruber
 Gruber's
 html
 inline
 Markdent
 Markdent's
+MARKDENT
 Markdown
 mdtest
 namespace
@@ -35,7 +39,12 @@ parameterized
 PayPal
 preformatted
 uri
+wiki
 XML's
 
+CaptureEvents
+HTMLStream
 EndCode
 StartCode
+StartEmphasis
+StartLink
