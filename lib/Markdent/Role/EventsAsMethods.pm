@@ -61,7 +61,7 @@ call like this:
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::Handler> role.
+This role does the L<Markdent::Role::Handler> role.
 
 =head1 BUGS
 

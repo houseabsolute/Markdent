@@ -57,7 +57,7 @@ This is required for all block parsers.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::AnyParser> and
+This role does the L<Markdent::Role::AnyParser> and
 L<Markdent::Role::DebugPrinter> roles.
 
 =head1 BUGS
