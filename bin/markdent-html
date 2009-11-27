@@ -4,13 +4,27 @@ use strict;
 use warnings;
 
 use File::Slurp qw( read_file );
+use Getopt::Long;
 use HTML::Tidy;
 use Markdent::Simple;
 
-my $markdown = read_file(shift);
+my $file;
+my $title = 'Needs a title';
+my $dialect = 'Standard';
+
+GetOptions(
+    'file:s'    => \$file,
+    'title:s'   => \$title,
+    'dialect:s' => \$dialect,
+);
+
+die "Need to specify a file" unless defined $file && -f $file;
+
+my $markdown = read_file($file);
 
 my $html = Markdent::Simple->new()->markdown_to_html(
-    title    => 'Needs a Title',
+    dialect  => $dialect,
+    title    => $title,
     markdown => $markdown,
 );
 

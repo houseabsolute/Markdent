@@ -41,6 +41,20 @@ The table does not require a header:
 
 =item
 
+You can include a header marker at the beginning and/or end of the table. This
+matches how MySQL outputs tables from its CLI tool.
+
+  +------+-------------+------------------------------+--------+
+  | id   | name        | description                  | price  |
+  +------+-------------+------------------------------+--------+
+  |    1 | gizmo       | Takes care of the doohickies |   1.99 |
+  |    2 | doodad      | Collects *gizmos*            |  23.80 |
+  |   10 | dojigger    | Foo                          | 102.98 |
+  | 1024 | thingamabob | Self-explanatory, no?        |   0.99 |
+  +------+-------------+------------------------------+--------+
+
+=item
+
 Currently it just does tables, not definition lists. This will be fixed in a
 future release.
 

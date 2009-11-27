@@ -85,10 +85,10 @@ my $TableRow = qr{ ^
                    )*             # ... can have 0+ continuation lines
                  }xm;
 
-my $HeaderSecondLine = qr/^[\-\+=]+\n/xm;
+my $HeaderMarkerLine = qr/^[\-\+=]+\n/xm;
 
 my $TableHeader = qr{ $TableRow
-                      $HeaderSecondLine
+                      $HeaderMarkerLine
                     }xm;
 
 sub _match_table {
@@ -99,6 +99,7 @@ sub _match_table {
                                 $BlockStart
                                 (
                                   $TableCaption?
+                                  $HeaderMarkerLine?
                                   ($TableHeader+)?
                                   (
                                     (?:
@@ -107,6 +108,7 @@ sub _match_table {
                                       $EmptyLine
                                     )+
                                   )
+                                  $HeaderMarkerLine?
                                   $TableCaption?
                                 )
                                 $BlockEnd
@@ -140,7 +142,7 @@ sub _match_table {
     my @header;
 
     if ( defined $header ) {
-        @header = $self->_parse_rows( qr/$HeaderSecondLine/m, $header );
+        @header = $self->_parse_rows( qr/$HeaderMarkerLine/m, $header );
         $_->{is_header_cell} = 1 for map { @{$_} } @header;
     }
 
