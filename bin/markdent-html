@@ -10,7 +10,6 @@ use Markdent::Simple;
 my $markdown = read_file(shift);
 
 my $html = Markdent::Simple->new()->markdown_to_html(
-dialect => 'Theory',
     title    => 'Needs a Title',
     markdown => $markdown,
 );
