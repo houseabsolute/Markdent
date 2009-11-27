@@ -21,6 +21,7 @@ all_pod_files_spelling_ok;
 __DATA__
 blockquote
 blockquotes
+CLI
 colspan
 escapeable
 # wiki-esque
