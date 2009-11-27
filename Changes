@@ -1,3 +1,17 @@
+0.04
+
+- Added Markdent::Manual, a start at more comprehensive high-level docs on how
+  to use Markdent.
+
+- Fixed some parsing bugs where some match methods did not return true, which
+  could cause failures if the handler's handle_event method didn't return
+  true. Now all match methods explicitly return true when they match (as they
+  should).
+
+- Added a new handler, Multiplexer, which lets you multiplex the event stream
+  to more than one handler at a time.
+
+
 0.03   2009-11-26
 
 - Added Markdent::Handler::CaptureEvents and Markdent::CapturedEvents. In my

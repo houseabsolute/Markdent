@@ -28,16 +28,17 @@ Markdent - An event-based Markdown parser toolkit
 =head1 DESCRIPTION
 
 This distribution provides a toolkit for parsing Markdown (and Markdown
-variants). Unlike the other Markdown Perl tools, this module can be used for
-more than just generating HTML. The core parser generates events (like XML's
-SAX), making it easy to analyze a Markdown document in any number of ways.
+variants, aka dialects). Unlike the other Markdown Perl tools, this module can
+be used for more than just generating HTML. The core parser generates events
+(like XML's SAX), making it easy to analyze a Markdown document in any number
+of ways.
 
 If you're only interested in converting Markdown to HTML, you can use the
 L<Markdent::Simple> class to do this, although you can just as well use better
 battle-tested tools like L<Test::Markdown>.
 
-Otherwise, see L<Markdent::Parser> for more details on how to connect your
-handlers to a parser.
+See L<Markdent::Manual> for more details on how Markdent works and how you can
+use it.
 
 =head1 ALPHA WARNING
 
