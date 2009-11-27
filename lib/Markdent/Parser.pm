@@ -3,7 +3,7 @@ package Markdent::Parser;
 use strict;
 use warnings;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use Class::MOP;
 use Markdent::Dialect::Standard::BlockParser;
