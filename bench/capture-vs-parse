@@ -10,6 +10,7 @@ use Markdent::Handler::CaptureEvents;
 use Markdent::Handler::HTMLStream;
 use Markdent::Parser;
 use Storable qw( nfreeze thaw );
+use Text::Markdown qw( markdown );
 
 use File::Find qw( find );
 use File::Slurp qw( read_file );
@@ -21,10 +22,6 @@ find(
     {
         wanted => sub {
             return unless $File::Find::name =~ /\.text$/;
-
-            ( my $html_file = $File::Find::name ) =~ s/\.text$/.xhtml/;
-
-            return unless -f $html_file;
 
             $files{$File::Find::name} = read_file($File::Find::name);
         },
@@ -47,6 +44,7 @@ cmpthese(
     $reps, {
         'parse from scratch'          => \&parse,
         'replay from captured events' => \&replay,
+        'Text::Markdown'              => \&tm,
     },
 );
 
@@ -73,4 +71,10 @@ sub _html_handler {
         title  => 'Benchmark',
         output => $fh,
     );
+}
+
+sub tm {
+    for my $file ( keys %files ) {
+        my $html = markdown( $files{$file} );
+    }
 }
