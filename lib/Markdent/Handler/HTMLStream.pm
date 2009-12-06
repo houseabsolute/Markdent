@@ -3,7 +3,7 @@ package Markdent::Handler::HTMLStream;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use HTML::Stream;
 use Markdent::Types qw(

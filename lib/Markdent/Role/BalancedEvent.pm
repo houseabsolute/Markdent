@@ -3,7 +3,7 @@ package Markdent::Role::BalancedEvent;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use List::AllUtils qw( all );
 use Markdent::Types qw( ArrayRef Str );

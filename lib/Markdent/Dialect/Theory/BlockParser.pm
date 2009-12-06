@@ -3,7 +3,7 @@ package Markdent::Dialect::Theory::BlockParser;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use List::AllUtils qw( insert_after_string sum );
 use Markdent::Event::StartTable;
