@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use lib 't/lib';
 
@@ -1826,5 +1826,46 @@ EOF
         $text,
         $expect,
         'first header row should have 3 columns'
+    );
+}
+
+{
+    my $text = <<'EOF';
+[Not a caption]
+
+[Also not]
+
+Some text
+EOF
+
+    my $expect = [
+        { type => 'paragraph' },
+        [
+            {
+                text => "[Not a caption]\n",
+                type => 'text'
+            }
+        ],
+        { type => 'paragraph' },
+        [
+            {
+                text => "[Also not]\n",
+                type => 'text'
+            }
+        ],
+        { type => 'paragraph' },
+        [
+            {
+                text => "Some text\n",
+                type => 'text'
+            }
+        ]
+    ];
+
+    parse_ok(
+        { dialect => 'Theory' },
+        $text,
+        $expect,
+        'Parser should not parse [foo] as a table caption if there is no table'
     );
 }

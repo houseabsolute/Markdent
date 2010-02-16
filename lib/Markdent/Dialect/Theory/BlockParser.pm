@@ -102,11 +102,12 @@ sub _match_table {
                                   $HeaderMarkerLine?
                                   ($TableHeader+)?
                                   (
+                                    $TableRow
                                     (?:
                                       $TableRow
                                       |
                                       $EmptyLine
-                                    )+
+                                    )*
                                   )
                                   $HeaderMarkerLine?
                                   $TableCaption?
