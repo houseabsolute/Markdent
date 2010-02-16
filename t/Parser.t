@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::Exception;
-use Test::More tests => 6;
+use Test::More;
 
 use Markdent::Dialect::Theory::BlockParser;
 use Markdent::Handler::MinimalTree;
@@ -74,3 +74,5 @@ my $handler = Markdent::Handler::MinimalTree->new();
         '$parser->_span_parser() with dialect = Example::Dialect'
     );
 }
+
+done_testing();

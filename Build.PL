@@ -27,7 +27,7 @@ my $builder = Markdent::Build->new(
         'Test::Deep'                           => '0',
         'Test::Differences'                    => '0',
         'Test::Exception'                      => '0',
-        'Test::More'                           => '0',
+        'Test::More'                           => '0.88',
         'Tree::Simple::Visitor::ToNestedArray' => '0',
     },
     create_readme        => 1,

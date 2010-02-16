@@ -31,8 +31,6 @@ find(
     't/mdtest-data'
 );
 
-plan tests => scalar @files;
-
 for my $pair ( sort { $a->[0] cmp $b->[0] } @files ) {
     my ( $md_file, $html_file ) = @{$pair};
 
@@ -44,3 +42,5 @@ for my $pair ( sort { $a->[0] cmp $b->[0] } @files ) {
 
     html_output_ok( $markdown, $expect_html, $desc );
 }
+
+done_testing();

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More;
 
 use lib 't/lib';
 
@@ -1869,3 +1869,5 @@ EOF
         'Parser should not parse [foo] as a table caption if there is no table'
     );
 }
+
+done_testing();

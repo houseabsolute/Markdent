@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 7;
+use Test::More;
 
 use lib 't/lib';
 
@@ -137,3 +137,5 @@ EOF
 
     parse_ok( $text, $expect, 'something that could be an hr but is not' );
 }
+
+done_testing();

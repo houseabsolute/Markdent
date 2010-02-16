@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Data::Dumper;
-use Test::More tests => 1;
+use Test::More;
 use Test::Deep;
 
 use Markdent::Handler::HTMLFilter;
@@ -73,3 +73,5 @@ EOF
 
     cmp_deeply( $results, $expect, 'all HTML events have been dropped' );
 }
+
+done_testing();

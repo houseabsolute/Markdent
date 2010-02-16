@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 13;
+use Test::More;
 
 use lib 't/lib';
 
@@ -507,3 +507,5 @@ EOF
 
     parse_ok( $text, $expect, 'three-paragraph blockquote with empty line between each para, followed by a regular paragraph' );
 }
+
+done_testing();

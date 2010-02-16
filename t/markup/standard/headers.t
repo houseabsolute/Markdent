@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 7;
+use Test::More;
 
 use lib 't/lib';
 
@@ -290,3 +290,5 @@ EOF
 
     parse_ok( $text, $expect, 'two-line header with tabs' );
 }
+
+done_testing();

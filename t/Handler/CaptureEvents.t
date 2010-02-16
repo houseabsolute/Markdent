@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More;
 use Test::Deep;
 
 use File::Slurp qw( read_file );
@@ -31,3 +31,5 @@ cmp_deeply(
     tree_from_handler($th2),
     'compare parse direct to tree versus replaying captured events into a tree'
 );
+
+done_testing();

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More;
 
 use lib 't/lib';
 
@@ -108,3 +108,5 @@ EOF
 
     parse_ok( $text, $expect, 'preformatted text with empty lines followed by regular paragraph' );
 }
+
+done_testing();

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More;
 use Test::Deep;
 
 use lib 't/lib';
@@ -41,3 +41,5 @@ cmp_deeply(
     ],
     'replay_events generates expected tree'
 );
+
+done_testing();

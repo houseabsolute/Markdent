@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More;
 
 use lib 't/lib';
 
@@ -137,3 +137,5 @@ EOF
         'Complex Theory-style table'
     );
 }
+
+done_testing();

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 13;
+use Test::More;
 
 use lib 't/lib';
 
@@ -431,3 +431,5 @@ EOF
 
     parse_ok( $text, $expect, 'html comments, standalone and inline' );
 }
+
+done_testing();

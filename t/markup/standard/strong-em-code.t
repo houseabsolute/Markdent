@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More;
 
 use lib 't/lib';
 
@@ -198,3 +198,5 @@ EOF
 
     parse_ok( $text, $expect, 'strong, em, and then both' );
 }
+
+done_testing();

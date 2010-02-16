@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More;
 
 use Markdent::Simple;
 
@@ -39,3 +39,5 @@ is(
     $expect,
     'Markdent::Simple returns expected HTML'
 );
+
+done_testing();

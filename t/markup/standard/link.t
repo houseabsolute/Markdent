@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More;
 
 use lib 't/lib';
 
@@ -613,3 +613,5 @@ EOF
 
     parse_ok( $text, $expect, 'Link text with a newline' );
 }
+
+done_testing();

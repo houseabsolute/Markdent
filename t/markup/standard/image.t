@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 9;
+use Test::More;
 
 use lib 't/lib';
 
@@ -226,3 +226,5 @@ EOF
 
     parse_ok( $text, $expect, 'Image by reference with a bad id is treated as text' );
 }
+
+done_testing();

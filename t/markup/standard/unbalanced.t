@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 7;
+use Test::More;
 
 use lib 't/lib';
 
@@ -216,3 +216,5 @@ EOF
 
     parse_ok( $text, $expect, 'unbalanced inline html tags are not detected' );
 }
+
+done_testing();

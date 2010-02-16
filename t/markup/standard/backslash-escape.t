@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More;
 
 use lib 't/lib';
 
@@ -145,3 +145,5 @@ EOF
 
     parse_ok( $text, $expect, 'backslashes in code spans' );
 }
+
+done_testing();
