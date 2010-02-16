@@ -3,7 +3,7 @@ package Markdent::Handler::MinimalTree;
 use strict;
 use warnings;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use MooseX::Params::Validate qw( validated_list validated_hash );
 use Markdent::Types qw(

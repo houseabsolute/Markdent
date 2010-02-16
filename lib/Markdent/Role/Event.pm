@@ -3,7 +3,7 @@ package Markdent::Role::Event;
 use strict;
 use warnings;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use namespace::autoclean;
 use MooseX::Role::Parameterized;

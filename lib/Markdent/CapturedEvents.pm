@@ -3,7 +3,7 @@ package Markdent::CapturedEvents;
 use strict;
 use warnings;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use Markdent::Types qw( ArrayRef EventObject );
 use MooseX::Params::Validate qw( pos_validated_list );

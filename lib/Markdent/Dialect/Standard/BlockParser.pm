@@ -3,7 +3,7 @@ package Markdent::Dialect::Standard::BlockParser;
 use strict;
 use warnings;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use Digest::SHA1 qw( sha1_hex );
 use Markdent::Event::StartDocument;

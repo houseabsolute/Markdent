@@ -1,3 +1,13 @@
+0.09   2010-02-15
+
+- The Theory dialect parser would parse text in brackets as a table caption
+  even if no table followed, for example:
+
+  [Not a caption]
+
+  Just some text
+
+
 0.08   2009-12-06
 
 - Added a missing dependency, MooseX::Role::Parameterized.
