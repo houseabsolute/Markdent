@@ -1,3 +1,15 @@
+0.10   2010-05-17
+
+- Split all HTML generating code into ::Document and ::Fragment classes. This
+  means that Markdent::Handler::HTMLStream is now
+  Markdent::Handler::HTMLStream::Document and
+  Markdent::Handler::HTMLStream::Fragment. Similarly, Markdent::Simple is now
+  Markdent::Simple::Document and Markdent::Simple::Fragment.
+
+  This was done to make it easy to turn a snippet of Markdown into a snippet
+  of HTML. Previously, you could only generate a complete HTML document.
+
+
 0.09   2010-02-15
 
 - The Theory dialect parser would parse text in brackets as a table caption
