@@ -66,9 +66,12 @@ Here are some pointers for common tasks ...
 
 =head2 Converting Markdown to HTML
 
-Take a look at the L<Markdent::Handler::HTMLStream>. This turns the event
-stream into a stream of HTML output. You can send the output to any
+Take a look at the L<Markdent::Handler::HTMLStream::Document>. This turns the
+event stream into a stream of HTML output. You can send the output to any
 filehandle. Open a filehandle to a scalar to capture the output in memory.
+
+You can use L<Markdent::Handler::HTMLStream::Fragment> if you don't want to
+generate a complete HTML document.
 
 =head2 Cache Parse Results
 

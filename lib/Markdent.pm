@@ -17,9 +17,9 @@ Markdent - An event-based Markdown parser toolkit
 
 =head1 SYNOPSIS
 
-    use Markdent::Simple;
+    use Markdent::Simple::Document;
 
-    my $parser = Markdent::Simple->new();
+    my $parser = Markdent::Simple::Document->new();
     my $html   = $parser->markdown_to_html(
         title    => 'My Document',
         markdown => $markdown,
@@ -34,8 +34,8 @@ be used for more than just generating HTML. The core parser generates events
 of ways.
 
 If you're only interested in converting Markdown to HTML, you can use the
-L<Markdent::Simple> class to do this, although you can just as well use better
-battle-tested tools like L<Text::Markdown>.
+L<Markdent::Simple::Document> class to do this, although you can just as well
+use better battle-tested tools like L<Text::Markdown>.
 
 See L<Markdent::Manual> for more details on how Markdent works and how you can
 use it.

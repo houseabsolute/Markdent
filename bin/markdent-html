@@ -6,7 +6,7 @@ use warnings;
 use File::Slurp qw( read_file );
 use Getopt::Long;
 use HTML::Tidy;
-use Markdent::Simple;
+use Markdent::Simple::Document;
 
 my $file;
 my $title = 'Needs a title';
@@ -22,7 +22,7 @@ die "Need to specify a file" unless defined $file && -f $file;
 
 my $markdown = read_file($file);
 
-my $html = Markdent::Simple->new()->markdown_to_html(
+my $html = Markdent::Simple::Document->new()->markdown_to_html(
     dialect  => $dialect,
     title    => $title,
     markdown => $markdown,
