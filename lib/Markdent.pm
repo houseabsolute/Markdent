@@ -7,13 +7,11 @@ our $VERSION = '0.10';
 
 1;
 
+# ABSTRACT: An event-based Markdown parser toolkit
+
 __END__
 
 =pod
-
-=head1 NAME
-
-Markdent - An event-based Markdown parser toolkit
 
 =head1 SYNOPSIS
 
@@ -72,16 +70,5 @@ best.
 To donate, log into PayPal and send money to autarch@urth.org or use
 the button on this page:
 L<http://www.urth.org/~autarch/fs-donation.html>
-
-=head1 AUTHOR
-
-Dave Rolsky, E<lt>autarch@urth.orgE<gt>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009-2010 Dave Rolsky, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut

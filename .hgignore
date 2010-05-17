@@ -5,6 +5,7 @@ blib*
 cover_db*
 Build
 _build
+.build
 MANIFEST
 META.yml
 README

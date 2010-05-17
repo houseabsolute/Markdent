@@ -45,13 +45,11 @@ __PACKAGE__->meta()->make_immutable();
 
 1;
 
+# ABSTRACT: Represents a series of captured events
+
 __END__
 
 =pod
-
-=head1 NAME
-
-Markdent::CapturedEvents - Represents a series of captured events
 
 =head1 DESCRIPTION
 
@@ -82,16 +80,5 @@ will replay all the captured events to that handler.
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.
-
-=head1 AUTHOR
-
-Dave Rolsky, E<lt>autarch@urth.orgE<gt>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009-2010 Dave Rolsky, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut
