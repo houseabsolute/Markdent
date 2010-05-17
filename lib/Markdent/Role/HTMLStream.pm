@@ -1,4 +1,4 @@
-package Markdent::Handler::HTMLStream;
+package Markdent::Role::HTMLStream;
 
 use strict;
 use warnings;
@@ -14,16 +14,11 @@ use Markdent::Types qw(
 use MooseX::Params::Validate qw( validated_list validated_hash );
 
 use namespace::autoclean;
-use Moose;
-use MooseX::SemiAffordanceAccessor;
+use Moose::Role;
 
 with 'Markdent::Role::EventsAsMethods';
 
-has title => (
-    is       => 'ro',
-    isa      => Str,
-    required => 1,
-);
+requires qw( start_document end_document );
 
 has _output => (
     is       => 'ro',
@@ -39,31 +34,6 @@ has _stream => (
     lazy     => 1,
     default  => sub { HTML::Stream->new( $_[0]->_output() ) },
 );
-
-my $Doctype = <<'EOF';
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-EOF
-
-sub start_document {
-    my $self = shift;
-
-    $self->_output()->print($Doctype);
-    $self->_stream()->tag('html');
-    $self->_stream()->tag('head');
-    $self->_stream()->tag('title');
-    $self->_stream()->text( $self->title() );
-    $self->_stream()->tag('_title');
-    $self->_stream()->tag('_head');
-    $self->_stream()->tag('body');
-}
-
-sub end_document {
-    my $self = shift;
-
-    $self->_stream()->tag('_body');
-    $self->_stream()->tag('_html');
-}
 
 sub start_header {
     my $self  = shift;
@@ -417,8 +387,6 @@ sub horizontal_rule {
     $self->_stream()->tag('hr');
 }
 
-__PACKAGE__->meta()->make_immutable();
-
 1;
 
 __END__
@@ -427,40 +395,21 @@ __END__
 
 =head1 NAME
 
-Markdent::Handler::HTMLStream - A Markdent handler which generates HTML
+Markdent::Role::HTMLStream - A role for handlers which generate HTML
 
 =head1 DESCRIPTION
 
-This class implements an event receiver which in turn generates a stream of
-HTML output based on those events.
+This role implements most of the code needed for event receivers which
+generate a stream of HTML output based on those events.
 
-=head1 METHODS
+=head1 REQUIRED METHODS
 
-This class provides the following methods:
-
-=head2 Markdent::Handler::HTMLStream->new(...)
-
-This method creates a new handler. It accepts the following parameters:
-
-=over 4
-
-=item * title => $title
-
-The title of the document. This is required.
-
-=item * output => $fh
-
-The file handle to which HTML output will be streamed. If you want to capture
-the output in a string, you can open a filehandle to a string:
-
-  my $buffer = q{};
-  open my $fh, '>', \$buffer;
-
-=back
+This role requires that consuming classes implement two methods, C<<
+$handler->start_document() >> and C<< $handler->end_document() >>.
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::EventsAsMethods> and
+This role does the L<Markdent::Role::EventsAsMethods> and
 L<Markdent::Role::Handler> roles.
 
 =head1 BUGS

@@ -1,11 +1,11 @@
-package Markdent::Simple::Document;
+package Markdent::Simple::Fragment;
 
 use strict;
 use warnings;
 
 our $VERSION = '0.09';
 
-use Markdent::Handler::HTMLStream::Document;
+use Markdent::Handler::HTMLStream::Fragment;
 use Markdent::Parser;
 use Markdent::Types qw( Str );
 use MooseX::Params::Validate qw( validated_list );
@@ -16,10 +16,9 @@ use MooseX::StrictConstructor;
 
 sub markdown_to_html {
     my $self = shift;
-    my ( $dialect, $title, $markdown ) = validated_list(
+    my ( $dialect, $markdown ) = validated_list(
         \@_,
         dialect  => { isa => Str, default => 'Standard' },
-        title    => { isa => Str },
         markdown => { isa => Str },
     );
 
@@ -27,10 +26,8 @@ sub markdown_to_html {
     open my $fh, '>', \$capture
         or die $!;
 
-    my $handler = Markdent::Handler::HTMLStream::Document->new(
-        title  => $title,
-        output => $fh,
-    );
+    my $handler
+        = Markdent::Handler::HTMLStream::Fragment->new( output => $fh );
 
     my $parser
         = Markdent::Parser->new( dialect => $dialect, handler => $handler );
@@ -48,32 +45,31 @@ __END__
 
 =head1 NAME
 
-Markdent::Simple::Document - Convert Markdown to an HTML Document
+Markdent::Simple::Fragment - Convert Markdown to an HTML Fragment
 
 =head1 SYNOPSIS
 
-    use Markdent::Simple::Document;
+    use Markdent::Simple::Fragment;
 
-    my $mds  = Markdent::Simple::Document->new();
+    my $mds  = Markdent::Simple::Fragment->new();
     my $html = $mss->markdown_to_html(
-        title    => 'My Document',
+        title    => 'My Fragment',
         markdown => $markdown,
     );
 
 =head1 DESCRIPTION
 
-This class provides a very simple interface for converting Markdown to a
-complete HTML document.
+This class provides a very simple interface for converting Markdown to an HTML fragment.
 
 =head1 METHODS
 
 This class provides the following methods:
 
-=head2 Markdent::Simple::Document->new()
+=head2 Markdent::Simple::Fragment->new()
 
-Creates a new Markdent::Simple::Document object.
+Creates a new Markdent::Simple::Fragment object.
 
-=head2 $mds->markdown_to_html( title => $title, markdown => $markdown )
+=head2 $mds->markdown_to_html( markdown => $markdown )
 
 This method turns Markdown into HTML. You must provide a title as well, which
 will be used as the C<< <title> >> for the resulting HTML document.

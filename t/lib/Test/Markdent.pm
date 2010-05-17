@@ -14,7 +14,7 @@ my $HasTidy = $@ ? 0 : 1;
 
 use Markdent::Handler::MinimalTree;
 use Markdent::Parser;
-use Markdent::Simple;
+use Markdent::Simple::Document;
 
 use Exporter qw( import );
 
@@ -63,7 +63,7 @@ sub html_output_ok {
         return;
     }
 
-    my $html = Markdent::Simple->new()->markdown_to_html(
+    my $html = Markdent::Simple::Document->new()->markdown_to_html(
         %{$dialect},
         title    => 'Test',
         markdown => $markdown,
