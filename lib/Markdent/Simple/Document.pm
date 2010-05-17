@@ -1,4 +1,4 @@
-package Markdent::Simple;
+package Markdent::Simple::Document;
 
 use strict;
 use warnings;
@@ -48,13 +48,13 @@ __END__
 
 =head1 NAME
 
-Markdent::Simple - Convert Markdown to HTML
+Markdent::Simple::Document - Convert Markdown to an HTML Document
 
 =head1 SYNOPSIS
 
-    use Markdent::Simple;
+    use Markdent::Simple::Document;
 
-    my $mds  = Markdent::Simple->new();
+    my $mds  = Markdent::Simple::Document->new();
     my $html = $mss->markdown_to_html(
         title    => 'My Document',
         markdown => $markdown,
@@ -62,15 +62,16 @@ Markdent::Simple - Convert Markdown to HTML
 
 =head1 DESCRIPTION
 
-This class provides a very simple interface for converting Markdown to HTML.
+This class provides a very simple interface for converting Markdown to a
+complete HTML document.
 
 =head1 METHODS
 
 This class provides the following methods:
 
-=head2 Markdent::Simple->new()
+=head2 Markdent::Simple::Document->new()
 
-Creates a new Markdent::Simple object.
+Creates a new Markdent::Simple::Document object.
 
 =head2 $mds->markdown_to_html( title => $title, markdown => $markdown )
 

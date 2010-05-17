@@ -3,9 +3,9 @@ use warnings;
 
 use Test::More;
 
-use Markdent::Simple;
+use Markdent::Simple::Document;
 
-my $mds = Markdent::Simple->new();
+my $mds = Markdent::Simple::Document->new();
 
 my $markdown = <<'EOF';
 A header
@@ -37,7 +37,7 @@ chomp $expect;
 is(
     $mds->markdown_to_html( title => 'Test', markdown => $markdown ),
     $expect,
-    'Markdent::Simple returns expected HTML'
+    'Markdent::Simple::Document returns expected HTML'
 );
 
 done_testing();
