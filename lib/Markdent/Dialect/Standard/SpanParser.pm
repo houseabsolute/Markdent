@@ -3,7 +3,7 @@ package Markdent::Dialect::Standard::SpanParser;
 use strict;
 use warnings;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 use re 'eval';
 

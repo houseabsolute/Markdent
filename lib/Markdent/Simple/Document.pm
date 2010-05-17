@@ -3,7 +3,7 @@ package Markdent::Simple::Document;
 use strict;
 use warnings;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 use Markdent::Handler::HTMLStream::Document;
 use Markdent::Parser;
