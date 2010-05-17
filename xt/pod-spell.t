@@ -23,6 +23,7 @@ blockquote
 blockquotes
 CLI
 colspan
+doctype
 escapeable
 # wiki-esque
 esque
