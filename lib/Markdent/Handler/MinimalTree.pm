@@ -3,8 +3,6 @@ package Markdent::Handler::MinimalTree;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use MooseX::Params::Validate qw( validated_list validated_hash );
 use Markdent::Types qw(
     HeaderLevel Str Bool HashRef

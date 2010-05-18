@@ -3,8 +3,6 @@ package Markdent::Role::HTMLStream;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use HTML::Stream;
 use Markdent::Types qw(
     HeaderLevel Str Bool HashRef

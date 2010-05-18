@@ -3,8 +3,6 @@ package Markdent::Role::BalancedEvent;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use List::AllUtils qw( all );
 use Markdent::Types qw( ArrayRef Str );
 use MooseX::Params::Validate qw( pos_validated_list );

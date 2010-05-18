@@ -3,8 +3,6 @@ package Markdent::Dialect::Standard::SpanParser;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use re 'eval';
 
 use List::AllUtils qw( uniq );

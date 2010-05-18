@@ -3,8 +3,6 @@ package Markdent::Simple::Fragment;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Markdent::Handler::HTMLStream::Fragment;
 use Markdent::Parser;
 use Markdent::Types qw( Str );

@@ -1,3 +1,5 @@
+package Mardent::Manual;
+
 =pod
 
 =head1 NAME

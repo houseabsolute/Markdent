@@ -3,8 +3,6 @@ package Markdent::Event::StartHTMLTag;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Markdent::Types qw( Str HashRef );
 
 use namespace::autoclean;

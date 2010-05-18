@@ -1,3 +1,5 @@
+package Mardent::Dialect::Theory;
+
 =pod
 
 =head1 NAME

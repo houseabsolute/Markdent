@@ -3,8 +3,6 @@ package Markdent::Event::EndTableCell;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Markdent::Types qw( Bool );
 
 use namespace::autoclean;

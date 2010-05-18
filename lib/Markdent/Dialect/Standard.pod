@@ -1,3 +1,5 @@
+package Mardent::Dialect::Standard;
+
 =pod
 
 =head1 NAME

@@ -3,8 +3,6 @@ package Markdent::Role::EventsAsMethods;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Scalar::Util qw( blessed );
 
 use namespace::autoclean;

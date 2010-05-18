@@ -3,8 +3,6 @@ package Markdent::Handler::HTMLFilter;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Markdent::CapturedEvents;
 
 use namespace::autoclean;

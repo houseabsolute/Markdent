@@ -3,8 +3,6 @@ package Markdent::Event::EndDocument;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;

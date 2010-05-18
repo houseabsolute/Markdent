@@ -3,8 +3,6 @@ package Markdent::Handler::Multiplexer;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Markdent::Types qw( NonEmptyArrayRef HandlerObject );
 
 use namespace::autoclean;

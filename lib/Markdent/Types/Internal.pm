@@ -3,8 +3,6 @@ package Markdent::Types::Internal;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use IO::Handle;
 
 use MooseX::Types -declare => [

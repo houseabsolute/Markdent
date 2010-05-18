@@ -3,8 +3,6 @@ package Markdent::Event::StartTableRow;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
-
 use Markdent::Types qw( Str );
 
 use namespace::autoclean;
