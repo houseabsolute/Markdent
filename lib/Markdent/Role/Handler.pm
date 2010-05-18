@@ -12,13 +12,11 @@ requires 'handle_event';
 
 1;
 
+# ABSTRACT: A required role for all handlers
+
 __END__
 
 =pod
-
-=head1 NAME
-
-Markdent::Role::Handler - A required role for all handlers
 
 =head1 DESCRIPTION
 
@@ -38,16 +36,5 @@ L<Markdent::Role::Event> role.
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.
-
-=head1 AUTHOR
-
-Dave Rolsky, E<lt>autarch@urth.orgE<gt>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009-2010 Dave Rolsky, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut

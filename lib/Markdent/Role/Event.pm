@@ -141,13 +141,11 @@ sub _debug_value {
 
 1;
 
+# ABSTRACT: Implements behavior shared by all events
+
 __END__
 
 =pod
-
-=head1 NAME
-
-Markdent::Role::Event - Implements behavior shared by all events
 
 =head1 DESCRIPTION
 
@@ -185,16 +183,5 @@ Returns a string representation of the event suitable for debugging output.
 =head1 BUGS
 
 See L<Markdent> for bug reporting details.
-
-=head1 AUTHOR
-
-Dave Rolsky, E<lt>autarch@urth.orgE<gt>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009-2010 Dave Rolsky, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut
