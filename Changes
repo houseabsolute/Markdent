@@ -1,4 +1,4 @@
-0.10   2010-05-17
+0.10   2010-05-18
 
 - Split all HTML generating code into ::Document and ::Fragment classes. This
   means that Markdent::Handler::HTMLStream is now
