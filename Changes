@@ -1,3 +1,9 @@
+0.11   2010-05-25
+
+- Moved Test::Markdent into lib (from t/lib), since it is useful to anyone who
+  wants to write a Markdent dialect.
+
+
 0.10   2010-05-19
 
 - Split all HTML generating code into ::Document and ::Fragment classes. This
