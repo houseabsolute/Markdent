@@ -165,6 +165,13 @@ You can also pass an optional hash reference as the first parameter to this
 function. This hash reference will be used as parameters when creating the
 L<Markdent::Parser> object.
 
+This hash reference can also include a "handler_class" parameter, which you
+can use to override the default of L<Markdent::Handler::MinimalTree>.
+
+If you set the C<MARKDENT_TEST_VERBOSE> environment variable to a true value,
+then this function will use Data::Dumper to output the tree with
+C<Test::More::diag()>.
+
 =head2 html_output_ok( $markdown, $html, $description )
 
 This function takes some Markdown text, the expected HTML output, and a
@@ -179,6 +186,10 @@ The comparison itself is done using C<eq_or_diff> from L<Test::Differences>.
 You can also pass an optional hash reference as the first parameter to this
 function. This hash reference will be used as parameters when creating the
 L<Markdent::Parser> object.
+
+If you set the C<MARKDENT_TEST_VERBOSE> environment variable to a true value,
+then this function will output the generated html (before tidying) with
+C<Test::More::diag()>.
 
 =head2 tree_from_handler($handler)
 
