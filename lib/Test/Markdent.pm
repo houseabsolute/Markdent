@@ -26,7 +26,9 @@ sub parse_ok {
     my $expect_tree = shift;
     my $desc        = shift;
 
-    my $handler = Markdent::Handler::MinimalTree->new();
+    my $handler_class = delete $parser_p->{handler_class}
+        || 'Markdent::Handler::MinimalTree';
+    my $handler = $handler_class->new();
 
     my $parser = Markdent::Parser->new( %{$parser_p}, handler => $handler );
 
@@ -36,6 +38,8 @@ sub parse_ok {
 
     diag( Dumper($results) )
         if $ENV{MARKDENT_TEST_VERBOSE};
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     cmp_deeply( $results, $expect_tree, $desc );
 }
@@ -91,6 +95,8 @@ $expect_html
 </body>
 </html>
 EOF
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     eq_or_diff( $tidy->clean($html), $tidy->clean($real_expect_html), $desc );
 }
