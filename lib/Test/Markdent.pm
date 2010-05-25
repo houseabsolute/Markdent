@@ -99,6 +99,8 @@ EOF
 
 # ABSTRACT: High level test functions for Markdent
 
+=pod
+
 =head1 SYNOPSIS
 
   use Test::Markdent;
