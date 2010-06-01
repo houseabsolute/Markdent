@@ -1,3 +1,15 @@
+0.13   2010-06-01
+
+- Fixed handling of a very pathological case for table parsing, which caused
+  the parser to die. Instead, it will now keep going. Your output may be
+  bizarre, but the parser should not die.
+
+- Fixed handling of a tab character next to a cell delimiter. This caused the
+  parser to become very confused and go into an endless loop. Now such tabs
+  are simply stripped from the output (just like other whitespace next to a
+  cell delimiter).
+
+
 0.12   2010-05-25
 
 - Allow setting the handler class when calling Test::Markdent::parse_ok().

@@ -1870,4 +1870,163 @@ EOF
     );
 }
 
+{
+
+    # This markup is insane, but we don't want to die or warn on this sort of
+    # thing. This will generate some sort of output, though it won't make much
+    # sense when rendered as HTML.
+    my $text = <<'EOF';
+| a | real | table |
+ | Foo * bar
+* : foo: bar
+EOF
+
+    my $expect = [
+        { 'type' => 'table' },
+        [
+            { 'type' => 'table_body' },
+            [
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'a',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'real',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'table',
+                            'type' => 'text'
+                        }
+                    ]
+                ],
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        { 'type' => 'paragraph' },
+                        [
+                            {
+                                'text' => "*\n",
+                                'type' => 'text'
+                            }
+                        ]
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        { 'type' => 'paragraph' },
+                        [
+                            {
+                                'text' => "Foo * bar\nfoo\n",
+                                'type' => 'text'
+                            }
+                        ]
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        { 'type' => 'paragraph' },
+                        [
+                            {
+                                'text' => "bar\n",
+                                'type' => 'text'
+                            }
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    parse_ok(
+        { dialect => 'Theory' },
+        $text,
+        $expect,
+        'Totally pathological table at least generates some output and does not die or warn'
+    );
+}
+
+{
+    my $text = <<"EOF";
+|Foo|\tBar|
+EOF
+
+    my $expect = [
+        { 'type' => 'table' },
+        [
+            { 'type' => 'table_body' },
+            [
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Foo',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Bar',
+                            'type' => 'text'
+                        }
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    parse_ok(
+        { dialect => 'Theory' },
+        $text,
+        $expect,
+        'Handle tabs in a table cell without going into an endless loop'
+    );
+}
+
 done_testing();

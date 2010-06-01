@@ -181,7 +181,6 @@ sub _parse_rows {
     my @rows;
 
     for my $chunk ( split $split_re, $rows ) {
-
         # Splitting on an empty string returns nothing, so we need to
         # special-case that, as we want to preserve empty lines.
         for my $line ( length $chunk ? ( split /\n/, $chunk ) : $chunk ) {
@@ -202,6 +201,7 @@ sub _parse_rows {
                         && $cells->[$i]{content} =~ /\S/ ) {
                         $rows[-1][$i]{content}
                             .= "\n" . $cells->[$i]{content};
+                        $rows[-1][$i]{colspan} ||= 1;
                     }
                 }
             }
@@ -222,7 +222,7 @@ sub _is_continuation_line {
         if $line =~ /(?<!\\)[|]/x;
 
     return 1
-        if $line =~ /(?<!\\):/x;
+        if $line =~ /(^|\p{SpaceSeparator}+)(?<!\\):(\p{SpaceSeparator}|$)/x;
 
     # a blank line, presumably
     return 0;
@@ -239,8 +239,10 @@ sub _cells_from_line {
         if ( length $cell ) {
             push @row, $self->_cell_params($cell);
         }
-
-        # If the first cell is empty, we just treat it as an empty cell.
+        # If the first cell is empty, that means the line started with a
+        # divider, and we can ignore the "cell". If we already have cells in
+        # the row, that means we just saw a repeated divider, which means the
+        # most recent cell has a colspan+1.
         elsif (@row) {
             $row[-1]{colspan}++;
         }
@@ -255,7 +257,7 @@ sub _split_cells {
     my $div  = shift;
 
     $line =~ s/^\Q$div//;
-    $line =~ s/\Q$div\E\p{SpaceSeparator}*$/$div/;
+    $line =~ s/\Q$div\E$HorizontalWS*$/$div/;
 
     # We don't want to split on a backslash-escaped divider, thus the
     # lookbehind. The -1 ensures that Perl gives us the trailing empty fields.
@@ -281,7 +283,7 @@ sub _cell_params {
         $alignment = $self->_alignment_for_cell($cell);
 
         ( $content = $cell )
-            =~ s/^\p{SpaceSeparator}+|\p{SpaceSeparator}+$//g;
+            =~ s/^$HorizontalWS+|$HorizontalWS+$//g;
     }
 
     my %p = (
