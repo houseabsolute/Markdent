@@ -126,7 +126,7 @@ sub _match_table {
     ) if defined $caption && $self->debug();
 
     my $header = $3;
-    my $body = $4;
+    my $body   = $4;
 
     $self->_debug_parse_result(
         $header,
@@ -152,7 +152,7 @@ sub _match_table {
     if (@header) {
         my $first_header_cell_content = $header[0][0]{content};
         unless ( defined $first_header_cell_content
-                 && $first_header_cell_content =~ /\S/ ) {
+            && $first_header_cell_content =~ /\S/ ) {
             $_->[0]{is_header_cell} = 1 for @body;
         }
     }
@@ -164,7 +164,7 @@ sub _match_table {
 
     $self->_events_for_rows( \@header, 'Header' )
         if @header;
-    $self->_events_for_rows( \@body,   'Body' );
+    $self->_events_for_rows( \@body, 'Body' );
 
     $self->_send_event('EndTable');
 
@@ -174,13 +174,14 @@ sub _match_table {
 }
 
 sub _parse_rows {
-    my $self = shift;
+    my $self     = shift;
     my $split_re = shift;
-    my $rows = shift;
+    my $rows     = shift;
 
     my @rows;
 
     for my $chunk ( split $split_re, $rows ) {
+
         # Splitting on an empty string returns nothing, so we need to
         # special-case that, as we want to preserve empty lines.
         for my $line ( length $chunk ? ( split /\n/, $chunk ) : $chunk ) {
@@ -199,7 +200,8 @@ sub _parse_rows {
                 for my $i ( 0 .. $#{$cells} ) {
                     if ( defined $cells->[$i]{content}
                         && $cells->[$i]{content} =~ /\S/ ) {
-                        $rows[-1][$i]{content} .= "\n" . $cells->[$i]{content};
+                        $rows[-1][$i]{content}
+                            .= "\n" . $cells->[$i]{content};
                     }
                 }
             }
@@ -233,10 +235,11 @@ sub _cells_from_line {
 
     my @row;
 
-    for my $cell ( $self->_split_cells($line, $div) ) {
+    for my $cell ( $self->_split_cells( $line, $div ) ) {
         if ( length $cell ) {
             push @row, $self->_cell_params($cell);
         }
+
         # If the first cell is empty, we just treat it as an empty cell.
         elsif (@row) {
             $row[-1]{colspan}++;
@@ -320,13 +323,14 @@ sub _normalize_cell_count_and_alignments {
     # "left". We loop through all the rules and set alignments accordingly.
     my %alignments;
 
-    for my $row ( grep { defined } @rows ) {
+    for my $row ( grep {defined} @rows ) {
+
         # If we have one extra column and the final cell has a colspan > 1 it
         # means we misinterpreted a trailing divider as indicating that the
         # prior cell had a colspan > 1. We adjust for that by comparing it to
         # the number of columns in the first row.
         if ( sum( map { $_->{colspan} } @{$row} ) == $default_cells + 1
-             && $row->[-1]{colspan} > 1 ) {
+            && $row->[-1]{colspan} > 1 ) {
             $row->[-1]{colspan}--;
         }
 
@@ -350,12 +354,12 @@ sub _events_for_rows {
     my $type = shift;
 
     my $start = 'StartTable' . $type;
-    my $end = 'EndTable' . $type;
+    my $end   = 'EndTable' . $type;
 
     $self->_send_event($start);
 
     for my $row ( @{$rows} ) {
-        if ( ! defined $row ) {
+        if ( !defined $row ) {
             $self->_send_event($end);
             $self->_send_event($start);
             next;
@@ -372,13 +376,14 @@ sub _events_for_rows {
             );
 
             if ( defined $content ) {
+
                 # If the content has newlines, it should be matched as a
                 # block-level construct (blockquote, list, etc), but to make
                 # that work, it has to have a trailing newline.
                 $content .= "\n"
                     if $content =~ /\n/;
 
-                $self->_parse_text(\$content);
+                $self->_parse_text( \$content );
             }
 
             $self->_send_event(
