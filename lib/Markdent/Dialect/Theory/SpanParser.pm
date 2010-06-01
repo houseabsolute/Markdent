@@ -10,11 +10,10 @@ use MooseX::StrictConstructor;
 
 extends 'Markdent::Dialect::Standard::SpanParser';
 
-
 override _build_escapable_chars => sub {
     my $chars = super();
 
-    return [ @{ $chars }, qw( | : ) ];
+    return [ @{$chars}, qw( | : ) ];
 };
 
 __PACKAGE__->meta()->make_immutable();
