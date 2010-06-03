@@ -1,3 +1,11 @@
+0.14   2010-06-03
+
+- Greatly improved table parsing speed. Large tables took a very long time to
+  parse, as the parser ended up backtracking way too much. Thanks to Yuval
+  Kogman for his suggestions. Now large tables parse approximately 10 times
+  faster.
+
+
 0.13   2010-06-01
 
 - Fixed handling of a very pathological case for table parsing, which caused
