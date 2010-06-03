@@ -694,12 +694,12 @@ EOF
 {
     my $tab = "\t";
 
-    my $text = <<'EOF';
-*	this
+    my $text = <<"EOF";
+*${tab}this
 
-	*	sub
+${tab}*${tab}sub
 
-	that
+${tab}that
 EOF
 
     my $expect = [
