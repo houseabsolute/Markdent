@@ -71,7 +71,7 @@ my $TableRow = qr{ ^
                      )+
                      [|]
                    )+
-                   .*?
+                   .*
                    \n
                    (?:
                      ^
@@ -84,7 +84,7 @@ my $TableRow = qr{ ^
                        )+
                        :
                      )+
-                     .*?
+                     .*
                      \n
                    )*             # ... can have 0+ continuation lines
                  }xm;
