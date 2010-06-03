@@ -1,3 +1,9 @@
+0.15   2010-06-03
+
+- Even more table parsing improvements. Now the parse speed is approximately
+  50 times faster than 0.13.
+
+
 0.14   2010-06-03
 
 - Greatly improved table parsing speed. Large tables took a very long time to
