@@ -61,32 +61,45 @@ my $TableCaption = qr{ ^
                        \n
                      }xm;
 
-my $TableRow = qr{ ^
-                   [|]?            # a regular pipe-separated row
+# The use of (?> ... ) in the various regexes below forces the regex engine
+# not to backtrack once it matches the relevant subsection. Using there where
+# possible _hugely_ speeds up matching, and seems to be safe. At least, the
+# tests pass.
+
+my $PipeRow = qr{ ^
+                  [|]?               # optional starting pipe
+                  (?:
+                    (?:
+                      (?>[^\|\\\n]*) # safe chars (not pipe or escape or newline)
+                    |
+                      \\[|]          # an escaped newline
+                    )+
+                    [|]              # must have at least one pipe
+                  )+
+                  .*                 # can have a final cell after the last pipe
+                }xm;
+
+my $ColonRow = qr{ ^
+                   :?
                    (?:
                      (?:
-                       (?>[^\|\\\n\r]*)
+                       (?>[^:\\\n]*)
                        |
-                       \\[|]
+                       \\:
                      )+
-                     [|]
+                     :
                    )+
                    .*
+                 }xm;
+
+my $TableRow = qr{ (?>$PipeRow)        # must have at least one starting row
                    \n
-                   (?:
-                     ^
-                     :?           # a colon-separated row continuation line
+                   (?>
                      (?:
-                       (?:
-                         (?>[^:\\\n\r]*)
-                         |
-                         \\:
-                       )+
-                       :
-                     )+
-                     .*
-                     \n
-                   )*             # ... can have 0+ continuation lines
+                       $ColonRow
+                       \n
+                     )*
+                   )                   # ... can have 0+ continuation lines
                  }xm;
 
 my $HeaderMarkerLine = qr/^[\-\+=]+\n/xm;
