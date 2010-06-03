@@ -64,8 +64,11 @@ my $TableCaption = qr{ ^
 my $TableRow = qr{ ^
                    [|]?            # a regular pipe-separated row
                    (?:
-                     .*?
-                     (?<!\\)
+                     (?:
+                       (?>[^\|\\\n\r]*)
+                       |
+                       \\[|]
+                     )+
                      [|]
                    )+
                    .*?
@@ -74,8 +77,11 @@ my $TableRow = qr{ ^
                      ^
                      :?           # a colon-separated row continuation line
                      (?:
-                       .*?
-                       (?<!\\)
+                       (?:
+                         (?>[^:\\\n\r]*)
+                         |
+                         \\:
+                       )+
                        :
                      )+
                      .*?

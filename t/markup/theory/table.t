@@ -2029,4 +2029,243 @@ EOF
     );
 }
 
+{
+    my $text = <<'EOF';
+A Theory-style table
+
+  [Table caption]
+| Header 1 and 2     || Nothing  |
++--------------------++----------+
+| Header 1 | Header 2 | Header 3 |
++----------+----------+----------+
+| B1       | B2       | B3       |
+|    right |  center  |          |
+
+| l1       | x        | x        |
+: l2       :          :          :
+: l3       :          :          :
+| end                          |||
+EOF
+
+    my $expect = [
+        { 'type' => 'paragraph' },
+        [
+            {
+                'type' => 'text',
+                'text' => "A Theory-style table\n",
+            },
+        ], {
+            'caption' => 'Table caption',
+            'type'    => 'table'
+        },
+        [
+            { 'type' => 'table_header' },
+            [
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => 1,
+                        'colspan'        => 2,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Header 1 and 2',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => 1,
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Nothing',
+                            'type' => 'text'
+                        }
+                    ]
+                ],
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => 1,
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Header 1',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => 1,
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Header 2',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => 1,
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'Header 3',
+                            'type' => 'text'
+                        }
+                    ]
+                ]
+            ],
+            { 'type' => 'table_body' },
+            [
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'B1',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'B2',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'B3',
+                            'type' => 'text'
+                        }
+                    ]
+                ],
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'right',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'right',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'center',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'center',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    }
+                ]
+            ],
+            { 'type' => 'table_body' },
+            [
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        { 'type' => 'paragraph' },
+                        [
+                            {
+                                'text' => 'l1
+l2
+l3
+',
+                                'type' => 'text'
+                            }
+                        ]
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'x',
+                            'type' => 'text'
+                        }
+                    ], {
+                        'is_header_cell' => '0',
+                        'colspan'        => 1,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'x',
+                            'type' => 'text'
+                        }
+                    ]
+                ],
+                { 'type' => 'table_row' },
+                [
+                    {
+                        'is_header_cell' => '0',
+                        'colspan'        => 3,
+                        'alignment'      => 'left',
+                        'type'           => 'table_cell'
+                    },
+                    [
+                        {
+                            'text' => 'end',
+                            'type' => 'text'
+                        }
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    parse_ok(
+        { dialect => 'Theory' },
+        $text,
+        $expect,
+        'complex table preceded by paragraph that broke with new regex'
+    );
+}
+
 done_testing();
