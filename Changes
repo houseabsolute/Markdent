@@ -1,3 +1,9 @@
+0.16   2010-06-03
+
+- The last release (and others?) did not include a $VERSION in its
+  modules. Doh.
+
+
 0.15   2010-06-03
 
 - Even more table parsing improvements. Now the parse speed is approximately
