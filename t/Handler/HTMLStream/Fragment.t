@@ -138,4 +138,35 @@ EOF
     );
 }
 
+{
+    my $markdown = <<'EOF';
+| **foo** | **bar** | **baz** |
+| 1       | 2       | 3       |
+EOF
+
+    my $expect_html = <<'EOF';
+<table>
+  <tbody>
+    <tr>
+      <td align="left"><strong>foo</strong></td>
+      <td align="left"><strong>bar</strong></td>
+      <td align="left"><strong>baz</strong></td>
+    </tr>
+    <tr>
+      <td align="left">1</td>
+      <td align="left">2</td>
+      <td align="left">3</td>
+    </tr>
+  </tbody>
+</table>
+EOF
+
+    html_output_ok(
+        { dialect => 'Theory' },
+        $markdown,
+        $expect_html,
+        'Simple Theory-style table with no header rows'
+    );
+}
+
 done_testing();
