@@ -58,6 +58,7 @@ has _list_level => (
 
 has _list_item_is_paragraph => (
     traits   => ['Bool'],
+    is       => 'ro',
     isa      => Bool,
     default  => 0,
     init_arg => undef,

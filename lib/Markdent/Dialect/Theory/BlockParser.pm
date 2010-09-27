@@ -26,6 +26,7 @@ extends 'Markdent::Dialect::Standard::BlockParser';
 
 has _in_table => (
     traits   => ['Bool'],
+    is       => 'ro',
     isa      => Bool,
     default  => 0,
     init_arg => undef,
