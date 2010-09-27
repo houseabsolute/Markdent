@@ -545,7 +545,6 @@ sub _match_list {
 
     $self->_inc_list_level();
 
-    my $indent = 
     my @items = $self->_split_list_items($list);
 
     for my $item (@items) {
