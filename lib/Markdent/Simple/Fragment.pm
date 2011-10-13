@@ -49,7 +49,6 @@ __END__
 
     my $mds  = Markdent::Simple::Fragment->new();
     my $html = $mss->markdown_to_html(
-        title    => 'My Fragment',
         markdown => $markdown,
     );
 
@@ -67,8 +66,7 @@ Creates a new Markdent::Simple::Fragment object.
 
 =head2 $mds->markdown_to_html( markdown => $markdown )
 
-This method turns Markdown into HTML. You must provide a title as well, which
-will be used as the C<< <title> >> for the resulting HTML document.
+This method turns Markdown into HTML.
 
 You can also provide an optional "dialect" parameter.
 
