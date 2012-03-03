@@ -15,7 +15,7 @@ has captured_events => (
     is       => 'ro',
     isa      => 'Markdent::CapturedEvents',
     init_arg => undef,
-    default => sub { Markdent::CapturedEvents->new() },
+    default  => sub { Markdent::CapturedEvents->new() },
 );
 
 sub handle_event {

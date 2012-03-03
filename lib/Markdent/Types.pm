@@ -7,6 +7,7 @@ use base 'MooseX::Types::Combine';
 
 __PACKAGE__->provide_types_from(
     qw( Markdent::Types::Internal
-        MooseX::Types::Moose ));
+        MooseX::Types::Moose )
+);
 
 1;

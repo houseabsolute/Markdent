@@ -23,7 +23,7 @@ has _converted_from => (
 
 has _merged_from => (
     is        => 'ro',
-    isa       => ArrayRef[Str],
+    isa       => ArrayRef [Str],
     predicate => '_has_merged_from',
 );
 

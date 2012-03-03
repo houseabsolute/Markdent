@@ -20,19 +20,19 @@ role {
 
     $name =~ s/(^|.)([A-Z])/$1 ? "$1\L_$2" : "\L$2"/ge;
 
-    my $event_name = join q{_}, map {lc} grep {defined} $type, $name;
-    method event_name => sub {$event_name};
+    my $event_name = join q{_}, map { lc } grep { defined } $type, $name;
+    method event_name => sub { $event_name };
 
-    method name => sub {$name};
+    method name => sub { $name };
 
     my $is_start = ( $type || q{} ) eq 'Start';
-    method is_start => sub {$is_start};
+    method is_start => sub { $is_start };
 
     my $is_end = ( $type || q{} ) eq 'End';
-    method is_end => sub {$is_end};
+    method is_end => sub { $is_end };
 
-    my $is_inline = ! defined $type;
-    method is_inline => sub {$is_inline};
+    my $is_inline = !defined $type;
+    method is_inline => sub { $is_inline };
 
     my @required;
     my @optional;
@@ -75,7 +75,7 @@ role {
         for my $triplet (@optional) {
             my ( $name, $reader, $pred ) = @{$triplet};
 
-            next if $pred && ! $event->$pred();
+            next if $pred && !$event->$pred();
 
             $p{$name} = $event->$name();
         }
@@ -124,8 +124,10 @@ sub debug_dump {
             }
         }
         else {
-            $dump .= sprintf( '    %-16s: %s', $name,
-                $self->_debug_value($val) );
+            $dump .= sprintf(
+                '    %-16s: %s', $name,
+                $self->_debug_value($val)
+            );
             $dump .= "\n";
         }
     }

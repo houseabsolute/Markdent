@@ -20,6 +20,7 @@ use MooseX::Types -declare => [
 
 use MooseX::Types::Moose qw( Int ArrayRef ClassName Any FileHandle Object );
 
+#<<<
 subtype HeaderLevel,
     as Int,
     where { $_ >= 1 && $_ <= 6 },
@@ -58,6 +59,7 @@ enum TableCellAlignment, qw( left right center );
 subtype PosInt,
     as Int,
     where { $_ >= 1 },
-    message {"The number provided ($_) is not a positive integer"};
+    message { "The number provided ($_) is not a positive integer" };
+#>>>
 
 1;

@@ -34,10 +34,11 @@ has _stream => (
 );
 
 sub start_header {
-    my $self  = shift;
-    my ($level) = validated_list( \@_,
-                                  level => { isa => HeaderLevel },
-                                );
+    my $self = shift;
+    my ($level) = validated_list(
+        \@_,
+        level => { isa => HeaderLevel },
+    );
 
     my $tag = 'h' . $level;
 
@@ -45,10 +46,11 @@ sub start_header {
 }
 
 sub end_header {
-    my $self  = shift;
-    my ($level) = validated_list( \@_,
-                                  level => { isa => HeaderLevel },
-                                );
+    my $self = shift;
+    my ($level) = validated_list(
+        \@_,
+        level => { isa => HeaderLevel },
+    );
 
     my $tag = '_h' . $level;
 
@@ -56,49 +58,49 @@ sub end_header {
 }
 
 sub start_blockquote {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('blockquote');
 }
 
 sub end_blockquote {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_blockquote');
 }
 
 sub start_unordered_list {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('ul');
 }
 
 sub end_unordered_list {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_ul');
 }
 
 sub start_ordered_list {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('ol');
 }
 
 sub end_ordered_list {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_ol');
 }
 
 sub start_list_item {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('li');
 }
 
 sub end_list_item {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_li');
 }
@@ -115,13 +117,13 @@ sub preformatted {
 }
 
 sub start_paragraph {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('p');
 }
 
 sub end_paragraph {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_p');
 }
@@ -155,31 +157,31 @@ sub start_table_header {
 }
 
 sub end_table_header {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_thead');
 }
 
 sub start_table_body {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('tbody');
 }
 
 sub end_table_body {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_tbody');
 }
 
 sub start_table_row {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('tr');
 }
 
 sub end_table_row {
-    my $self  = shift;
+    my $self = shift;
 
     $self->_stream()->tag('_tr');
 }
@@ -250,7 +252,7 @@ sub end_code {
 
 sub auto_link {
     my $self = shift;
-    my ($uri)    = validated_list(
+    my ($uri) = validated_list(
         \@_,
         uri => { isa => Str, optional => 1 },
     );
@@ -270,7 +272,7 @@ sub start_link {
         is_implicit_id => { isa => Bool, optional => 1 },
     );
 
-    delete @p{ grep { ! defined $p{$_} } keys %p };
+    delete @p{ grep { !defined $p{$_} } keys %p };
 
     $self->_stream()->tag(
         'a', href => $p{uri},
@@ -370,7 +372,7 @@ sub image {
         is_implicit_id => { isa => Bool, optional => 1 },
     );
 
-    delete @p{ grep { ! defined $p{$_} } keys %p };
+    delete @p{ grep { !defined $p{$_} } keys %p };
 
     $self->_stream()->tag(
         'img', src => $p{uri},

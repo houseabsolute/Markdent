@@ -11,7 +11,7 @@ use namespace::autoclean;
 use MooseX::Role::Parameterized;
 
 parameter compare => (
-    isa => ArrayRef[Str],
+    isa => ArrayRef [Str],
 );
 
 role {
@@ -21,7 +21,8 @@ role {
 
     method balances_event => sub {
         my $self = shift;
-        my ($other) = pos_validated_list( \@_, { does => 'Markdent::Role::Event' } );
+        my ($other)
+            = pos_validated_list( \@_, { does => 'Markdent::Role::Event' } );
 
         return 0 unless $self->name() eq $other->name();
 

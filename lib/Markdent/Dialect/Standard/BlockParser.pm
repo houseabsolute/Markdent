@@ -35,7 +35,7 @@ with 'Markdent::Role::BlockParser';
 has __html_blocks => (
     traits   => ['Hash'],
     is       => 'ro',
-    isa      => HashRef[Str],
+    isa      => HashRef [Str],
     default  => sub { {} },
     init_arg => undef,
     handles  => {
@@ -82,6 +82,7 @@ sub parse_document {
 }
 
 {
+
     # Stolen from Text::Markdown, along with the whole "extract and replace
     # with hash" concept.
     my $block_names_re = qr{
@@ -94,8 +95,7 @@ sub parse_document {
         my $self = shift;
         my $text = shift;
 
-        ${$text}
-            =~ s{
+        ${$text} =~ s{
                  ( $BlockStart )
                  (
                    ^ < ($block_names_re) [^>]* >
@@ -127,7 +127,7 @@ sub _parse_text {
 
     my $last_pos;
     my $x = 1;
- PARSE:
+PARSE:
     while (1) {
         if ( $self->debug() && pos ${$text} ) {
             $self->_print_debug( "Remaining text:\n[\n"
@@ -141,7 +141,8 @@ sub _parse_text {
 
         my $current_pos = pos ${$text} || 0;
         if ( defined $last_pos && $last_pos == $current_pos ) {
-            my $msg = "About to enter an endless loop (pos = $current_pos)!\n";
+            my $msg
+                = "About to enter an endless loop (pos = $current_pos)!\n";
             $msg .= "\n";
             $msg .= substr( ${$text}, $last_pos );
             $msg .= "\n";
@@ -172,10 +173,13 @@ sub _possible_block_matches {
     push @look_for, qw( hashed_html horizontal_rule )
         unless $self->_list_level();
 
-    push @look_for,
-        qw( html_comment
-            atx_header two_line_header
-            blockquote preformatted list );
+    push @look_for, qw(
+        html_comment
+        atx_header
+        two_line_header
+        blockquote
+        preformatted
+        list );
 
     push @look_for, 'list_item'
         if $self->_list_level();
@@ -235,7 +239,7 @@ sub _match_html_comment {
         'html comment block',
     ) if $self->debug();
 
-    $self->_detab_text(\$comment);
+    $self->_detab_text( \$comment );
 
     $self->_send_event( HTMLCommentBlock => text => $comment );
 
@@ -397,10 +401,9 @@ sub _match_blockquote {
     my $bq = $1;
 
     $self->_debug_parse_result(
-         $bq,
+        $bq,
         'blockquote',
     ) if $self->debug();
-
 
     $self->_send_event('StartBlockquote');
 
@@ -415,7 +418,10 @@ sub _match_blockquote {
     # well. If we treat each change of blockquote level as starting a new
     # sub-document, we get the same behavior.
     for my $chunk (
-        $self->_split_chunks_on_regex( $bq, qr/^>(?: \p{SpaceSeparator} | \t )*\S/xm ) ) {
+        $self->_split_chunks_on_regex(
+            $bq, qr/^>(?: \p{SpaceSeparator} | \t )*\S/xm
+        )
+        ) {
 
         $self->_parse_text( \$chunk );
     }
@@ -463,7 +469,7 @@ sub _match_preformatted {
 
     $pre =~ s/^(?:\p{SpaceSeparator}{4}|\t)//gm;
 
-    $self->_detab_text(\$pre);
+    $self->_detab_text( \$pre );
 
     $self->_send_event( Preformatted => text => $pre );
 
@@ -531,7 +537,7 @@ sub _match_list {
                                 )
                               /xmgc;
 
-    my $list = $1;
+    my $list   = $1;
     my $bullet = $2;
 
     my $type = $bullet =~ /\d/ ? 'OrderedList' : 'UnorderedList';
@@ -552,7 +558,7 @@ sub _match_list {
 
         $item =~ s/^ (?: $Bullet | \p{SpaceSeparator}{4} | \t )//xgm;
 
-        $self->_print_debug( "Parsing list item for blocks:\n[$item]\n" )
+        $self->_print_debug("Parsing list item for blocks:\n[$item]\n")
             if $self->debug();
 
         # This is a hack to ensure that the last item in a loose list (each
@@ -573,8 +579,9 @@ sub _match_list {
             }
         }
         elsif ( $item =~ /^$EmptyLine\z/m ) {
-            $self->_print_debug("Treating item as a paragraph because it ends with empty line\n")
-                if $self->debug();
+            $self->_print_debug(
+                "Treating item as a paragraph because it ends with empty line\n"
+            ) if $self->debug();
 
             $self->_treat_list_item_as_paragraph();
         }
@@ -719,7 +726,7 @@ sub _split_chunks_on_regex {
         my $new_chunk;
 
         if ( $in_regex && $line !~ $regex ) {
-            $in_regex = 0;
+            $in_regex  = 0;
             $new_chunk = 1;
         }
         elsif ( $line =~ $regex && !$in_regex ) {

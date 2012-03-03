@@ -17,7 +17,7 @@ has handler => (
 );
 
 sub handle_event {
-    my $self = shift;
+    my $self  = shift;
     my $event = shift;
 
     my $new_event = $self->filter_event($event);

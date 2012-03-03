@@ -23,11 +23,11 @@ our %EXPORT_TAGS = (
 our @EXPORT_OK = uniq( map { @{$_} } values %EXPORT_TAGS );
 
 our $HorizontalWS = qr/(?: \p{SpaceSeparator} | \t )/x;
-our $EmptyLine = qr/(?: ^ $HorizontalWS* \n ) /xm;
-our $EmptyLines = qr/ (?: $EmptyLine )+ /xm;
+our $EmptyLine    = qr/(?: ^ $HorizontalWS* \n ) /xm;
+our $EmptyLines   = qr/ (?: $EmptyLine )+ /xm;
 
 our $BlockStart = qr/(?: \A | $EmptyLines )/xm;
-our $BlockEnd = qr/(?=(?: $EmptyLines | \z ) )/xm;
+our $BlockEnd   = qr/(?=(?: $EmptyLines | \z ) )/xm;
 
 our $HTMLComment = qr{<!--(.+?)-->}s;
 

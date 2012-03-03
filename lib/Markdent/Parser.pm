@@ -67,7 +67,7 @@ sub BUILD {
 
     my %sp_args;
     for my $key (
-        grep {defined}
+        grep { defined }
         map  { $_->init_arg() }
         $self->_span_parser_class()->meta()->get_all_attributes()
         ) {
@@ -78,11 +78,11 @@ sub BUILD {
 
     $sp_args{handler} = $self->handler();
 
-    $self->_set_span_parser_args(\%sp_args);
+    $self->_set_span_parser_args( \%sp_args );
 
     my %bp_args;
     for my $key (
-        grep {defined}
+        grep { defined }
         map  { $_->init_arg() }
         $self->_block_parser_class()->meta()->get_all_attributes()
         ) {
@@ -91,15 +91,15 @@ sub BUILD {
             if exists $args->{$key};
     }
 
-    $bp_args{handler} = $self->handler();
+    $bp_args{handler}     = $self->handler();
     $bp_args{span_parser} = $self->_span_parser();
 
-    $self->_set_block_parser_args(\%bp_args);
+    $self->_set_block_parser_args( \%bp_args );
 }
 
 sub _set_classes_for_dialect {
-    my $self    = shift;
-    my $args    = shift;
+    my $self = shift;
+    my $args = shift;
 
     my $dialect = delete $args->{dialect}
         or return;
@@ -141,7 +141,7 @@ sub _class_name_for_dialect {
     my $dialect = shift;
     my $type    = shift;
 
-    my $suffix = join q{}, map {ucfirst} split /_/, $type;
+    my $suffix = join q{}, map { ucfirst } split /_/, $type;
 
     if ( $dialect =~ /::/ ) {
         return join '::', $dialect, $suffix;
@@ -170,11 +170,11 @@ sub parse {
         markdown => { isa => Str },
     );
 
-    $self->_clean_text(\$text);
+    $self->_clean_text( \$text );
 
     $self->_send_event('StartDocument');
 
-    $self->_block_parser()->parse_document(\$text);
+    $self->_block_parser()->parse_document( \$text );
 
     $self->_send_event('EndDocument');
 

@@ -17,7 +17,7 @@ has delimiter => (
 
 with 'Markdent::Role::Event';
 
-with 'Markdent::Role::BalancedEvent' => { compare => [ 'delimiter' ] };
+with 'Markdent::Role::BalancedEvent' => { compare => ['delimiter'] };
 
 with 'Markdent::Role::EventAsText';
 

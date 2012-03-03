@@ -17,9 +17,14 @@ sub filter_event {
 
     return
         if grep { $event->isa( 'Markdent::Event::' . $_ ) }
-            qw( HTMLBlock
-                HTMLComment HTMLCommentBlock
-                HTMLTag StartHTMLTag EndHTMLTag );
+            qw(
+            HTMLBlock
+            HTMLComment
+            HTMLCommentBlock
+            HTMLTag
+            StartHTMLTag
+            EndHTMLTag
+    );
 
     $self->handler()->handle_event($event);
 

@@ -12,7 +12,7 @@ use MooseX::StrictConstructor;
 
 has _events => (
     is       => 'ro',
-    isa      => ArrayRef[EventObject],
+    isa      => ArrayRef [EventObject],
     init_arg => 'events',
     default  => sub { [] },
 );
@@ -34,7 +34,8 @@ sub capture_events {
 
 sub replay_events {
     my $self = shift;
-    my ($handler) = pos_validated_list( \@_, { does => 'Markdent::Role::Handler' } );
+    my ($handler)
+        = pos_validated_list( \@_, { does => 'Markdent::Role::Handler' } );
 
     $handler->handle_event($_) for $self->events();
 }

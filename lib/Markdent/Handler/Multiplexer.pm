@@ -13,7 +13,7 @@ with 'Markdent::Role::Handler';
 
 has _handlers => (
     is       => 'ro',
-    isa      => NonEmptyArrayRef[HandlerObject],
+    isa      => NonEmptyArrayRef [HandlerObject],
     init_arg => 'handlers',
     required => 1,
 );
