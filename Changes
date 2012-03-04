@@ -1,3 +1,14 @@
+{{$NEXT}}
+
+- The Markdent::Handler::HTMLStream::Document and ::Fragment modules did not
+  detect when streaming to a file handle failed. This is because HTML::Stream
+  does not check that it's calls to ->print succeed. This has been fixed by
+  wrapping file handles (native or IO::Handle) in an object which checks that
+  print succeeds.
+
+- Distro/packaging cleanup.
+
+
 0.17   2010-09-27
 
 - Avoid warnings from the next Moose.
