@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Data::Dumper;
-use Test::More;
+use Test::More 0.88;
 use Test::Deep;
 
 use Markdent::Handler::HTMLFilter;

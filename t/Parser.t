@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::Exception;
-use Test::More;
+use Test::More 0.88;
 
 use Markdent::Dialect::Theory::BlockParser;
 use Markdent::Handler::MinimalTree;
