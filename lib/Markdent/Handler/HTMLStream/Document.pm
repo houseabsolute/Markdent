@@ -72,11 +72,17 @@ The title of the document. This is required.
 
 =item * output => $fh
 
-The file handle to which HTML output will be streamed. If you want to capture
-the output in a string, you can open a filehandle to a string:
+The file handle or object to which HTML output will be streamed. If you want
+to capture the output in a string, you can open a filehandle to a string:
 
   my $buffer = q{};
   open my $fh, '>', \$buffer;
+
+If you pass a file handle (or L<IO::Handle> object), then all calls to
+C<print()> will be checked, and an error will be thrown.
+
+You can pass an object of any other class, it must implement its own
+C<print()> method, and error handling is left up to this method.
 
 =back
 
