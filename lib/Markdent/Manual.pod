@@ -52,7 +52,7 @@ L<Markdent::Role::EventsAsMethods> role. This provides a C<handle_event()>
 implementation that calls a different method for each type of event.
 
 This is used by the L<Markdent::Handler::HTMLStream::Document> and
-L<Markdent::Handler::HTMLStream::Fragmnet> handlers, for example. Since it
+L<Markdent::Handler::HTMLStream::Fragment> handlers, for example. Since it
 generates a different tag for each event, it makes sense to have one method
 per event which knows what tag to generate.
 
