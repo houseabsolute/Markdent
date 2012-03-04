@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::Exception;
+use Test::Fatal;
 use Test::More 0.88;
 
 use Markdent::Dialect::Theory::BlockParser;
@@ -45,15 +45,18 @@ my $handler = Markdent::Handler::MinimalTree->new();
 }
 
 {
-    throws_ok {
-        my $parser = Markdent::Parser->new(
-            dialect            => 'Theory',
-            block_parser_class => 'Markdent::Dialect::Standard::BlockParser',
-            handler            => $handler,
-        );
-    }
-    qr/\QYou specified a dialect (Theory) which has its own block_parser class/,
-        'Cannot specify a dialect and an overlapping explicit block parser class';
+    like(
+        exception {
+            my $parser = Markdent::Parser->new(
+                dialect => 'Theory',
+                block_parser_class =>
+                    'Markdent::Dialect::Standard::BlockParser',
+                handler => $handler,
+            );
+        },
+        qr/\QYou specified a dialect (Theory) which has its own block_parser class/,
+        'Cannot specify a dialect and an overlapping explicit block parser class'
+    );
 }
 
 {
