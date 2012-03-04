@@ -2,8 +2,8 @@ package Markdent::Role::EventAsText;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose::Role;
 
 requires 'as_text';

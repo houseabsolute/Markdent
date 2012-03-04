@@ -2,12 +2,12 @@ package Markdent::Role::BalancedEvent;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use List::AllUtils qw( all );
 use Markdent::Types qw( ArrayRef Str );
 use MooseX::Params::Validate qw( pos_validated_list );
 
-use namespace::autoclean;
 use MooseX::Role::Parameterized;
 
 parameter compare => (

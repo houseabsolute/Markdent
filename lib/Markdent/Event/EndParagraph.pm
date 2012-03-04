@@ -2,8 +2,8 @@ package Markdent::Event::EndParagraph;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::StrictConstructor;
 

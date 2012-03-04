@@ -2,10 +2,10 @@ package Markdent::Event::Text;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::Types qw( Str ArrayRef );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

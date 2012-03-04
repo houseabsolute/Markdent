@@ -2,8 +2,8 @@ package Markdent::Role::Event;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use MooseX::Role::Parameterized;
 
 role {

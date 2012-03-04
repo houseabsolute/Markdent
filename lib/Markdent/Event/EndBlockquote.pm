@@ -2,8 +2,8 @@ package Markdent::Event::EndBlockquote;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::StrictConstructor;
 

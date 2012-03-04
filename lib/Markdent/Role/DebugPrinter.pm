@@ -2,10 +2,10 @@ package Markdent::Role::DebugPrinter;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::Types qw( Bool );
 
-use namespace::autoclean;
 use Moose::Role;
 
 has debug => (

@@ -2,6 +2,7 @@ package Markdent::Role::HTMLStream;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use HTML::Stream;
 use Markdent::Types qw(
@@ -11,7 +12,6 @@ use Markdent::Types qw(
 );
 use MooseX::Params::Validate qw( validated_list validated_hash );
 
-use namespace::autoclean;
 use Moose::Role;
 
 with 'Markdent::Role::EventsAsMethods';

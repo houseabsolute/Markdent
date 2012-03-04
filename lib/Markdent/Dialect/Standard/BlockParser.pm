@@ -2,6 +2,7 @@ package Markdent::Dialect::Standard::BlockParser;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Digest::SHA1 qw( sha1_hex );
 use Markdent::Event::StartDocument;
@@ -25,7 +26,6 @@ use Markdent::Event::Preformatted;
 use Markdent::Regexes qw( :block $HTMLComment );
 use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;

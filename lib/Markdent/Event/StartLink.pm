@@ -2,10 +2,10 @@ package Markdent::Event::StartLink;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::Types qw( Str Bool );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

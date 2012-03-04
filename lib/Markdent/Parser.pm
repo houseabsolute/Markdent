@@ -2,6 +2,7 @@ package Markdent::Parser;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Class::Load qw( load_optional_class );
 use Markdent::Dialect::Standard::BlockParser;
@@ -10,7 +11,6 @@ use Markdent::Types qw( Str HashRef BlockParserClass SpanParserClass );
 use MooseX::Params::Validate qw( validated_list );
 use Try::Tiny;
 
-use namespace::autoclean;
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;

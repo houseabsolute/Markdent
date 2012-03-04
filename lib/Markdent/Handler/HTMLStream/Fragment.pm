@@ -2,8 +2,8 @@ package Markdent::Handler::HTMLStream::Fragment;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 

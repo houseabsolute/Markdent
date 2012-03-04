@@ -2,6 +2,7 @@ package Markdent::Handler::MinimalTree;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use MooseX::Params::Validate qw( validated_list validated_hash );
 use Markdent::Types qw(
@@ -10,7 +11,6 @@ use Markdent::Types qw(
 );
 use Tree::Simple;
 
-use namespace::autoclean;
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 

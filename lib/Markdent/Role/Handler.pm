@@ -2,8 +2,8 @@ package Markdent::Role::Handler;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose::Role;
 
 requires 'handle_event';

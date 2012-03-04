@@ -2,6 +2,7 @@ package Markdent::Dialect::Theory::BlockParser;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use List::AllUtils qw( insert_after_string sum );
 use Markdent::Event::StartTable;
@@ -17,7 +18,6 @@ use Markdent::Event::EndTableCell;
 use Markdent::Regexes qw( $HorizontalWS $EmptyLine $BlockStart $BlockEnd );
 use Markdent::Types qw( Bool );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;

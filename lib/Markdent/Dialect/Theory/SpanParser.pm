@@ -2,8 +2,8 @@ package Markdent::Dialect::Theory::SpanParser;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;

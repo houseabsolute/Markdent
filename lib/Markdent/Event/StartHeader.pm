@@ -2,10 +2,10 @@ package Markdent::Event::StartHeader;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::Types qw( HeaderLevel );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

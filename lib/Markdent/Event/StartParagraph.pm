@@ -2,8 +2,8 @@ package Markdent::Event::StartParagraph;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::StrictConstructor;
 

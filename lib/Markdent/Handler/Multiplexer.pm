@@ -2,10 +2,10 @@ package Markdent::Handler::Multiplexer;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::Types qw( NonEmptyArrayRef HandlerObject );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

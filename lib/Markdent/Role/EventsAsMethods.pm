@@ -2,10 +2,10 @@ package Markdent::Role::EventsAsMethods;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Scalar::Util qw( blessed );
 
-use namespace::autoclean;
 use Moose::Role;
 
 with 'Markdent::Role::Handler';

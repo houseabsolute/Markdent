@@ -2,6 +2,7 @@ package Markdent::Dialect::Standard::SpanParser;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use re 'eval';
 
@@ -25,7 +26,6 @@ use Markdent::Event::Text;
 use Markdent::Regexes qw( $HTMLComment );
 use Markdent::Types qw( Str ArrayRef HashRef RegexpRef EventObject );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;

@@ -2,8 +2,8 @@ package Markdent::Event::EndListItem;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::StrictConstructor;
 

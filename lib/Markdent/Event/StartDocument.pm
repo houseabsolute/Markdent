@@ -2,8 +2,8 @@ package Markdent::Event::StartDocument;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose;
 use MooseX::StrictConstructor;
 

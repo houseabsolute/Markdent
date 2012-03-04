@@ -2,10 +2,10 @@ package Markdent::Handler::HTMLFilter;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::CapturedEvents;
 
-use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

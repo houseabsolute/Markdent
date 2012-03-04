@@ -2,10 +2,10 @@ package Markdent::Event::HTMLCommentBlock;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 use Markdent::Types qw( Str HashRef );
 
-use namespace::autoclean;
 use Moose;
 use MooseX::StrictConstructor;
 

@@ -2,8 +2,8 @@ package Markdent::Role::FilterHandler;
 
 use strict;
 use warnings;
-
 use namespace::autoclean;
+
 use Moose::Role;
 
 with 'Markdent::Role::Handler';
