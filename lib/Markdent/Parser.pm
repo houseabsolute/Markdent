@@ -3,7 +3,7 @@ package Markdent::Parser;
 use strict;
 use warnings;
 
-use Class::MOP;
+use Class::Load qw( load_optional_class );
 use Markdent::Dialect::Standard::BlockParser;
 use Markdent::Dialect::Standard::SpanParser;
 use Markdent::Types qw( Str HashRef BlockParserClass SpanParserClass );
@@ -110,19 +110,7 @@ sub _set_classes_for_dialect {
 
         my ( $thing, $class ) = @{$pair};
 
-        my $loaded;
-        try {
-            Class::MOP::load_class($class);
-            $loaded = 1;
-        }
-        catch {
-
-            # XXX - This is kind of broken, since a user can typo a dialect
-            # and that will just get ignored.
-            die $_ unless $_ =~ /Can't locate/;
-        };
-
-        next unless $loaded;
+        next unless load_optional_class($class);
 
         if ( exists $args->{ $thing . '_class' } ) {
             die
