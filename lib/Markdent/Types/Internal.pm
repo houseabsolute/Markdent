@@ -5,7 +5,7 @@ use warnings;
 
 use IO::Handle;
 
-use MooseX::Types -declare => [
+use MooseX::Types 0.20 -declare => [
     qw( HeaderLevel
         BlockParserClass
         SpanParserClass

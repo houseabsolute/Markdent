@@ -3,9 +3,9 @@
 use strict;
 use warnings;
 
+use Class::Load qw( load_optional_class );
 use File::Slurp qw( read_file );
 use Getopt::Long;
-use HTML::Tidy;
 use Markdent::Simple::Document;
 
 my $file;
@@ -27,6 +27,8 @@ my $html = Markdent::Simple::Document->new()->markdown_to_html(
     title    => $title,
     markdown => $markdown,
 );
+
+print $html unless load_optional_class('HTML::Tidy');
 
 my $tidy = HTML::Tidy->new(
     {

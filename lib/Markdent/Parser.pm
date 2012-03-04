@@ -2,7 +2,7 @@ package Markdent::Parser;
 
 use strict;
 use warnings;
-use namespace::autoclean;
+use namespace::autoclean 0.09;
 
 use Class::Load qw( load_optional_class );
 use Markdent::Dialect::Standard::BlockParser;
@@ -11,9 +11,9 @@ use Markdent::Types qw( Str HashRef BlockParserClass SpanParserClass );
 use MooseX::Params::Validate qw( validated_list );
 use Try::Tiny;
 
-use Moose;
-use MooseX::SemiAffordanceAccessor;
-use MooseX::StrictConstructor;
+use Moose 0.92;
+use MooseX::SemiAffordanceAccessor 0.05;
+use MooseX::StrictConstructor 0.08;
 
 with 'Markdent::Role::AnyParser';
 
