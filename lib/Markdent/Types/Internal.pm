@@ -18,7 +18,14 @@ use MooseX::Types 0.20 -declare => [
         )
 ];
 
-use MooseX::Types::Moose qw( Int ArrayRef ClassName Any FileHandle Object );
+use MooseX::Types::Moose qw(
+    Any
+    ArrayRef
+    ClassName
+    FileHandle
+    Int
+    Object
+);
 
 #<<<
 subtype HeaderLevel,
