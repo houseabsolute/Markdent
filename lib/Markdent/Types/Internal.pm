@@ -20,11 +20,11 @@ use MooseX::Types 0.20 -declare => [
 ];
 
 use MooseX::Types::Moose qw(
-    Any
     ArrayRef
     ClassName
     FileHandle
     Int
+    Item
     Object
 );
 
@@ -55,7 +55,7 @@ subtype NonEmptyArrayRef,
     where { @{$_} >= 1 };
 
 subtype OutputStream,
-    as Any,
+    as Item,
     where {
         FileHandle->check($_)
             || ( Object->check($_) && $_->can('print') );
