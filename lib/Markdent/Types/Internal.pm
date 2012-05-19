@@ -6,15 +6,16 @@ use warnings;
 use IO::Handle;
 
 use MooseX::Types 0.20 -declare => [
-    qw( HeaderLevel
+    qw(
         BlockParserClass
-        SpanParserClass
         EventObject
         HandlerObject
-        OutputStream
+        HeaderLevel
         NonEmptyArrayRef
-        TableCellAlignment
+        OutputStream
         PosInt
+        SpanParserClass
+        TableCellAlignment
         )
 ];
 
