@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.21   2012-06-22
+
 - The StartListItem event now has a bullet attribute. This contains the text
   of the bullet, something like "*" or "1.". Requested by Steven Haryanto. RT
   #77893.
