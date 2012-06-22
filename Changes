@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The StartListItem event now has a bullet attribute. This contains the text
+  of the bullet, something like "*" or "1.". Requested by Steven Haryanto. RT
+  #77893.
+
+
 0.20   2012-05-18
 
 - Work around breakage introduced with MooseX::Types 0.32.
