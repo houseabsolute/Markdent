@@ -68,7 +68,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '-',
+            },
             [
                 {
                     type => 'text',

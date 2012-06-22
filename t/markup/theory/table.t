@@ -1527,7 +1527,8 @@ EOF
                             type => 'text',
                             text => 'th1',
                         },
-                    ], {
+                    ],
+                    {
                         type           => 'table_cell',
                         alignment      => 'left',
                         colspan        => 1,
@@ -1554,21 +1555,30 @@ EOF
                     [
                         { type => 'unordered_list' },
                         [
-                            { type => 'list_item' },
+                            {
+                                type   => 'list_item',
+                                bullet => '*',
+                            },
                             [
                                 {
                                     type => 'text',
                                     text => "list\n",
                                 }
                             ],
-                            { type => 'list_item' },
+                            {
+                                type   => 'list_item',
+                                bullet => '*',
+                            },
                             [
                                 {
                                     type => 'text',
                                     text => "l2\n",
                                 }
                             ],
-                            { type => 'list_item' },
+                            {
+                                type   => 'list_item',
+                                bullet => '*',
+                            },
                             [
                                 {
                                     type => 'text',

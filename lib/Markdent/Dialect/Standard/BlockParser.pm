@@ -554,9 +554,15 @@ sub _match_list {
     my @items = $self->_split_list_items($list);
 
     for my $item (@items) {
-        $self->_send_event('StartListItem');
+        $item =~ s/^$Bullet//;
+        my $bullet = $1;
 
-        $item =~ s/^ (?: $Bullet | \p{SpaceSeparator}{4} | \t )//xgm;
+        # This strips out indentation from any lines beyond the first. This
+        # causes the block parser to see a sub-list as starting a new list
+        # when it parses the entire item for blocks.
+        $item =~ s/(?<=\n)^ (?: \p{SpaceSeparator}{4} | \t )//xgm;
+
+        $self->_send_event( StartListItem => bullet => $bullet );
 
         $self->_print_debug("Parsing list item for blocks:\n[$item]\n")
             if $self->debug();

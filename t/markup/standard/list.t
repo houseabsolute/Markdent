@@ -17,7 +17,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -42,7 +45,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -52,7 +58,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'one line unordered list with tab after bullet' );
+    parse_ok(
+        $text, $expect,
+        'one line unordered list with tab after bullet'
+    );
 }
 
 {
@@ -66,14 +75,20 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "l1\n",
                 }
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -97,14 +112,20 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "l1\n",
                 }
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -114,7 +135,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'two line unordered list, second list item has 3 space indent' );
+    parse_ok(
+        $text, $expect,
+        'two line unordered list, second list item has 3 space indent'
+    );
 }
 
 {
@@ -129,16 +153,23 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "l1\n",
-                }, {
+                },
+                {
                     type => 'unordered_list',
                 },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
@@ -147,7 +178,10 @@ EOF
                     ],
                 ]
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -157,7 +191,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'unordered list with nested list as second item' );
+    parse_ok(
+        $text, $expect,
+        'unordered list with nested list as second item'
+    );
 }
 
 {
@@ -172,14 +209,20 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "l1\n  continues\n",
                 },
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -189,7 +232,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'unordered list with multi-line single list item' );
+    parse_ok(
+        $text, $expect,
+        'unordered list with multi-line single list item'
+    );
 }
 
 {
@@ -204,14 +250,20 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "l1\ncontinues\n",
                 },
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -221,7 +273,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'unordered list with multi-line single list item (no indent for continuation)' );
+    parse_ok(
+        $text, $expect,
+        'unordered list with multi-line single list item (no indent for continuation)'
+    );
 }
 
 {
@@ -238,7 +293,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -255,7 +313,10 @@ EOF
                     },
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -268,7 +329,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'unordered list with first item having two paragraphs' );
+    parse_ok(
+        $text, $expect,
+        'unordered list with first item having two paragraphs'
+    );
 }
 
 {
@@ -285,7 +349,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -312,7 +379,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'unordered list with first item having two paragraphs followed by regular paragraph' );
+    parse_ok(
+        $text, $expect,
+        'unordered list with first item having two paragraphs followed by regular paragraph'
+    );
 }
 
 {
@@ -332,7 +402,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -340,7 +413,10 @@ EOF
                 },
                 { type => 'unordered_list' },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
@@ -349,7 +425,10 @@ EOF
                     ],
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -357,14 +436,20 @@ EOF
                 },
                 { type => 'ordered_list' },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '1.',
+                    },
                     [
                         {
                             type => 'text',
                             text => "bunk\n",
                         },
                     ],
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '2.',
+                    },
                     [
                         {
                             type => 'text',
@@ -372,7 +457,10 @@ EOF
                         },
                         { type => 'unordered_list' },
                         [
-                            { type => 'list_item' },
+                            {
+                                type   => 'list_item',
+                                bullet => '*',
+                            },
                             [
                                 {
                                     type => 'text',
@@ -381,7 +469,10 @@ EOF
                             ],
                         ],
                     ],
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '3.',
+                    },
                     [
                         {
                             type => 'text',
@@ -390,7 +481,10 @@ EOF
                     ],
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -417,14 +511,20 @@ EOF
             type => 'ordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '1.',
+            },
             [
                 {
                     type => 'text',
                     text => "ordered\n",
                 }
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '2.',
+            },
             [
                 {
                     type => 'text',
@@ -432,14 +532,20 @@ EOF
                 },
                 { type => 'unordered_list' },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
                             text => "unordered\n",
                         },
                     ],
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
@@ -448,7 +554,10 @@ EOF
                     ],
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '3.',
+            },
             [
                 {
                     type => 'text',
@@ -475,7 +584,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -485,7 +597,10 @@ EOF
                     },
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -499,7 +614,10 @@ EOF
         { type => 'horizontal_rule' },
     ];
 
-    parse_ok( $text, $expect, 'unordered list terminated by a horizontal rule' );
+    parse_ok(
+        $text, $expect,
+        'unordered list terminated by a horizontal rule'
+    );
 }
 
 {
@@ -514,21 +632,30 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "+ x\n",
                 },
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "+ x\n",
                 },
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -538,7 +665,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'list where each list item text looks like a bullet' );
+    parse_ok(
+        $text, $expect,
+        'list where each list item text looks like a bullet'
+    );
 }
 
 {
@@ -552,14 +682,20 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "---\n",
                 },
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
@@ -589,7 +725,10 @@ EOF
             type => 'ordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '1.',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -599,7 +738,10 @@ EOF
                     },
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '2.',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -610,14 +752,20 @@ EOF
                 ],
                 { type => 'unordered_list' },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
                             text => "Fee\n",
                         },
                     ],
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
@@ -626,7 +774,10 @@ EOF
                     ],
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '3.',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -639,7 +790,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'loose list with sublist should still have paras' );
+    parse_ok(
+        $text, $expect,
+        'loose list with sublist should still have paras'
+    );
 }
 
 {
@@ -656,25 +810,36 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 {
                     type => 'text',
                     text => "Tab\n",
-                }, {
+                },
+                {
                     type => 'unordered_list',
                 },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
                             text => "Tab\n",
-                        }, {
+                        },
+                        {
                             type => 'unordered_list',
                         },
                         [
-                            { type => 'list_item' },
+                            {
+                                type   => 'list_item',
+                                bullet => '*',
+                            },
                             [
                                 {
                                     type => 'text',
@@ -707,7 +872,10 @@ EOF
             type => 'unordered_list',
         },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -718,7 +886,10 @@ EOF
                 ],
                 { type => 'unordered_list' },
                 [
-                    { type => 'list_item' },
+                    {
+                        type   => 'list_item',
+                        bullet => '*',
+                    },
                     [
                         {
                             type => 'text',
@@ -737,7 +908,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'weird use of tabs and nested lists from mdtest' );
+    parse_ok(
+        $text, $expect,
+        'weird use of tabs and nested lists from mdtest'
+    );
 }
 
 done_testing();

@@ -4,8 +4,16 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+use Markdent::Types qw( Str );
+
 use Moose;
 use MooseX::StrictConstructor;
+
+has bullet => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+);
 
 with 'Markdent::Role::Event';
 
@@ -22,6 +30,14 @@ __END__
 =head1 DESCRIPTION
 
 This class represents the start of a list item.
+
+=head1 ATTRIBUTES
+
+This class has the following attributes:
+
+=head2 bullet
+
+The bullet text for the list item.
 
 =head1 ROLES
 

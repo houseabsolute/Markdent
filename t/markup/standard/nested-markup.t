@@ -29,14 +29,20 @@ EOF
             ],
             { type => 'unordered_list' },
             [
-                { type => 'list_item' },
+                {
+                    type   => 'list_item',
+                    bullet => '*',
+                },
                 [
                     {
                         type => 'text',
                         text => "with list\n",
                     },
                 ],
-                { type => 'list_item' },
+                {
+                    type   => 'list_item',
+                    bullet => '*',
+                },
                 [
                     {
                         type => 'text',
@@ -90,7 +96,8 @@ EOF
                         text => "And, they can be nested.\n",
                     },
                 ],
-            ], {
+            ],
+            {
                 type  => 'header',
                 level => 4,
             },
@@ -102,14 +109,20 @@ EOF
             ],
             { type => 'unordered_list' },
             [
-                { type => 'list_item' },
+                {
+                    type   => 'list_item',
+                    bullet => '*',
+                },
                 [
                     {
                         type => 'text',
                         text => "You can quote a list.\n",
                     },
                 ],
-                { type => 'list_item' },
+                {
+                    type   => 'list_item',
+                    bullet => '*',
+                },
                 [
                     {
                         type => 'text',
@@ -136,7 +149,10 @@ EOF
     my $expect = [
         { type => 'unordered_list' },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -158,7 +174,10 @@ EOF
                     ],
                 ],
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -187,7 +206,10 @@ EOF
     my $expect = [
         { type => 'unordered_list' },
         [
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [
@@ -196,13 +218,17 @@ EOF
                         text =>
                             "A list item with a pre block:\n",
                     },
-                ], {
+                ],
+                {
                     type => 'preformatted',
                     text =>
                         "This is a pre block\ninside a list item.\n",
                 },
             ],
-            { type => 'list_item' },
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
             [
                 { type => 'paragraph' },
                 [

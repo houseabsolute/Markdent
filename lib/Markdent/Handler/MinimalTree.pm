@@ -109,8 +109,13 @@ sub end_ordered_list {
 
 sub start_list_item {
     my $self = shift;
+    my %p    = validated_hash(
+        \@_,
+        bullet => { isa => Str },
+    );
 
-    my $para = Tree::Simple->new( { type => 'list_item' } );
+    my $para
+        = Tree::Simple->new( { type => 'list_item', bullet => $p{bullet} } );
     $self->_current_node()->addChild($para);
 
     $self->_set_current_node($para);
