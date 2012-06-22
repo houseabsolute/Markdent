@@ -114,11 +114,11 @@ sub start_list_item {
         bullet => { isa => Str },
     );
 
-    my $para
+    my $list_item
         = Tree::Simple->new( { type => 'list_item', bullet => $p{bullet} } );
-    $self->_current_node()->addChild($para);
+    $self->_current_node()->addChild($list_item);
 
-    $self->_set_current_node($para);
+    $self->_set_current_node($list_item);
 }
 
 sub end_list_item {
