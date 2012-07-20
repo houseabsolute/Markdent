@@ -3,8 +3,8 @@ package Example::Dialect::BlockParser;
 use strict;
 use warnings;
 
-use Moose;
+use Moose::Role;
 
-extends 'Markdent::Dialect::Standard::BlockParser';
+with 'Markdent::Role::Dialect::BlockParser';
 
 1;

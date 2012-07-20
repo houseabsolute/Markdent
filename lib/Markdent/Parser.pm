@@ -7,7 +7,9 @@ use namespace::autoclean 0.09;
 use Class::Load qw( load_optional_class );
 use Markdent::Dialect::Standard::BlockParser;
 use Markdent::Dialect::Standard::SpanParser;
-use Markdent::Types qw( Str HashRef BlockParserClass SpanParserClass );
+use Markdent::Types
+    qw( ArrayRef HashRef BlockParserClass BlockParserDialectRole SpanParserClass SpanParserDialectRole Str );
+use Moose::Meta::Class;
 use MooseX::Params::Validate qw( validated_list );
 use Try::Tiny;
 
@@ -25,7 +27,7 @@ has _block_parser_class => (
 );
 
 has _block_parser => (
-    is       => 'ro',
+    is       => 'rw',
     does     => 'Markdent::Role::BlockParser',
     lazy     => 1,
     init_arg => undef,
@@ -40,15 +42,9 @@ has _block_parser_args => (
 
 has _span_parser_class => (
     is       => 'rw',
-    does     => SpanParserClass,
+    isa      => SpanParserClass,
     init_arg => 'span_parser_class',
     default  => 'Markdent::Dialect::Standard::SpanParser',
-);
-
-has _span_parser_args => (
-    is       => 'rw',
-    does     => HashRef,
-    init_arg => undef,
 );
 
 has _span_parser => (
@@ -59,11 +55,35 @@ has _span_parser => (
     builder  => '_build_span_parser',
 );
 
+has _span_parser_args => (
+    is       => 'rw',
+    does     => HashRef,
+    init_arg => undef,
+);
+
+override BUILDARGS => sub {
+    my $class = shift;
+
+    my $args = super();
+
+    if ( exists $args->{dialect} ) {
+
+        # XXX - deprecation warning
+        $args->{dialects} = [ delete $args->{dialect} ];
+    }
+    elsif ( exists $args->{dialects} ) {
+        $args->{dialects} = [ $args->{dialects} ]
+            unless ref $args->{dialects};
+    }
+
+    return $args;
+};
+
 sub BUILD {
     my $self = shift;
     my $args = shift;
 
-    $self->_set_classes_for_dialect($args);
+    $self->_set_classes_for_dialects($args);
 
     my %sp_args;
     for my $key (
@@ -97,34 +117,49 @@ sub BUILD {
     $self->_set_block_parser_args( \%bp_args );
 }
 
-sub _set_classes_for_dialect {
+sub _set_classes_for_dialects {
     my $self = shift;
     my $args = shift;
 
-    my $dialect = delete $args->{dialect}
-        or return;
+    my $dialects = delete $args->{dialects};
 
-    for my $pair (
-        map { [ $_, $self->_class_name_for_dialect( $dialect, $_ ) ] }
-        qw( block_parser span_parser ) ) {
+    return unless @{ $dialects // [] };
 
-        my ( $thing, $class ) = @{$pair};
+    for my $thing (qw( block_parser span_parser )) {
+        my @roles;
 
-        next unless load_optional_class($class);
+        for my $dialect ( @{$dialects} ) {
+            my $role = $self->_role_name_for_dialect( $dialect, $thing );
 
-        if ( exists $args->{ $thing . '_class' } ) {
-            die
-                "You specified a dialect ($dialect) which has its own $thing class"
-                . " and you also specified an explicit $thing class."
-                . " You cannot specify both when creating a Markdent::Parser.";
+            load_optional_class($role)
+                or next;
+
+            my $specified_class = $args->{ $thing . '_class' };
+
+            next
+                if $specified_class
+                && $specified_class->can('meta')
+                && $specified_class->meta()->does_role($role);
+
+            push @roles, $role;
         }
 
-        my $meth = '_set_' . $thing . '_class';
-        $self->$meth($class);
+        next unless @roles;
+
+        my $class_meth = q{_} . $thing . '_class';
+
+        my $class = Moose::Meta::Class->create_anon_class(
+            superclasses => [ $self->$class_meth() ],
+            roles        => \@roles,
+            cache        => 1,
+        )->name();
+
+        my $set_meth = '_set' . $class_meth;
+        $self->$set_meth($class);
     }
 }
 
-sub _class_name_for_dialect {
+sub _role_name_for_dialect {
     my $self    = shift;
     my $dialect = shift;
     my $type    = shift;

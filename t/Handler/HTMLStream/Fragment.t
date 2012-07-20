@@ -131,7 +131,7 @@ EOF
 EOF
 
     html_output_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $markdown,
         $expect_html,
         'Complex Theory-style table'
@@ -162,7 +162,7 @@ EOF
 EOF
 
     html_output_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $markdown,
         $expect_html,
         'Simple Theory-style table with no header rows'

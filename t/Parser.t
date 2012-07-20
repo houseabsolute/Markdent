@@ -14,14 +14,73 @@ my $handler = Markdent::Handler::MinimalTree->new();
 
 {
     my $parser = Markdent::Parser->new(
-        block_parser_class => 'Markdent::Dialect::Theory::BlockParser',
-        handler            => $handler,
+        dialects => 'Theory',
+        handler  => $handler,
     );
 
-    isa_ok(
-        $parser->_block_parser(),
-        'Markdent::Dialect::Theory::BlockParser',
-        '$parser->_block_parser() with explicit class name'
+    ok(
+        $parser->_block_parser()->meta()
+            ->does_role('Markdent::Dialect::Theory::BlockParser'),
+        '$parser->_block_parser() with dialects = Theory'
+    );
+
+    ok(
+        $parser->_span_parser()->meta()
+            ->does_role('Markdent::Dialect::Theory::SpanParser'),
+        '$parser->_span_parser() with dialects = Theory'
+    );
+}
+
+{
+    my $parser = Markdent::Parser->new(
+        dialects => ['Theory'],
+        handler  => $handler,
+    );
+
+    ok(
+        $parser->_block_parser()->meta()
+            ->does_role('Markdent::Dialect::Theory::BlockParser'),
+        '$parser->_block_parser() with dialects = [Theory]'
+    );
+
+    ok(
+        $parser->_span_parser()->meta()
+            ->does_role('Markdent::Dialect::Theory::SpanParser'),
+        '$parser->_span_parser() with dialects = [Theory]'
+    );
+}
+
+{
+    is(
+        exception {
+            my $parser = Markdent::Parser->new(
+                dialects => 'Theory',
+                block_parser_class =>
+                    'Markdent::Dialect::Standard::BlockParser',
+                handler => $handler,
+            );
+        },
+        undef,
+        'Can combine an explicit block_parser_class with a dialect'
+    );
+}
+
+{
+    my $parser = Markdent::Parser->new(
+        dialects => ['Example::Dialect'],
+        handler  => $handler,
+    );
+
+    ok(
+        $parser->_block_parser()->meta()
+            ->does_role('Example::Dialect::BlockParser'),
+        '$parser->_block_parser() with dialects = Theory'
+    );
+
+    ok(
+        $parser->_span_parser()->meta()
+            ->does_role('Example::Dialect::SpanParser'),
+        '$parser->_span_parser() with dialects = Theory'
     );
 }
 
@@ -31,50 +90,16 @@ my $handler = Markdent::Handler::MinimalTree->new();
         handler => $handler,
     );
 
-    isa_ok(
-        $parser->_block_parser(),
-        'Markdent::Dialect::Theory::BlockParser',
-        '$parser->_block_parser() with dialect = Theory'
+    ok(
+        $parser->_block_parser()->meta()
+            ->does_role('Markdent::Dialect::Theory::BlockParser'),
+        '$parser->_block_parser() with dialect = Theory (dialect as synonym for dialects)'
     );
 
-    isa_ok(
-        $parser->_span_parser(),
-        'Markdent::Dialect::Standard::SpanParser',
-        '$parser->_span_parser() with dialect = Theory'
-    );
-}
-
-{
-    like(
-        exception {
-            my $parser = Markdent::Parser->new(
-                dialect => 'Theory',
-                block_parser_class =>
-                    'Markdent::Dialect::Standard::BlockParser',
-                handler => $handler,
-            );
-        },
-        qr/\QYou specified a dialect (Theory) which has its own block_parser class/,
-        'Cannot specify a dialect and an overlapping explicit block parser class'
-    );
-}
-
-{
-    my $parser = Markdent::Parser->new(
-        dialect => 'Example::Dialect',
-        handler => $handler,
-    );
-
-    isa_ok(
-        $parser->_block_parser(),
-        'Example::Dialect::BlockParser',
-        '$parser->_block_parser() with dialect = Example::Dialect'
-    );
-
-    isa_ok(
-        $parser->_span_parser(),
-        'Example::Dialect::SpanParser',
-        '$parser->_span_parser() with dialect = Example::Dialect'
+    ok(
+        $parser->_span_parser()->meta()
+            ->does_role('Markdent::Dialect::Theory::SpanParser'),
+        '$parser->_span_parser() with dialect = Theory (dialect as synonym for dialects)'
     );
 }
 

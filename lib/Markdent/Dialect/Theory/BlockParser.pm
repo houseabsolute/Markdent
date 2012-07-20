@@ -18,11 +18,9 @@ use Markdent::Event::EndTableCell;
 use Markdent::Regexes qw( $HorizontalWS $EmptyLine $BlockStart $BlockEnd );
 use Markdent::Types qw( Bool );
 
-use Moose;
-use MooseX::SemiAffordanceAccessor;
-use MooseX::StrictConstructor;
+use Moose::Role;
 
-extends 'Markdent::Dialect::Standard::BlockParser';
+with 'Markdent::Role::Dialect::BlockParser';
 
 has _in_table => (
     traits   => ['Bool'],
@@ -36,10 +34,11 @@ has _in_table => (
     },
 );
 
-sub _possible_block_matches {
+around _possible_block_matches => sub {
+    my $orig = shift;
     my $self = shift;
 
-    my @look_for = $self->SUPER::_possible_block_matches();
+    my @look_for = $self->$orig();
 
     return @look_for if $self->_list_level();
 
@@ -51,7 +50,7 @@ sub _possible_block_matches {
     }
 
     return @look_for;
-}
+};
 
 my $TableCaption = qr{ ^
                        $HorizontalWS*
@@ -445,8 +444,6 @@ sub _match_table_cell {
     $self->_span_parser()->parse_block($1);
 }
 
-__PACKAGE__->meta()->make_immutable();
-
 1;
 
 # ABSTRACT: Block parser for Theory's Markdown
@@ -457,24 +454,24 @@ __END__
 
 =head1 DESCRIPTION
 
-This class adds parsing for Markdown extensions proposed by David Wheeler (aka
+This role adds parsing for Markdown extensions proposed by David Wheeler (aka
 Theory). See
 L<http://justatheory.com/computers/markup/markdown-table-rfc.html> and
 L<http://justatheory.com/computers/markup/modest-markdown-proposal.html> for
 details.
 
-For now, this class handles tables only.
+For now, this role handles tables only.
 
-This class extends the L<Markdent::Dialect::Standard::BlockParser> class.
+This role should be applied to a class which extends
+L<Markdent::Dialect::Standard::BlockParser>.
 
 =head1 METHODS
 
-This class provides the following methods:
+This role provides the following methods:
 
 =head1 ROLES
 
-This class does the L<Markdent::Role::BlockParser>,
-L<Markdent::Role::AnyParser>, and L<Markdent::Role::DebugPrinter> roles.
+This role does the L<Markdent::Role::Dialect::BlockParser> role.
 
 =head1 BUGS
 

@@ -56,7 +56,7 @@ sub tree_from_handler {
 }
 
 sub html_output_ok {
-    my $dialect     = ref $_[0] ? shift : {};
+    my $dialects    = ref $_[0] ? shift : {};
     my $markdown    = shift;
     my $expect_html = shift;
     my $desc        = shift;
@@ -68,7 +68,7 @@ sub html_output_ok {
     }
 
     my $html = Markdent::Simple::Document->new()->markdown_to_html(
-        %{$dialect},
+        %{$dialects},
         title    => 'Test',
         markdown => $markdown,
     );

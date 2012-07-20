@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 use Markdent::Handler::HTMLStream::Document;
 use Markdent::Parser;
-use Markdent::Types qw( Str );
+use Markdent::Types qw( ArrayRef Str );
 use MooseX::Params::Validate qw( validated_list );
 
 use Moose;
@@ -14,9 +14,11 @@ use MooseX::StrictConstructor;
 
 sub markdown_to_html {
     my $self = shift;
-    my ( $dialect, $title, $markdown ) = validated_list(
+    my ( $dialects, $title, $markdown ) = validated_list(
         \@_,
-        dialect  => { isa => Str, default => 'Standard' },
+        dialects => {
+            isa => Str | ( ArrayRef [Str] ), default => [],
+        },
         title    => { isa => Str },
         markdown => { isa => Str },
     );
@@ -31,7 +33,7 @@ sub markdown_to_html {
     );
 
     my $parser
-        = Markdent::Parser->new( dialect => $dialect, handler => $handler );
+        = Markdent::Parser->new( dialects => $dialects, handler => $handler );
 
     $parser->parse( markdown => $markdown );
 

@@ -3,8 +3,8 @@ package Example::Dialect::SpanParser;
 use strict;
 use warnings;
 
-use Moose;
+use Moose::Role;
 
-extends 'Markdent::Dialect::Standard::SpanParser';
+with 'Markdent::Role::Dialect::SpanParser';
 
 1;
