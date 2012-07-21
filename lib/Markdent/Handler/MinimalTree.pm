@@ -304,6 +304,14 @@ sub end_link {
     $self->_set_current_up_one_level();
 }
 
+sub line_break {
+    my $self = shift;
+
+    my $break_node = Tree::Simple->new( { type => 'line_break' } );
+
+    $self->_current_node()->addChild($break_node);
+}
+
 sub text {
     my $self = shift;
     my ($text) = validated_list( \@_, text => { isa => Str }, );

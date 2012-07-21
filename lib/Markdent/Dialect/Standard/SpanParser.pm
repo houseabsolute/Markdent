@@ -17,6 +17,7 @@ use Markdent::Event::HTMLComment;
 use Markdent::Event::HTMLEntity;
 use Markdent::Event::HTMLTag;
 use Markdent::Event::Image;
+use Markdent::Event::LineBreak;
 use Markdent::Event::StartCode;
 use Markdent::Event::StartEmphasis;
 use Markdent::Event::StartHTMLTag;
@@ -75,6 +76,14 @@ has _escape_re => (
     isa      => RegexpRef,
     lazy     => 1,
     builder  => '_build_escape_re',
+    init_arg => undef,
+);
+
+has _line_break_re => (
+    is       => 'ro',
+    isa      => RegexpRef,
+    lazy     => 1,
+    builder  => '_build_line_break_re',
     init_arg => undef,
 );
 
@@ -214,7 +223,7 @@ sub _possible_span_matches {
         push @look_for, qw( auto_link link image );
     }
 
-    push @look_for, 'html_comment', 'html_tag', 'html_entity';
+    push @look_for, 'html_comment', 'html_tag', 'html_entity', 'line_break';
 
     return @look_for;
 }
@@ -289,6 +298,12 @@ sub _build_escape_re {
     my $chars = join q{}, uniq( @{ $self->_escapable_chars() } );
 
     return qr/\\([\Q$chars\E])/;
+}
+
+sub _build_line_break_re {
+    my $self = shift;
+
+    return qr/\p{SpaceSeparator}{2}\n/;
 }
 
 sub _match_escape {
@@ -667,11 +682,27 @@ sub _match_html_entity {
     return 1;
 }
 
+sub _match_line_break {
+    my $self = shift;
+    my $text = shift;
+
+    my $line_break_re = $self->_line_break_re();
+
+    return unless ${$text} =~ /\G$line_break_re/gcs;
+
+    my $event = $self->_make_event('LineBreak');
+
+    $self->_markup_event($event);
+
+    return 1;
+}
+
 sub _match_plain_text {
     my $self = shift;
     my $text = shift;
 
-    my $escape_re = $self->_escape_re();
+    my $escape_re     = $self->_escape_re();
+    my $line_break_re = $self->_line_break_re();
 
     # Note that we're careful not to consume any of the characters marking the
     # (possible) end of the plain text. If those things turn out to _not_ be
@@ -682,6 +713,8 @@ sub _match_plain_text {
                      ( .+? )              # at least one character followed by ...
                      (?=
                        $escape_re
+                       |
+                       $line_break_re
                        |
                        \*                 #   possible span markup - bold or italics
                        |

@@ -286,6 +286,12 @@ sub end_link {
     $self->_stream()->tag('_a');
 }
 
+sub line_break {
+    my $self = shift;
+
+    $self->_stream()->tag('br');
+}
+
 sub text {
     my $self = shift;
     my ($text) = validated_list( \@_, text => { isa => Str }, );
