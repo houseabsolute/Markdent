@@ -683,9 +683,9 @@ sub _match_plain_text {
                      (?=
                        $escape_re
                        |
-                       \*                 #   possible span markup
+                       \*                 #   possible span markup - bold or italics
                        |
-                       _
+                       _                  #   possible span markup - bold or italics
                        |
                        \p{SpaceSeparator}* \`
                        |
