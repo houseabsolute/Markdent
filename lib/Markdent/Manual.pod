@@ -39,7 +39,7 @@ power in dealing with the parse results.
 
 When I call Markdent a parser I<toolkit>, that means it is designed to be part
 of a larger ecosystem. You can write your handlers, and you can even write
-your own parser subclasses or roles to create your own dialect of Markdown.
+your own parser dialects as roles.
 
 =head1 HANDLERS
 
@@ -106,14 +106,14 @@ parser. The span parser looks for things like strong and emphasis markup,
 links, HTML entities, and so on.
 
 Separating these two makes creating a Markdown dialect a bit easier, as you
-may find yourself just needing to extending either the block I<or> the span
-parser.
+may find yourself just needing to alter the behavior of just the block I<or>
+the span parser.
 
 For example, the L<Theory dialect|Markdent::Dialect::Theory> shipped with this
-distribution is mostly implemented as a subclass of the L<Standard
+distribution is mostly implemented as a role applied to the L<Standard
 dialect's|Markdent::Dialect::Standard> block parser.
 
-See the Theory dialect for an example of how to extend the core Markdown
+See the Theory dialect for an example of how to modify the core Markdown
 dialect.
 
 =head1 WHAT DOES THE NAME MEAN?

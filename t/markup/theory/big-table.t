@@ -132,7 +132,7 @@ EOF
         );
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         \@expect,
         'very large table to test performance'

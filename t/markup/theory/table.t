@@ -112,7 +112,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with header and two body rows'
@@ -222,7 +222,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with header and two body rows, header uses +===+'
@@ -334,7 +334,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple MySQL-style table (header marker at start and end of table)'
@@ -411,7 +411,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with no header'
@@ -523,7 +523,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with header and two body rows - caption on the bottom'
@@ -635,7 +635,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with header and two body rows, all right-aligned'
@@ -775,7 +775,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with two header rows and two body rows'
@@ -918,7 +918,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'three cells across, no leading/trailing pipes or pluses'
@@ -1065,7 +1065,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'three cells across, two table bodies'
@@ -1164,7 +1164,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'three cells across, each row has some >1 colspan cells'
@@ -1264,7 +1264,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'three cells across, each row has some >1 colspan cells'
@@ -1374,7 +1374,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with escaped pipe in cell'
@@ -1489,7 +1489,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with continuation lines'
@@ -1593,7 +1593,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'table with a list inside a cell'
@@ -1699,7 +1699,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'simple table with empty first header cell, so first col is header cells'
@@ -1832,7 +1832,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'first header row should have 3 columns'
@@ -1873,7 +1873,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'Parser should not parse [foo] as a table caption if there is no table'
@@ -1984,7 +1984,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'Totally pathological table at least generates some output and does not die or warn'
@@ -2032,7 +2032,7 @@ EOF
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'Handle tabs in a table cell without going into an endless loop'
@@ -2271,7 +2271,7 @@ l3
     ];
 
     parse_ok(
-        { dialect => 'Theory' },
+        { dialects => 'Theory' },
         $text,
         $expect,
         'complex table preceded by paragraph that broke with new regex'

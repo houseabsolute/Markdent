@@ -254,25 +254,21 @@ This method creates a new parser. It accepts the following parameters:
 
 =over 4
 
-=item * dialect => $name
+=item * dialects => $name or [ $name1, $name2 ]
 
-You can use this as a shorthand to pick a block and/or span parser class.
+You can use this to apply dialect roles to the standard parser class.
 
-If the dialect parameter does not contain a namespace separator (::), the
-constructor looks for classes named
-C<Markdent::Dialect::${dialect}::BlockParser> and
+If a dialect name does not contain a namespace separator (::), the constructor
+looks for roles named C<Markdent::Dialect::${dialect}::BlockParser> and
 C<Markdent::Dialect::${dialect}::SpanParser>.
 
-If the dialect parameter does contain a namespace separator, it is used a
-prefix - C<$dialect::BlockParser> and C<$dialect::SpanParser>.
+If a dialect name does contain a namespace separator, it is used a prefix -
+C<$dialect::BlockParser> and C<$dialect::SpanParser>.
 
-If any relevant classes are found, they will be used by the parser.
+If any relevant roles are found, they will be used by the parser.
 
-You can I<also> specify an explicit block or span parser, but if the dialect
-has its own class of that type, an error will be thrown.
-
-If the dialect only specifies a block or span parser, but not both, then we
-fall back to using the appropriate parser for the Standard dialect.
+It is okay if a given dialect only provides a block or span parser, but not
+both.
 
 =item * block_parser_class => $class
 
