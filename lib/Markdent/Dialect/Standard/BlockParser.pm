@@ -179,7 +179,8 @@ sub _possible_block_matches {
         two_line_header
         blockquote
         preformatted
-        list );
+        list
+    );
 
     push @look_for, 'list_item'
         if $self->_list_level();
