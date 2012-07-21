@@ -27,7 +27,7 @@ __END__
 
 =head1 DESCRIPTION
 
-This role implements behavior shared by all block parsers
+This role implements behavior shared by all block parsers.
 
 =head1 REQUIRED METHODS
 

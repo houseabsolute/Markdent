@@ -20,7 +20,7 @@ __END__
 
 =head1 DESCRIPTION
 
-This role implements behavior shared by all span parsers
+This role implements behavior shared by all span parsers.
 
 =head1 REQUIRED METHODS
 
