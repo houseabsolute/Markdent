@@ -1,5 +1,22 @@
 {{$NEXT}}
 
+* All dialects except the Standard dialect are now roles. This makes it
+  possible to create a parser that parses multiple dialects. It's possible for
+  dialects to have conflicting parsing rules, in which case the results are
+  unpredictable.
+
+  This is a backwards incompatible change, but should not break most code,
+  unless you have implemented your own dialect.
+
+- The use of a "dialect" as a named parameter has been replaced by
+  "dialects". The "dialects" parameter can be either a string or an array ref
+  of strings. However, the "dialect" parameter is still accepted for backwards
+  compatibility. This may be removed in the future.
+
+- The Standard dialect now parses two spaces at the end of a line as a line
+  break. There is a new Markdent::Event::LineBreak class to go with this.
+
+
 0.21   2012-06-22
 
 - The StartListItem event now has a bullet attribute. This contains the text
