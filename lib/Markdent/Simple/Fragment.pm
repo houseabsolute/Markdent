@@ -12,6 +12,8 @@ use MooseX::Params::Validate qw( validated_list );
 use Moose;
 use MooseX::StrictConstructor;
 
+with 'Markdent::Role::Simple';
+
 sub markdown_to_html {
     my $self = shift;
     my ( $dialects, $markdown ) = validated_list(
@@ -22,19 +24,13 @@ sub markdown_to_html {
         markdown => { isa => Str },
     );
 
-    my $capture = q{};
-    open my $fh, '>', \$capture
-        or die $!;
+    my $handler_class = 'Markdent::Handler::HTMLStream::Fragment';
 
-    my $handler
-        = Markdent::Handler::HTMLStream::Fragment->new( output => $fh );
-
-    my $parser
-        = Markdent::Parser->new( dialects => $dialects, handler => $handler );
-
-    $parser->parse( markdown => $markdown );
-
-    return $capture;
+    return $self->_parse_markdown(
+        $markdown,
+        $dialects,
+        $handler_class,
+    );
 }
 
 1;
@@ -71,6 +67,10 @@ Creates a new Markdent::Simple::Fragment object.
 This method turns Markdown into HTML.
 
 You can also provide an optional "dialect" parameter.
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::Simple> role.
 
 =head1 BUGS
 

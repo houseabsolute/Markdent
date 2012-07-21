@@ -5,12 +5,13 @@ use warnings;
 use namespace::autoclean;
 
 use Markdent::Handler::HTMLStream::Document;
-use Markdent::Parser;
 use Markdent::Types qw( ArrayRef Str );
 use MooseX::Params::Validate qw( validated_list );
 
 use Moose;
 use MooseX::StrictConstructor;
+
+with 'Markdent::Role::Simple';
 
 sub markdown_to_html {
     my $self = shift;
@@ -23,21 +24,15 @@ sub markdown_to_html {
         markdown => { isa => Str },
     );
 
-    my $capture = q{};
-    open my $fh, '>', \$capture
-        or die $!;
+    my $handler_class = 'Markdent::Handler::HTMLStream::Document';
+    my %handler_p = ( title => $title );
 
-    my $handler = Markdent::Handler::HTMLStream::Document->new(
-        title  => $title,
-        output => $fh,
+    return $self->_parse_markdown(
+        $markdown,
+        $dialects,
+        $handler_class,
+        \%handler_p
     );
-
-    my $parser
-        = Markdent::Parser->new( dialects => $dialects, handler => $handler );
-
-    $parser->parse( markdown => $markdown );
-
-    return $capture;
 }
 
 1;
@@ -77,6 +72,10 @@ This method turns Markdown into HTML. You must provide a title as well, which
 will be used as the C<< <title> >> for the resulting HTML document.
 
 You can also provide an optional "dialect" parameter.
+
+=head1 ROLES
+
+This class does the L<Markdent::Role::Simple> role.
 
 =head1 BUGS
 
