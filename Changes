@@ -6,7 +6,12 @@
   unpredictable.
 
   This is a backwards incompatible change, but should not break most code,
-  unless you have implemented your own dialect.
+  unless you have implemented your own dialect, or you were explicitly setting
+  a block or span parser class to something like
+
+      block_parser_class => 'Markdent::Dialect::Theory::BlockParser'
+
+  But there was really no good reason to do this.
 
 - The use of a "dialect" as a named parameter has been replaced by
   "dialects". The "dialects" parameter can be either a string or an array ref
