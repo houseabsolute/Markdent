@@ -13,6 +13,9 @@
 
   But there was really no good reason to do this.
 
+- The Standard dialect block/span parser classes are now named
+  Markdent::Parser::BlockParser and ::SpanParser.
+
 - The use of a "dialect" as a named parameter has been replaced by
   "dialects". The "dialects" parameter can be either a string or an array ref
   of strings. However, the "dialect" parameter is still accepted for backwards
