@@ -21,6 +21,10 @@
 - The Standard dialect now parses two spaces at the end of a line as a line
   break. There is a new Markdent::Event::LineBreak class to go with this.
 
+- Improve the bin/markdent-html script. It now has a --help option. You can
+  pass it Markdown text via the CLI --text option, rather than only via a
+  --file.
+
 
 0.21   2012-06-22
 
