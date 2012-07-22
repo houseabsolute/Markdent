@@ -33,7 +33,7 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'emphasis markup surrounded by brackets' );
+    parse_ok( $text, $expect, 'emphasis markup surrounded by percent signs' );
 }
 
 {
