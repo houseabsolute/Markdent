@@ -3,38 +3,6 @@
 use strict;
 use warnings;
 
-use Class::Load qw( load_optional_class );
-use File::Slurp qw( read_file );
-use Getopt::Long;
-use Markdent::Simple::Document;
+use Markdent::CLI;
 
-my $file;
-my $title = 'Needs a title';
-my $dialect = 'Standard';
-
-GetOptions(
-    'file:s'    => \$file,
-    'title:s'   => \$title,
-    'dialect:s' => \$dialect,
-);
-
-die "Need to specify a file" unless defined $file && -f $file;
-
-my $markdown = read_file($file);
-
-my $html = Markdent::Simple::Document->new()->markdown_to_html(
-    dialect  => $dialect,
-    title    => $title,
-    markdown => $markdown,
-);
-
-print $html unless load_optional_class('HTML::Tidy');
-
-my $tidy = HTML::Tidy->new(
-    {
-        doctype => 'transitional',
-        indent  => 1,
-    }
-);
-
-print $tidy->clean($html);
+Markdent::CLI->new_with_options()->run();
