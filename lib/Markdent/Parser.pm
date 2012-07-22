@@ -123,7 +123,7 @@ sub _set_classes_for_dialects {
 
     my $dialects = delete $args->{dialects};
 
-    return unless @{ $dialects // [] };
+    return unless @{ $dialects || [] };
 
     for my $thing (qw( block_parser span_parser )) {
         my @roles;

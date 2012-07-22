@@ -34,7 +34,7 @@ sub _parse_markdown {
         or die $!;
 
     my $handler = $handler_class->new(
-        %{ $handler_p // {} },
+        %{ $handler_p || {} },
         output => $fh,
     );
 
