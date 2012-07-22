@@ -462,8 +462,8 @@ details.
 
 For now, this role handles tables only.
 
-This role should be applied to a class which extends
-L<Markdent::Dialect::Standard::BlockParser>.
+This role should be applied to L<Markdent::Parser::BlockParser> class or a
+subclass of that class.
 
 =head1 METHODS
 

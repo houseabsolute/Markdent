@@ -1,4 +1,4 @@
-package Markdent::Dialect::Standard::BlockParser;
+package Markdent::Parser::BlockParser;
 
 use strict;
 use warnings;
@@ -784,7 +784,7 @@ Daring Fireball and mdtest).
 
 This class provides the following methods:
 
-=head2 Markdent::Dialect::Standard::BlockParser->new(  handler => $handler , span_parser => $span_parser )
+=head2 Markdent::Parser::BlockParser->new( handler => $handler, span_parser => $span_parser )
 
 Creates a new block parser object. You must provide a span parser object.
 

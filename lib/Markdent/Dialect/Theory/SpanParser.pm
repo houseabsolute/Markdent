@@ -26,9 +26,9 @@ __END__
 
 =head1 DESCRIPTION
 
-This role is applied to a L<Markdent::Dialect::Standard::SpanParser> in order
-to allow the pipe (|) and colon (:) characters to be backslash-escaped. These
-are used to mark tables, so they need to be escapeable.
+This role is applied to a L<Markdent::Parser::SpanParser> in order to allow
+the pipe (|) and colon (:) characters to be backslash-escaped. These are used
+to mark tables, so they need to be escapeable.
 
 =head1 METHODS
 

@@ -5,8 +5,8 @@ use warnings;
 use namespace::autoclean 0.09;
 
 use Class::Load qw( load_optional_class );
-use Markdent::Dialect::Standard::BlockParser;
-use Markdent::Dialect::Standard::SpanParser;
+use Markdent::Parser::BlockParser;
+use Markdent::Parser::SpanParser;
 use Markdent::Types
     qw( ArrayRef HashRef BlockParserClass BlockParserDialectRole SpanParserClass SpanParserDialectRole Str );
 use Moose::Meta::Class;
@@ -23,7 +23,7 @@ has _block_parser_class => (
     is       => 'rw',
     isa      => BlockParserClass,
     init_arg => 'block_parser_class',
-    default  => 'Markdent::Dialect::Standard::BlockParser',
+    default  => 'Markdent::Parser::BlockParser',
 );
 
 has _block_parser => (
@@ -44,7 +44,7 @@ has _span_parser_class => (
     is       => 'rw',
     isa      => SpanParserClass,
     init_arg => 'span_parser_class',
-    default  => 'Markdent::Dialect::Standard::SpanParser',
+    default  => 'Markdent::Parser::SpanParser',
 );
 
 has _span_parser => (
@@ -274,13 +274,13 @@ both.
 
 =item * block_parser_class => $class
 
-This default to L<Markdent::Dialect::Standard::BlockParser>, but can be any
-class which implements the L<Markdent::Role::BlockParser> role.
+This defaults to L<Markdent::Parser::BlockParser>, but can be any class which
+implements the L<Markdent::Role::BlockParser> role.
 
 =item * span_parser_class => $class
 
-This default to L<Markdent::Dialect::Standard::SpanParser>, but can be any
-class which implements the L<Markdent::Role::SpanParser> role.
+This defaults to L<Markdent::Parser::SpanParser>, but can be any class which
+implements the L<Markdent::Role::SpanParser> role.
 
 =item * handler => $handler
 
