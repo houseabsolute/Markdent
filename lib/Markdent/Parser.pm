@@ -129,6 +129,8 @@ sub _set_classes_for_dialects {
         my @roles;
 
         for my $dialect ( @{$dialects} ) {
+            next if $dialect eq 'Standard';
+
             my $role = $self->_role_name_for_dialect( $dialect, $thing );
 
             load_optional_class($role)
