@@ -71,6 +71,14 @@ has _links_by_id => (
     },
 );
 
+has _emphasis_start_delimiter_re => (
+    is       => 'ro',
+    isa      => RegexpRef,
+    lazy     => 1,
+    builder  => '_build_emphasis_start_delimiter_re',
+    init_arg => undef,
+);
+
 has _escape_re => (
     is       => 'ro',
     isa      => RegexpRef,
@@ -288,6 +296,12 @@ sub _open_start_event_for_span {
     return $in;
 }
 
+sub _build_emphasis_start_delimiter_re {
+    my $self = shift;
+
+    return qr/(?:\*|_)/;
+}
+
 sub _build_escapable_chars {
     return [ qw( \ ` * _ { } [ ] ( ) + - . ! < > ), '#' ];
 }
@@ -357,8 +371,10 @@ sub _match_emphasis_start {
     my $self = shift;
     my $text = shift;
 
-    my ($delim) = $self->_match_delimiter_start( $text, qr/(?:\*|_)/ )
-        or return;
+    my ($delim) = $self->_match_delimiter_start(
+        $text,
+        $self->_emphasis_start_delimiter_re(),
+    ) or return;
 
     my $event = $self->_make_event( StartEmphasis => delimiter => $delim );
 
@@ -372,14 +388,23 @@ sub _match_emphasis_end {
     my $text  = shift;
     my $delim = shift;
 
-    $self->_match_delimiter_end( $text, qr/\Q$delim\E/ )
-        or return;
+    $self->_match_delimiter_end(
+        $text,
+        $self->_emphasis_end_delimiter_re($delim),
+    ) or return;
 
     my $event = $self->_make_event( EndEmphasis => delimiter => $delim );
 
     $self->_markup_event($event);
 
     return 1;
+}
+
+sub _emphasis_end_delimiter_re {
+    my $self  = shift;
+    my $delim = shift;
+
+    return qr/\Q$delim\E/;
 }
 
 sub _match_code_start {
