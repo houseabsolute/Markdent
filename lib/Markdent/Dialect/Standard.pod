@@ -39,14 +39,6 @@ by Dingus.
 
 =item
 
-Currently Markdent does not look for two trailing spaces at the end of a
-paragraph line. In the Standard dialect, these indicate an intentional line
-break.
-
-This will probably be fixed in a future release.
-
-=item
-
 Markdent will not generate bad HTML from Markdown markup. Markdent does not
 allow unbalanced markup events to propagate, and will turn unbalanced events
 into plain text.
