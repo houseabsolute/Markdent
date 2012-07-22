@@ -10,6 +10,7 @@ use MooseX::Types 0.20 -declare => [
         BlockParserClass
         BlockParserDialectRole
         EventObject
+        ExistingFile
         HandlerObject
         HeaderLevel
         NonEmptyArrayRef
@@ -28,6 +29,7 @@ use MooseX::Types::Moose qw(
     Int
     Item
     Object
+    Str
 );
 
 #<<<
@@ -51,6 +53,10 @@ subtype SpanParserClass,
 subtype EventObject,
     as Object,
     where { $_->can('does') && $_->does('Markdent::Role::Event') };
+
+subtype ExistingFile,
+    as Str,
+    where { -f $_ };
 
 subtype HandlerObject,
     as Object,
