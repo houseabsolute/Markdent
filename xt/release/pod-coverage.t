@@ -42,6 +42,7 @@ my @handler_events = qw(
     html_comment_block
     html_entity
     image
+    line_break
     preformatted
     start_blockquote
     start_code
@@ -67,6 +68,8 @@ my @handler_events = qw(
     start_table_cell
     start_table_header
     start_table_row
+
+    code_block
 );
 
 my %trustme = (
