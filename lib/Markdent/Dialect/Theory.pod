@@ -10,7 +10,7 @@ Markdent::Dialect::Theory - Markdown extensions proposed by David Wheeler (aka T
 
   use Markdent::Parser;
 
-  my $parser = Markdent::Parser->new( dialect => 'Theory', handler => ... );
+  my $parser = Markdent::Parser->new( dialects => 'Theory', handler => ... );
 
 =head1 DESCRIPTION
 
