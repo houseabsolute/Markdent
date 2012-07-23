@@ -64,7 +64,7 @@ sub _match_bare_link {
     return 1;
 }
 
-around _text_end_re => sub {
+around _text_end_res => sub {
     my $orig = shift;
     my $self = shift;
 

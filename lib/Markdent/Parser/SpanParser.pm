@@ -727,9 +727,7 @@ sub _match_plain_text {
     my $text = shift;
 
     my $end_of_text_re = join '|', grep { defined } (
-        $self->_escape_re(),
-        $self->_line_break_re(),
-        $self->_text_end_re(),
+        $self->_text_end_res(),
     );
 
     # Note that we're careful not to consume any of the characters marking the
@@ -766,9 +764,13 @@ sub _match_plain_text {
     return 1;
 }
 
-# This exists so dialects can hook into it.
-sub _text_end_re {
-    return;
+sub _text_end_res {
+    my $self = shift;
+
+    return (
+        $self->_escape_re(),
+        $self->_line_break_re(),
+    );
 }
 
 sub _markup_event {
