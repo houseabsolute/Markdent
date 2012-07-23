@@ -13,14 +13,6 @@ eval "use Pod::Coverage::Moose 0.02";
 plan skip_all => "Pod::Coverage::Moose 0.02 required for testing POD coverage"
     if $@;
 
-my %skip = map { $_ => 1 }
-    qw( Markdent::Regexes Markdent::Types Markdent::Types::Internal );
-
-# This is a stripped down version of all_pod_coverage_ok which lets us
-# vary the trustme parameter per module.
-my @modules = grep { ! $skip{$_} } all_modules();
-plan tests => scalar @modules;
-
 my @handler_events = qw(
     auto_link
     end_blockquote
@@ -83,6 +75,17 @@ my %trustme = (
     'Markdent::Parser'                        => ['BUILD'],
 );
 
+my %skip = map { $_ => 1 } qw(
+    Markdent::CLI
+    Markdent::Regexes
+    Markdent::Types
+    Markdent::Types::Internal
+);
+
+# This is a stripped down version of all_pod_coverage_ok which lets us
+# vary the trustme parameter per module.
+my @modules = grep { ! $skip{$_} } all_modules();
+
 for my $module ( sort @modules ) {
     my $trustme = [];
 
@@ -99,3 +102,5 @@ for my $module ( sort @modules ) {
         "Pod coverage for $module"
     );
 }
+
+done_testing();
