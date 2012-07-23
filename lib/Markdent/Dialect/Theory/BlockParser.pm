@@ -446,7 +446,7 @@ sub _match_table_cell {
 
 1;
 
-# ABSTRACT: Block parser for Theory's Markdown
+# ABSTRACT: Block parser for Theory's proposed Markdown extensions
 
 __END__
 
@@ -464,10 +464,6 @@ For now, this role handles tables only.
 
 This role should be applied to L<Markdent::Parser::BlockParser> class or a
 subclass of that class.
-
-=head1 METHODS
-
-This role provides the following methods:
 
 =head1 ROLES
 

@@ -18,7 +18,7 @@ around _build_escapable_chars => sub {
 
 1;
 
-# ABSTRACT: Span parser for Theory's Markdown
+# ABSTRACT: Span parser for Theory's proposed Markdown extensions
 
 __END__
 
@@ -29,10 +29,6 @@ __END__
 This role is applied to a L<Markdent::Parser::SpanParser> in order to allow
 the pipe (|) and colon (:) characters to be backslash-escaped. These are used
 to mark tables, so they need to be escapeable.
-
-=head1 METHODS
-
-This role provides the following methods:
 
 =head1 ROLES
 
