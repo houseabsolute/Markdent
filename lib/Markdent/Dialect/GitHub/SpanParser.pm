@@ -75,3 +75,24 @@ around _text_end_res => sub {
 };
 
 1;
+
+# ABSTRACT: Span parser for GitHub Markdown
+
+__END__
+
+=pod
+
+=head1 DESCRIPTION
+
+This role adds parsing for some of the Markdown extensions used on GitHub. See
+http://github.github.com/github-flavored-markdown/ for details.
+
+=head1 ROLES
+
+This role does the L<Markdent::Role::Dialect::SpanParser> role.
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=cut

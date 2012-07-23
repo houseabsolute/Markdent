@@ -58,3 +58,24 @@ sub _match_fenced_code_block {
 }
 
 1;
+
+# ABSTRACT: Block parser for GitHub Markdown
+
+__END__
+
+=pod
+
+=head1 DESCRIPTION
+
+This role adds parsing for some of the Markdown extensions used on GitHub. See
+http://github.github.com/github-flavored-markdown/ for details.
+
+=head1 ROLES
+
+This role does the L<Markdent::Role::Dialect::BlockParser> role.
+
+=head1 BUGS
+
+See L<Markdent> for bug reporting details.
+
+=cut
