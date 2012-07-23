@@ -123,7 +123,7 @@ sub _hash_and_save_html {
     my $self = shift;
     my $html = shift;
 
-    my $sha1 = sha1_hex($html);
+    my $sha1 = lc sha1_hex($html);
 
     $self->_save_html_block( $sha1 => $html );
 
@@ -207,7 +207,7 @@ sub _match_hashed_html {
                                 $BlockStart
                                 ^
                                 (
-                                  html:(.{40})
+                                  html:([0-9a-f]{40})
                                   \n
                                 )
                                 $BlockEnd
