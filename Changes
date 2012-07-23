@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.22   2012-07-22
+
 * All dialects except the Standard dialect are now roles. This makes it
   possible to create a parser that parses multiple dialects. It's possible for
   dialects to have conflicting parsing rules, in which case the results are
