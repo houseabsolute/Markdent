@@ -28,6 +28,8 @@
   pass it Markdown text via the CLI --text option, rather than only via a
   --file.
 
+- Implemented most of GitHub-flavored Markdown as a dialect.
+
 
 0.21   2012-06-22
 
