@@ -563,16 +563,52 @@ sub _match_list {
 
     my @items = $self->_split_list_items($list);
 
+    $self->_handle_list_items(@items);
+
+    $self->_dec_list_level();
+
+    $self->_send_event( 'End' . $type );
+
+    return 1;
+}
+
+sub _split_list_items {
+    my $self = shift;
+    my $list = shift;
+
+    my @items;
+    my @chunk;
+
+    for my $line ( split /\n/, $list ) {
+        if ( $line =~ /^$Bullet/ && @chunk ) {
+            push @items, join q{}, map { $_ . "\n" } @chunk;
+
+            @chunk = ();
+        }
+
+        push @chunk, $line;
+    }
+
+    push @items, join q{}, map { $_ . "\n" } @chunk
+        if @chunk;
+
+    return @items;
+}
+
+sub _handle_list_items {
+    my $self  = shift;
+    my @items = @_;
+
     for my $item (@items) {
         $item =~ s/^$Bullet//;
         my $bullet = $1;
+
+        $self->_send_event( StartListItem => bullet => $bullet );
 
         # This strips out indentation from any lines beyond the first. This
         # causes the block parser to see a sub-list as starting a new list
         # when it parses the entire item for blocks.
         $item =~ s/(?<=\n)^ (?: \p{SpaceSeparator}{4} | \t )//xgm;
-
-        $self->_send_event( StartListItem => bullet => $bullet );
 
         $self->_print_debug("Parsing list item for blocks:\n[$item]\n")
             if $self->debug();
@@ -609,35 +645,6 @@ sub _match_list {
 
         $self->_send_event('EndListItem');
     }
-
-    $self->_dec_list_level();
-
-    $self->_send_event( 'End' . $type );
-
-    return 1;
-}
-
-sub _split_list_items {
-    my $self = shift;
-    my $list = shift;
-
-    my @items;
-    my @chunk;
-
-    for my $line ( split /\n/, $list ) {
-        if ( $line =~ /^$Bullet/ && @chunk ) {
-            push @items, join q{}, map { $_ . "\n" } @chunk;
-
-            @chunk = ();
-        }
-
-        push @chunk, $line;
-    }
-
-    push @items, join q{}, map { $_ . "\n" } @chunk
-        if @chunk;
-
-    return @items;
 }
 
 # A list item matches multiple lines of text without any separating
