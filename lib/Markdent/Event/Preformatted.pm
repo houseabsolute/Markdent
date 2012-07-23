@@ -29,7 +29,7 @@ __END__
 
 =head1 DESCRIPTION
 
-This class represents a block of preformatted text (a code block).
+This class represents a block of preformatted text.
 
 =head1 ATTRIBUTES
 
