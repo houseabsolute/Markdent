@@ -9,13 +9,13 @@ use Markdent::Types qw( Str );
 use Moose;
 use MooseX::StrictConstructor;
 
+with 'Markdent::Role::Event';
+
 has text => (
     is       => 'ro',
     isa      => Str,
     required => 1,
 );
-
-with 'Markdent::Role::Event';
 
 __PACKAGE__->meta()->make_immutable();
 
