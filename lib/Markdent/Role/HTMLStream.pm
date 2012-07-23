@@ -105,6 +105,25 @@ sub end_list_item {
     $self->_stream()->tag('_li');
 }
 
+sub code_block {
+    my $self = shift;
+    my ( $code, $language ) = validated_list(
+        \@_,
+        code     => { isa => Str },
+        language => { isa => Str, optional => 1 },
+    );
+
+    $self->_stream()->tag('pre');
+
+    my @class = $language ? ( class => 'language-' . $language ) : ();
+    $self->_stream()->tag( 'code', @class );
+
+    $self->_stream()->text($code);
+
+    $self->_stream()->tag('_code');
+    $self->_stream()->tag('_pre');
+}
+
 sub preformatted {
     my $self = shift;
     my ($text) = validated_list( \@_, text => { isa => Str }, );

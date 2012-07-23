@@ -136,6 +136,25 @@ sub preformatted {
     $self->_current_node()->addChild($pre_node);
 }
 
+sub code_block {
+    my $self = shift;
+    my ( $code, $language ) = validated_list(
+        \@_,
+        code     => { isa => Str },
+        language => { isa => Str, optional => 1 },
+    );
+
+    my $code_block_node = Tree::Simple->new(
+        {
+            type     => 'code_block',
+            code     => $code,
+            language => $language,
+        }
+    );
+
+    $self->_current_node()->addChild($code_block_node);
+}
+
 sub start_paragraph {
     my $self = shift;
 
