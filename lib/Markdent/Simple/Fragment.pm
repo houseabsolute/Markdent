@@ -46,7 +46,7 @@ __END__
     use Markdent::Simple::Fragment;
 
     my $mds  = Markdent::Simple::Fragment->new();
-    my $html = $mss->markdown_to_html(
+    my $html = $mds->markdown_to_html(
         markdown => $markdown,
     );
 

@@ -48,7 +48,7 @@ __END__
     use Markdent::Simple::Document;
 
     my $mds  = Markdent::Simple::Document->new();
-    my $html = $mss->markdown_to_html(
+    my $html = $mds->markdown_to_html(
         title    => 'My Document',
         markdown => $markdown,
     );
