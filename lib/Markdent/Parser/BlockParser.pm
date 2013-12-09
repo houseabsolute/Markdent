@@ -68,6 +68,26 @@ has _list_item_is_paragraph => (
     },
 );
 
+has _ordered_list_ordinal_for_level => (
+    traits => ['Hash'],
+    is       => 'rw',
+    isa      => HashRef,
+    default  => sub { {} },
+    init_arg => undef,
+);
+
+has _list_is_ordered => (
+    traits   => ['Bool'],
+    is       => 'ro',
+    isa      => Bool,
+    default  => 0,
+    init_arg => undef,
+    handles  => {
+        _treat_list_as_ordered   => 'set',
+        _treat_list_as_unordered => 'unset',
+    },
+);
+
 sub parse_document {
     my $self = shift;
     my $text = shift;
@@ -561,6 +581,14 @@ sub _match_list {
 
     $self->_inc_list_level();
 
+    if ( $type eq 'OrderedList' ) {
+        $self->_ordered_list_ordinal_for_level->{ $self->_list_level } = 1;
+        $self->_treat_list_as_ordered;
+    }
+    else {
+        $self->_treat_list_as_unordered;
+    }
+
     my @items = $self->_split_list_items($list);
 
     $self->_handle_list_items(@items);
@@ -602,6 +630,11 @@ sub _handle_list_items {
     for my $item (@items) {
         $item =~ s/^$Bullet//;
         my $bullet = $1;
+        if ( $self->_list_is_ordered ) {
+            $bullet = $self->_ordered_list_ordinal_for_level->{ $self->_list_level };
+            $bullet .= q{.};
+            $self->_ordered_list_ordinal_for_level->{ $self->_list_level }++;
+        }
 
         $self->_send_event( StartListItem => bullet => $bullet );
 
