@@ -914,4 +914,175 @@ EOF
     );
 }
 
+{
+    my $text = <<'EOF';
+1. First
+1. Second
+1. Third
+EOF
+
+    my $expect = [
+        {
+            type => 'ordered_list',
+        },
+        [
+            {
+                type   => 'list_item',
+                bullet => '1.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "First\n",
+                }
+            ],
+            {
+                type   => 'list_item',
+                bullet => '2.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "Second\n",
+                },
+            ],
+            {
+                type   => 'list_item',
+                bullet => '3.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "Third\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'lazily numbered ordered list' );
+}
+
+{
+    my $text = <<'EOF';
+042. First
+6. Second
+10. Third
+EOF
+
+    my $expect = [
+        {
+            type => 'ordered_list',
+        },
+        [
+            {
+                type   => 'list_item',
+                bullet => '1.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "First\n",
+                }
+            ],
+            {
+                type   => 'list_item',
+                bullet => '2.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "Second\n",
+                },
+            ],
+            {
+                type   => 'list_item',
+                bullet => '3.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "Third\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'drunkenly numbered ordered list' );
+}
+
+{
+    my $text = <<'EOF';
+1. ordered
+5. #2
+    1. nested
+    1. #2
+1. and ordered again
+EOF
+
+    my $expect = [
+        {
+            type => 'ordered_list',
+        },
+        [
+            {
+                type   => 'list_item',
+                bullet => '1.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "ordered\n",
+                }
+            ],
+            {
+                type   => 'list_item',
+                bullet => '2.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "#2\n",
+                },
+                { type => 'ordered_list' },
+                [
+                    {
+                        type   => 'list_item',
+                        bullet => '1.',
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => "nested\n",
+                        },
+                    ],
+                    {
+                        type   => 'list_item',
+                        bullet => '2.',
+                    },
+                    [
+                        {
+                            type => 'text',
+                            text => "#2\n",
+                        },
+                    ],
+                ],
+            ],
+            {
+                type   => 'list_item',
+                bullet => '3.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "and ordered again\n",
+                },
+            ],
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'drunk and lazily numbered ordered lists, nested' );
+}
+
+
+
 done_testing();
