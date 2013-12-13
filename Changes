@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Added support for drunken (42, 5, 3) and lazy (1, 1, 1) ordered lists, per
+  the Markdown spec -
+  http://daringfireball.net/projects/markdown/syntax#list. Based on tests and
+  patch from Jason McIntosh.
+
+
 0.22   2012-07-22
 
 * All dialects except the Standard dialect are now roles. This makes it
