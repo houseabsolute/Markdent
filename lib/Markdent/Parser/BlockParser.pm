@@ -563,7 +563,7 @@ sub _match_list {
 
     my @items = $self->_split_list_items($list);
 
-    $self->_handle_list_items(@items);
+    $self->_handle_list_items( $type, @items );
 
     $self->_dec_list_level();
 
@@ -597,11 +597,15 @@ sub _split_list_items {
 
 sub _handle_list_items {
     my $self  = shift;
+    my $type  = shift;
     my @items = @_;
 
+    my $ordinal_list_num = 1;
     for my $item (@items) {
         $item =~ s/^$Bullet//;
-        my $bullet = $1;
+
+        my $bullet
+            = $type eq 'OrderedList' ? ( $ordinal_list_num++ ) . q{.} : $1;
 
         $self->_send_event( StartListItem => bullet => $bullet );
 
