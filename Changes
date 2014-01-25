@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Shut up enum warnings from the latest Moose (2.1200). Patch by Zoffix. RT
+  #92274.
+
+
 0.23   2013-12-13
 
 - Added support for drunken (42, 5, 3) and lazy (1, 1, 1) ordered lists, per

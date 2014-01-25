@@ -74,7 +74,7 @@ subtype OutputStream,
     },
     message { 'The output stream must be a Perl file handle or an object with a print method' };
 
-enum TableCellAlignment, qw( left right center );
+enum TableCellAlignment, [qw( left right center )];
 
 subtype PosInt,
     as Int,
