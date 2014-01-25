@@ -7,7 +7,6 @@ _build
 .build
 MANIFEST
 META.yml
-README
 Debian_CPANTS.txt
 Makefile.PL
 Makefile
