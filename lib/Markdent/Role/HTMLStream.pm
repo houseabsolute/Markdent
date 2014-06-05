@@ -225,7 +225,7 @@ sub start_table_cell {
 
 sub end_table_cell {
     my $self = shift;
-    my ($is_header) = validated_hash(
+    my ($is_header) = validated_list(
         \@_,
         is_header_cell => { isa => Bool },
     );
