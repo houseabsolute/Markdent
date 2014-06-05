@@ -9,8 +9,15 @@ use Test::Differences;
 use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
-eval { require HTML::Tidy };
-my $HasTidy = $@ ? 0 : 1;
+
+my $HasTidy = do {
+    local $@;
+    eval {
+        require HTML::Tidy;
+        HTML::Tidy->import('TIDY_INFO');
+    };
+    $@ ? 0 : 1;
+};
 
 use Markdent::Handler::MinimalTree;
 use Markdent::Parser;
@@ -80,6 +87,7 @@ sub html_output_ok {
         {
             doctype           => 'transitional',
             'sort-attributes' => 'alpha',
+            clean             => 0,
         }
     );
 
@@ -98,7 +106,13 @@ EOF
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    eq_or_diff( $tidy->clean($html), $tidy->clean($real_expect_html), $desc );
+    my $cleaned = $tidy->clean($html);
+    if ( my @m = grep { $_->type() != TIDY_INFO() } $tidy->messages() ) {
+        ok( 0, 'tidy ran on generated HTML without errors' );
+        diag($_) for @m;
+    }
+
+    eq_or_diff( $cleaned, $tidy->clean($real_expect_html), $desc );
 }
 
 1;
