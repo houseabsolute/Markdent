@@ -84,7 +84,6 @@ EOF
     parse_ok( $text, $expect, 'hr cannot have >1 space between text items' );
 }
 
-
 {
     my $text = <<'EOF';
 ************************

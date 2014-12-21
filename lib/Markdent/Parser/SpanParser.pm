@@ -145,7 +145,7 @@ sub _parse_uri_and_title {
     $uri = q{}
         unless defined $uri;
 
-    $uri   =~ s/^<|>$//g;
+    $uri =~ s/^<|>$//g;
     $title =~ s/^"|"$//g
         if defined $title;
 
@@ -726,9 +726,10 @@ sub _match_plain_text {
     my $self = shift;
     my $text = shift;
 
-    my $end_of_text_re = join '|', grep { defined } (
+    my $end_of_text_re = join '|',
+        grep {defined} (
         $self->_text_end_res(),
-    );
+        );
 
     # Note that we're careful not to consume any of the characters marking the
     # (possible) end of the plain text. If those things turn out to _not_ be
@@ -926,7 +927,7 @@ sub _splice_merged_text_event {
 
     $self->_print_debug(
         "Merging consecutive text events ($start-$end) for: \n"
-            . ( join q{}, map { "  - [$_]\n" } @to_merge ) )
+            . ( join q{}, map {"  - [$_]\n"} @to_merge ) )
         if $self->debug();
 
     my $merged_text = join q{}, @to_merge;

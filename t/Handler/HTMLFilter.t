@@ -39,20 +39,17 @@ EOF
                 type => 'text',
                 text => "Some text\n",
             },
-        ],
-        {
+        ], {
             type => 'paragraph',
         },
         [
             {
                 type => 'text',
                 text => 'Some ',
-            },
-            {
+            }, {
                 type => 'text',
                 text => 'inline',
-            },
-            {
+            }, {
                 type => 'text',
                 text => " HTML.\n",
             },

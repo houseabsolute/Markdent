@@ -62,7 +62,7 @@ EOF
                 type => 'text',
                 text => ' and ',
             }, {
-                type => 'html_entity',
+                type   => 'html_entity',
                 entity => '#38',
             }, {
                 type => 'text',
@@ -294,8 +294,7 @@ EOF
         {
             type => 'html_block',
             html => $html,
-        },
-        {
+        }, {
             type => 'html_block',
             html => $html,
         },
@@ -331,7 +330,8 @@ EOF
         },
     ];
 
-    parse_ok( $text, $expect, 'two html blocks and a paragraph in the middle' );
+    parse_ok( $text, $expect,
+        'two html blocks and a paragraph in the middle' );
 }
 
 {
@@ -348,7 +348,8 @@ EOF
             [
                 {
                     type => 'text',
-                    text => "Inside code we do not match <em>html</em> &amp; entities",
+                    text =>
+                        "Inside code we do not match <em>html</em> &amp; entities",
                 },
             ], {
                 type => 'text',
@@ -357,7 +358,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'html inside code block is not treated as html' );
+    parse_ok( $text, $expect,
+        'html inside code block is not treated as html' );
 }
 
 {

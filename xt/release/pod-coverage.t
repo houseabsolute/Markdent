@@ -84,7 +84,7 @@ my %skip = map { $_ => 1 } qw(
 
 # This is a stripped down version of all_pod_coverage_ok which lets us
 # vary the trustme parameter per module.
-my @modules = grep { ! $skip{$_} } all_modules();
+my @modules = grep { !$skip{$_} } all_modules();
 
 for my $module ( sort @modules ) {
     my $trustme = [];

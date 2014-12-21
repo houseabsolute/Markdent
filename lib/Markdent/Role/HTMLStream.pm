@@ -416,13 +416,12 @@ sub _wrapped_output {
     my $self = shift;
 
     my $output = $self->_output();
-    return $output if blessed $output && ! $output->isa('IO::Handle');
+    return $output if blessed $output && !$output->isa('IO::Handle');
 
     return _CheckedOutput->new($output);
 }
 
-package
-    _CheckedOutput;
+package _CheckedOutput;
 
 use strict;
 use warnings;

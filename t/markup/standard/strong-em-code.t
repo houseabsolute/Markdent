@@ -62,7 +62,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'code marked with `` containing a single backtick' );
+    parse_ok( $text, $expect,
+        'code marked with `` containing a single backtick' );
 }
 
 {

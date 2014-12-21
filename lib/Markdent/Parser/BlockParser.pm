@@ -106,7 +106,6 @@ sub parse_document {
                 }
                 { ( $1 || q{} ) . $self->_hash_and_save_html($2) }egxm;
 
-
         # We need to treat <hr/> tags as blocks as well, but they don't have
         # an ending delimiter.
         ${$text} =~ s{

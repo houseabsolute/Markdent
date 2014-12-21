@@ -28,8 +28,7 @@ EOF
                 type => 'text',
                 text => "Some plain text.\n",
             },
-        ],
-        {
+        ], {
             type     => 'code_block',
             code     => $code,
             language => undef,
@@ -44,10 +43,10 @@ EOF
     ];
 
     parse_ok(
-            { dialects => 'GitHub' },
-            $text,
-            $expect,
-            'fenced code block with no language'
+        { dialects => 'GitHub' },
+        $text,
+        $expect,
+        'fenced code block with no language'
     );
 }
 
@@ -72,8 +71,7 @@ EOF
                 type => 'text',
                 text => "Some plain text.\n",
             },
-        ],
-        {
+        ], {
             type     => 'code_block',
             code     => $code,
             language => 'Perl',
@@ -88,10 +86,10 @@ EOF
     ];
 
     parse_ok(
-            { dialects => 'GitHub' },
-            $text,
-            $expect,
-            'fenced code block with language indicator'
+        { dialects => 'GitHub' },
+        $text,
+        $expect,
+        'fenced code block with language indicator'
     );
 }
 

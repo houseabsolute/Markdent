@@ -18,12 +18,10 @@ EOF
             {
                 type => 'text',
                 text => 'Just an ',
-            },
-            {
+            }, {
                 type => 'auto_link',
                 uri  => 'http://example.com',
-            },
-            {
+            }, {
                 type => 'text',
                 text => " link in some plain text.\n",
             },
@@ -49,20 +47,16 @@ EOF
             {
                 type => 'text',
                 text => 'Just an ',
-            },
-            {
+            }, {
                 type => 'auto_link',
                 uri  => 'http://example.com',
-            },
-            {
+            }, {
                 type => 'text',
                 text => ' link and ',
-            },
-            {
+            }, {
                 type => 'auto_link',
                 uri  => 'https://example.com',
-            },
-            {
+            }, {
                 type => 'text',
                 text => " link in some plain text.\n",
             },
@@ -111,12 +105,10 @@ EOF
             {
                 type => 'text',
                 text => 'Link:',
-            },
-            {
+            }, {
                 type => 'auto_link',
                 uri  => 'http://example.com',
-            },
-            {
+            }, {
                 type => 'text',
                 text => "\n",
             },
@@ -139,8 +131,7 @@ EOF
             {
                 type => 'auto_link',
                 uri  => 'http://example.com',
-            },
-            {
+            }, {
                 type => 'text',
                 text => "\n",
             },

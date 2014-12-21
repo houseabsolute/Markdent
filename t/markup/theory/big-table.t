@@ -15,8 +15,7 @@ Another paragraph.
 
 EOF
 
-    $text .= "| a  | table | row  | goes  | here  |\n"
-        for 1..100;
+    $text .= "| a  | table | row  | goes  | here  |\n" for 1 .. 100;
 
     $text .= <<'EOF';
 

@@ -38,8 +38,7 @@ EOF
                         type => 'text',
                         text => "with list\n",
                     },
-                ],
-                {
+                ], {
                     type   => 'list_item',
                     bullet => '*',
                 },
@@ -96,8 +95,7 @@ EOF
                         text => "And, they can be nested.\n",
                     },
                 ],
-            ],
-            {
+            ], {
                 type  => 'header',
                 level => 4,
             },
@@ -118,8 +116,7 @@ EOF
                         type => 'text',
                         text => "You can quote a list.\n",
                     },
-                ],
-                {
+                ], {
                     type   => 'list_item',
                     bullet => '*',
                 },
@@ -133,7 +130,9 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'blockquote contains headers, blockquote and list (from Dingus examples)' );
+    parse_ok( $text, $expect,
+        'blockquote contains headers, blockquote and list (from Dingus examples)'
+    );
 }
 
 {
@@ -173,8 +172,7 @@ EOF
                         },
                     ],
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -218,14 +216,12 @@ EOF
                         text =>
                             "A list item with a pre block:\n",
                     },
-                ],
-                {
+                ], {
                     type => 'preformatted',
                     text =>
                         "This is a pre block\ninside a list item.\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },

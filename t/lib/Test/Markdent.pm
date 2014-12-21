@@ -9,7 +9,6 @@ use Test::Differences;
 use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
-
 my $HasTidy = do {
     local $@;
     eval {

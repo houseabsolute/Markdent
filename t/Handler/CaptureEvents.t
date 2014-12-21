@@ -13,9 +13,10 @@ use lib 't/lib';
 
 use Test::Markdent;
 
-my $markdown = read_file( 't/mdtest-data/Markdown Documentation - Basics.text' );
+my $markdown
+    = read_file('t/mdtest-data/Markdown Documentation - Basics.text');
 
-my $ch = Markdent::Handler::CaptureEvents->new();
+my $ch  = Markdent::Handler::CaptureEvents->new();
 my $th1 = Markdent::Handler::MinimalTree->new();
 
 for my $handler ( $ch, $th1 ) {

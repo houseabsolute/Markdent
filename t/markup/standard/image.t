@@ -30,7 +30,7 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect, 'text and an inline link image');
+    parse_ok( $text, $expect, 'text and an inline link image' );
 }
 
 {
@@ -63,7 +63,6 @@ EOF
 
 [image]: /foo.jpg
 EOF
-
 
     my $expect = [
         { type => 'paragraph' },
@@ -224,7 +223,8 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect, 'Image by reference with a bad id is treated as text' );
+    parse_ok( $text, $expect,
+        'Image by reference with a bad id is treated as text' );
 }
 
 done_testing();

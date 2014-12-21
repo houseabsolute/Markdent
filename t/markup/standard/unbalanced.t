@@ -73,12 +73,14 @@ EOF
         [
             {
                 type => 'text',
-                text => "**bad strong with ``bad code and *indirectly bad em*\n",
+                text =>
+                    "**bad strong with ``bad code and *indirectly bad em*\n",
             },
         ],
     ];
 
-    parse_ok( $text, $expect, 'bad strong and code start containing good emphasis' );
+    parse_ok( $text, $expect,
+        'bad strong and code start containing good emphasis' );
 }
 
 {
@@ -106,7 +108,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'bad strong start, good emphasis, then bad code start' );
+    parse_ok( $text, $expect,
+        'bad strong start, good emphasis, then bad code start' );
 }
 
 {
@@ -141,7 +144,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'bad strong start, good emphasis containing good code' );
+    parse_ok( $text, $expect,
+        'bad strong start, good emphasis containing good code' );
 }
 
 {
@@ -176,7 +180,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'bad strong start, good emphasis and good code' );
+    parse_ok( $text, $expect,
+        'bad strong start, good emphasis and good code' );
 }
 
 {
@@ -214,7 +219,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'unbalanced inline html tags are not detected' );
+    parse_ok( $text, $expect,
+        'unbalanced inline html tags are not detected' );
 }
 
 done_testing();

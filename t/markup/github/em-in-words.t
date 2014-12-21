@@ -116,8 +116,7 @@ EOF
                     type => 'text',
                     text => 'terisk in words is em',
                 },
-            ],
-            {
+            ], {
                 type => 'text',
                 text => "phasis\n",
             },
@@ -173,8 +172,7 @@ EOF
                     type => 'text',
                     text => 'fucking',
                 },
-            ],
-            {
+            ], {
                 type => 'text',
                 text => "credible\n",
             },
@@ -201,8 +199,7 @@ EOF
                     type => 'text',
                     text => 'right at the beginning',
                 },
-            ],
-            {
+            ], {
                 type => 'text',
                 text => "\n",
             },

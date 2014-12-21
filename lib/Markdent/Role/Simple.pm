@@ -13,7 +13,7 @@ requires 'markdown_to_html';
 around markdown_to_html => sub {
     my $orig = shift;
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
     # XXX - should warn eventually.
     $p{dialects} = delete $p{dialect}
@@ -23,11 +23,11 @@ around markdown_to_html => sub {
 };
 
 sub _parse_markdown {
-    my $self = shift;
-    my $markdown = shift;
-    my $dialects = shift;
+    my $self          = shift;
+    my $markdown      = shift;
+    my $dialects      = shift;
     my $handler_class = shift;
-    my $handler_p = shift;
+    my $handler_p     = shift;
 
     my $capture = q{};
     open my $fh, '>', \$capture

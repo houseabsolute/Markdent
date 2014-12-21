@@ -19,11 +19,9 @@ EOF
             {
                 type => 'text',
                 text => 'Has two spaces',
-            },
-            {
+            }, {
                 type => 'line_break',
-            },
-            {
+            }, {
                 type => 'text',
                 text => qq{That's a line break\n},
             },
@@ -50,25 +48,24 @@ EOF
             {
                 type => 'text',
                 text => 'Has two spaces',
-            },
-            {
+            }, {
                 type => 'line_break',
-            },
-            {
+            }, {
                 type => 'text',
                 text => 'And two more',
-            },
-            {
+            }, {
                 type => 'line_break',
-            },
-            {
+            }, {
                 type => 'text',
                 text => qq{Now just one \nThat's not a line break\n},
             },
         ],
     ];
 
-    parse_ok( $text, $expect, 'two spaces at end of paragraph line forces a
-        line break but one space does not' ); }
+    parse_ok(
+        $text, $expect, 'two spaces at end of paragraph line forces a
+        line break but one space does not'
+    );
+}
 
 done_testing();

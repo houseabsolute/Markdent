@@ -345,7 +345,7 @@ sub _normalize_cell_count_and_alignments {
     # "left". We loop through all the rules and set alignments accordingly.
     my %alignments;
 
-    for my $row ( grep { defined } @rows ) {
+    for my $row ( grep {defined} @rows ) {
 
         # If we have one extra column and the final cell has a colspan > 1 it
         # means we misinterpreted a trailing divider as indicating that the

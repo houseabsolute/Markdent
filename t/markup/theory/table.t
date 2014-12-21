@@ -129,7 +129,7 @@ EOF
 
     my $expect = [
         {
-            type    => 'table',
+            type => 'table',
         },
         [
             {
@@ -241,7 +241,7 @@ EOF
 
     my $expect = [
         {
-            type    => 'table',
+            type => 'table',
         },
         [
             {
@@ -349,7 +349,7 @@ EOF
 
     my $expect = [
         {
-            type    => 'table',
+            type => 'table',
         },
         [
             { type => 'table_body' },
@@ -1171,7 +1171,6 @@ EOF
     );
 }
 
-
 {
     my $text = <<'EOF';
  th1          || th3
@@ -1281,7 +1280,7 @@ EOF
 
     my $expect = [
         {
-            type    => 'table',
+            type => 'table',
         },
         [
             {
@@ -1527,8 +1526,7 @@ EOF
                             type => 'text',
                             text => 'th1',
                         },
-                    ],
-                    {
+                    ], {
                         type           => 'table_cell',
                         alignment      => 'left',
                         colspan        => 1,
@@ -1564,8 +1562,7 @@ EOF
                                     type => 'text',
                                     text => "list\n",
                                 }
-                            ],
-                            {
+                            ], {
                                 type   => 'list_item',
                                 bullet => '*',
                             },
@@ -1574,8 +1571,7 @@ EOF
                                     type => 'text',
                                     text => "l2\n",
                                 }
-                            ],
-                            {
+                            ], {
                                 type   => 'list_item',
                                 bullet => '*',
                             },

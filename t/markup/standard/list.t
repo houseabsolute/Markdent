@@ -84,8 +84,7 @@ EOF
                     type => 'text',
                     text => "l1\n",
                 }
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -121,8 +120,7 @@ EOF
                     type => 'text',
                     text => "l1\n",
                 }
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -161,8 +159,7 @@ EOF
                 {
                     type => 'text',
                     text => "l1\n",
-                },
-                {
+                }, {
                     type => 'unordered_list',
                 },
                 [
@@ -177,8 +174,7 @@ EOF
                         }
                     ],
                 ]
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -218,8 +214,7 @@ EOF
                     type => 'text',
                     text => "l1\n  continues\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -259,8 +254,7 @@ EOF
                     type => 'text',
                     text => "l1\ncontinues\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -312,8 +306,7 @@ EOF
                         text => "  para\n",
                     },
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -424,8 +417,7 @@ EOF
                         },
                     ],
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -445,8 +437,7 @@ EOF
                             type => 'text',
                             text => "bunk\n",
                         },
-                    ],
-                    {
+                    ], {
                         type   => 'list_item',
                         bullet => '2.',
                     },
@@ -468,8 +459,7 @@ EOF
                                 },
                             ],
                         ],
-                    ],
-                    {
+                    ], {
                         type   => 'list_item',
                         bullet => '3.',
                     },
@@ -480,8 +470,7 @@ EOF
                         },
                     ],
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -520,8 +509,7 @@ EOF
                     type => 'text',
                     text => "ordered\n",
                 }
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '2.',
             },
@@ -541,8 +529,7 @@ EOF
                             type => 'text',
                             text => "unordered\n",
                         },
-                    ],
-                    {
+                    ], {
                         type   => 'list_item',
                         bullet => '*',
                     },
@@ -553,8 +540,7 @@ EOF
                         },
                     ],
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '3.',
             },
@@ -596,8 +582,7 @@ EOF
                         text => "asterisk 1\n",
                     },
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -641,8 +626,7 @@ EOF
                     type => 'text',
                     text => "+ x\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -651,8 +635,7 @@ EOF
                     type => 'text',
                     text => "+ x\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -691,8 +674,7 @@ EOF
                     type => 'text',
                     text => "---\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '*',
             },
@@ -737,8 +719,7 @@ EOF
                         text => "First\n",
                     },
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '2.',
             },
@@ -761,8 +742,7 @@ EOF
                             type => 'text',
                             text => "Fee\n",
                         },
-                    ],
-                    {
+                    ], {
                         type   => 'list_item',
                         bullet => '*',
                     },
@@ -773,8 +753,7 @@ EOF
                         },
                     ],
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '3.',
             },
@@ -818,8 +797,7 @@ EOF
                 {
                     type => 'text',
                     text => "Tab\n",
-                },
-                {
+                }, {
                     type => 'unordered_list',
                 },
                 [
@@ -831,8 +809,7 @@ EOF
                         {
                             type => 'text',
                             text => "Tab\n",
-                        },
-                        {
+                        }, {
                             type => 'unordered_list',
                         },
                         [
@@ -935,8 +912,7 @@ EOF
                     type => 'text',
                     text => "First\n",
                 }
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '2.',
             },
@@ -945,8 +921,7 @@ EOF
                     type => 'text',
                     text => "Second\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '3.',
             },
@@ -983,8 +958,7 @@ EOF
                     type => 'text',
                     text => "First\n",
                 }
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '2.',
             },
@@ -993,8 +967,7 @@ EOF
                     type => 'text',
                     text => "Second\n",
                 },
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '3.',
             },
@@ -1033,8 +1006,7 @@ EOF
                     type => 'text',
                     text => "ordered\n",
                 }
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '2.',
             },
@@ -1054,8 +1026,7 @@ EOF
                             type => 'text',
                             text => "nested\n",
                         },
-                    ],
-                    {
+                    ], {
                         type   => 'list_item',
                         bullet => '2.',
                     },
@@ -1066,8 +1037,7 @@ EOF
                         },
                     ],
                 ],
-            ],
-            {
+            ], {
                 type   => 'list_item',
                 bullet => '3.',
             },
@@ -1080,9 +1050,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'drunk and lazily numbered ordered lists, nested' );
+    parse_ok( $text, $expect,
+        'drunk and lazily numbered ordered lists, nested' );
 }
-
-
 
 done_testing();

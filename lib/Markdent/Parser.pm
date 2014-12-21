@@ -87,7 +87,7 @@ sub BUILD {
 
     my %sp_args;
     for my $key (
-        grep { defined }
+        grep {defined}
         map  { $_->init_arg() }
         $self->_span_parser_class()->meta()->get_all_attributes()
         ) {
@@ -102,7 +102,7 @@ sub BUILD {
 
     my %bp_args;
     for my $key (
-        grep { defined }
+        grep {defined}
         map  { $_->init_arg() }
         $self->_block_parser_class()->meta()->get_all_attributes()
         ) {
@@ -166,7 +166,7 @@ sub _role_name_for_dialect {
     my $dialect = shift;
     my $type    = shift;
 
-    my $suffix = join q{}, map { ucfirst } split /_/, $type;
+    my $suffix = join q{}, map {ucfirst} split /_/, $type;
 
     if ( $dialect =~ /::/ ) {
         return join '::', $dialect, $suffix;
