@@ -7,6 +7,6 @@ use lib 't/lib';
 
 use Test::Markdent;
 
-test_all_html('fragment');
+test_all_html('document');
 
 done_testing();

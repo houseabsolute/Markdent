@@ -62,11 +62,11 @@ This class provides the following methods:
 
 Creates a new Markdent::Simple::Fragment object.
 
-=head2 $mds->markdown_to_html( markdown => $markdown )
+=head2 $mdf->markdown_to_html( markdown => $markdown )
 
 This method turns Markdown into HTML.
 
-You can also provide an optional "dialect" parameter.
+You can also provide an optional "dialects" parameter.
 
 =head1 ROLES
 

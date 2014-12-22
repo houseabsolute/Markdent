@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+- HTML output now uses the HTML5 doctype.
+
+- The Markdent::Handler::HTMLStream::Document and Markdent::Simple::Document
+  classes now accept optional charset and language parameters.
+
+- The HTML output for table cells was broken. Cells always ended with </th>
+  even for body cells. Reported by Polina Shubina. GitHub PR #2.
+
+
 0.24   2014-01-25
 
 - Shut up enum warnings from the latest Moose (2.1200). Patch by Zoffix. RT

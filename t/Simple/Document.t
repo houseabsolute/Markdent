@@ -21,8 +21,7 @@ That is all
 EOF
 
 my $expect = <<'EOF';
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html><head><title>Test</title></head><body><h1>A header
 </h1><p>Some <em>text</em> with <strong>markup</strong>
 in a paragraph.

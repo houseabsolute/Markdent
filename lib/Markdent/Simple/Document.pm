@@ -15,17 +15,24 @@ with 'Markdent::Role::Simple';
 
 sub markdown_to_html {
     my $self = shift;
-    my ( $dialects, $title, $markdown ) = validated_list(
+    my ( $dialects, $title, $charset, $language, $markdown )
+        = validated_list(
         \@_,
         dialects => {
             isa => Str | ( ArrayRef [Str] ), default => [],
         },
         title    => { isa => Str },
+        charset  => { isa => Str, optional => 1 },
+        language => { isa => Str, optional => 1 },
         markdown => { isa => Str },
-    );
+        );
 
     my $handler_class = 'Markdent::Handler::HTMLStream::Document';
-    my %handler_p = ( title => $title );
+    my %handler_p     = (
+        title => $title,
+        ( $charset  ? ( charset  => $charset )  : () ),
+        ( $language ? ( language => $language ) : () ),
+    );
 
     return $self->_parse_markdown(
         $markdown,
@@ -68,10 +75,30 @@ Creates a new Markdent::Simple::Document object.
 
 =head2 $mds->markdown_to_html( title => $title, markdown => $markdown )
 
-This method turns Markdown into HTML. You must provide a title as well, which
-will be used as the C<< <title> >> for the resulting HTML document.
+This method turns Markdown into HTML. It accepts the following parameters:
 
-You can also provide an optional "dialect" parameter.
+=over 4
+
+=item * title => $title
+
+The title of the document. This is required.
+
+=item * charset => $charset
+
+If provided, a C<< <meta charset="..."> >> tag will be added to the document's
+C<< <head> >>.
+
+=item * language => $language
+
+If provided, a "lang" attribute will be added to the document's C<< <html> >>
+tag.
+
+=item * dialects => [...]
+
+This can either be a single string or an array ref of strings containing the
+class names of dialects. Thsi parameters is optional.
+
+=back
 
 =head1 ROLES
 

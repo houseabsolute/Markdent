@@ -216,7 +216,10 @@ sub start_table_cell {
 
     my $tag = $is_header ? 'th' : 'td';
 
-    my %attr = ( align => $alignment );
+    my %attr;
+    $attr{style} = "text-align: $alignment"
+        if $alignment;
+
     $attr{colspan} = $colspan
         if $colspan != 1;
 
@@ -225,7 +228,7 @@ sub start_table_cell {
 
 sub end_table_cell {
     my $self = shift;
-    my ($is_header) = validated_hash(
+    my ($is_header) = validated_list(
         \@_,
         is_header_cell => { isa => Bool },
     );

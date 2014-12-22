@@ -5,26 +5,33 @@ use warnings;
 
 use Data::Dumper;
 use Test::Deep;
-use Test::Differences;
 use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
-my $HasTidy = do {
+my $CanTestHTML = do {
     local $@;
     eval {
-        require HTML::Tidy;
-        HTML::Tidy->import('TIDY_INFO');
+        require Test::HTML::Differences;
+        Test::HTML::Differences->import('eq_or_diff_html');
+        require WebService::Validator::HTML::W3C;
+        1;
     };
-    $@ ? 0 : 1;
 };
 
+use Markdent::Handler::HTMLStream::Document;
+use Markdent::Handler::HTMLStream::Fragment;
 use Markdent::Handler::MinimalTree;
 use Markdent::Parser;
-use Markdent::Simple::Document;
 
 use Exporter qw( import );
 
-our @EXPORT = qw( tree_from_handler parse_ok html_output_ok );
+our @EXPORT = qw(
+    tree_from_handler
+    parse_ok
+    html_fragment_ok
+    html_document_ok
+    test_all_html
+);
 
 sub parse_ok {
     my $parser_p    = ref $_[0] ? shift : {};
@@ -61,41 +68,63 @@ sub tree_from_handler {
     return $visitor->getResults()->[0];
 }
 
-sub html_output_ok {
+sub html_fragment_ok {
+    my $dialects        = ref $_[0] ? shift : {};
+    my $markdown        = shift;
+    my $expect_html     = shift;
+    my $desc            = shift;
+    my $skip_validation = shift;
+
+    return unless _can_test_html();
+
+    subtest(
+        $desc,
+        sub {
+            my $got_html = _html_for(
+                'Fragment',
+                $dialects,
+                $markdown,
+            );
+
+            _html_validates_ok( $got_html, 'is fragment' )
+                unless $skip_validation;
+
+            s/\n+$/\n/ for $got_html, $expect_html;
+
+            local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+            eq_or_diff_html( $got_html, $expect_html );
+        }
+    );
+}
+
+sub html_document_ok {
     my $dialects    = ref $_[0] ? shift : {};
     my $markdown    = shift;
     my $expect_html = shift;
     my $desc        = shift;
 
-    unless ($HasTidy) {
-    SKIP: { skip 'This test requires HTML::Tidy', 1; }
+    return unless _can_test_html();
 
-        return;
-    }
+    subtest(
+        $desc,
+        sub {
+            my $got_html = _html_for(
+                'Document',
+                $dialects,
+                $markdown, {
+                    title    => $desc,
+                    charset  => 'UTF-8',
+                    language => 'en',
+                },
+            );
 
-    my $html = Markdent::Simple::Document->new()->markdown_to_html(
-        %{$dialects},
-        title    => 'Test',
-        markdown => $markdown,
-    );
-
-    diag($html)
-        if $ENV{MARKDENT_TEST_VERBOSE};
-
-    my $tidy = HTML::Tidy->new(
-        {
-            doctype           => 'transitional',
-            'sort-attributes' => 'alpha',
-            clean             => 0,
-        }
-    );
-
-    my $real_expect_html = <<"EOF";
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+            my $real_expect_html = <<"EOF";
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Test</title>
+  <meta charset="UTF-8">
+  <title>$desc</title>
 </head>
 <body>
 $expect_html
@@ -103,110 +132,330 @@ $expect_html
 </html>
 EOF
 
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
+            _html_validates_ok($got_html);
 
-    my $cleaned = $tidy->clean($html);
-    if ( my @m = grep { $_->type() != TIDY_INFO() } $tidy->messages() ) {
-        ok( 0, 'tidy ran on generated HTML without errors' );
-        diag($_) for @m;
-    }
+            s/\n+$/\n/ for $got_html, $real_expect_html;
 
-    eq_or_diff( $cleaned, $tidy->clean($real_expect_html), $desc );
+            local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+            eq_or_diff_html( $got_html, $real_expect_html );
+        }
+    );
 }
 
-1;
+sub _html_for {
+    my $class    = shift;
+    my $dialects = shift || {};
+    my $markdown = shift;
+    my $handler_p = shift || {};
+
+    my $got_html = q{};
+    open my $fh, '>', \$got_html
+        or die $!;
+
+    my $full_class = 'Markdent::Handler::HTMLStream::' . $class;
+    my $streamer   = $full_class->new(
+        %{$handler_p},
+        output => $fh,
+    );
+    my $parser = Markdent::Parser->new(
+        %{$dialects},
+        handler => $streamer,
+    );
+    $parser->parse( markdown => $markdown );
+
+    return $got_html;
+}
+
+sub _html_validates_ok {
+    my $got_html    = shift;
+    my $is_fragment = shift;
+
+    if ($is_fragment) {
+        $got_html = <<"EOF";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Test</title>
+</head>
+<body>
+$got_html
+</body>
+</html>
+EOF
+    }
+
+    my $v = WebService::Validator::HTML::W3C->new(
+        detailed => 1,
+    );
+
+    $v->validate_markup($got_html);
+
+    is( $v->num_errors(), 0, 'no errors from W3C validator' )
+        and return;
+
+    diag($got_html);
+    diag(
+        sprintf(
+            "line %s\tcol %s\terror: %s",
+            $_->line(), $_->col(), $_->msg()
+        )
+    ) for @{ $v->errors() || [] };
+
+    return;
+}
+
+sub _can_test_html {
+    return 1 if $CanTestHTML;
+
+SKIP: {
+        skip
+            'This test requires Test::HTML::Differences and WebService::Validator::HTML::W3C',
+            1;
+    }
+
+    return 0;
+}
+
+sub test_all_html {
+    my $type = shift;
+
+    my $sub = __PACKAGE__->can( 'html_' . $type . '_ok' );
+
+    {
+        my $markdown = <<'EOF';
+This is a paragraph
+EOF
+
+        my $expect_html = <<'EOF';
+<p>
+  This is a paragraph
+</p>
+EOF
+
+        $sub->( $markdown, $expect_html, 'single paragraph' );
+    }
+
+    {
+        my $markdown = <<'EOF';
+Here is a [link](http://example.com) and *em* and **strong**.
+
+* Now a list
+* List 2
+    * indented
+
+Need a para to separate lists.
+
+1. #1
+2. #2
+EOF
+
+        my $expect_html = <<'EOF';
+<p>
+  Here is a <a href="http://example.com">link</a>
+  and <em>em</em> and <strong>strong</strong>.
+</p>
+
+<ul>
+  <li>Now a list</li>
+  <li>List 2
+    <ul>
+      <li>indented</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+  Need a para to separate lists.
+</p>
+
+<ol>
+  <li>#1</li>
+  <li>#2</li>
+</ol>
+EOF
+
+        $sub->( $markdown, $expect_html, 'links, em, strong, and lists' );
+    }
+
+    {
+        my $markdown = <<'EOF';
+A Theory-style table
+
+  [Table caption]
+| Header 1 and 2     || Nothing  |
++--------------------++----------+
+| Header 1 | Header 2 | Header 3 |
++----------+----------+----------+
+| B1       | B2       | B3       |
+|    right |  center  |          |
+
+| l1       | x        | x        |
+: l2       :          :          :
+: l3       :          :          :
+| end                          |||
+EOF
+
+        my $expect_html = <<'EOF';
+<p>
+  A Theory-style table
+</p>
+
+<table>
+  <caption>Table caption</caption>
+  <thead>
+    <tr>
+      <th style="text-align: left" colspan="2">Header 1 and 2</th>
+      <th style="text-align: left">Nothing</th>
+    </tr>
+    <tr>
+      <th style="text-align: left">Header 1</th>
+      <th style="text-align: left">Header 2</th>
+      <th style="text-align: left">Header 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">B1</td>
+      <td style="text-align: left">B2</td>
+      <td style="text-align: left">B3</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">right</td>
+      <td style="text-align: center">center</td>
+      <td style="text-align: left"></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td style="text-align: left">
+        <p>
+          l1
+l2
+l3
+        </p>
+      </td>
+      <td style="text-align: left">x</td>
+      <td style="text-align: left">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left" colspan="3">end</td>
+    </tr>
+  </tbody>
+</table>
+EOF
+
+        $sub->(
+            { dialects => 'Theory' },
+            $markdown,
+            $expect_html,
+            'Complex Theory-style table'
+        );
+    }
+
+    {
+        my $markdown = <<'EOF';
+| **foo** | **bar** | **baz** |
+| 1       | 2       | 3       |
+EOF
+
+        my $expect_html = <<'EOF';
+<table>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>foo</strong></td>
+      <td style="text-align: left"><strong>bar</strong></td>
+      <td style="text-align: left"><strong>baz</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">3</td>
+    </tr>
+  </tbody>
+</table>
+EOF
+
+        $sub->(
+            { dialects => 'Theory' },
+            $markdown,
+            $expect_html,
+            'Simple Theory-style table with no header rows'
+        );
+    }
+
+    {
+        my $markdown = <<'EOF';
+This is a p.
+
+```
+my $foo = 'bar';
+```
+
+More p.
+EOF
+
+        my $expect_html = <<'EOF';
+<p>
+  This is a p.
+</p>
+
+<pre><code>my $foo = 'bar';</code></pre>
+
+<p>
+  More p.
+</p>
+EOF
+
+        $sub->(
+            { dialects => 'GitHub' },
+            $markdown,
+            $expect_html,
+            'GitHub dialect with fenced code block (no language)'
+        );
+    }
+
+    {
+        my $markdown = <<'EOF';
+This is a p.
+
+```Perl
+my $foo = 'bar';
+```
+
+More p.
+EOF
+
+        my $expect_html = <<'EOF';
+<p>
+  This is a p.
+</p>
+
+<pre><code class="language-Perl">my $foo = 'bar';</code></pre>
+
+<p>
+  More p.
+</p>
+EOF
+
+        $sub->(
+            { dialects => 'GitHub' },
+            $markdown,
+            $expect_html,
+            'GitHub dialect with fenced code block (language = Perl)'
+        );
+    }
+}
 
 # ABSTRACT: High level test functions for Markdent
 
+__END__
+
 =pod
-
-=head1 SYNOPSIS
-
-  use Test::Markdent;
-
-  my $text = <<'EOF';
-  Some %*em text*%
-  EOF
-
-  my $expect = [
-      { type => 'paragraph' },
-      [
-          {
-              type => 'text',
-              text => 'Some %',
-          }, {
-              type => 'emphasis',
-          },
-          [
-              {
-                  type => 'text',
-                  text => 'em text',
-              },
-          ], {
-              type => 'text',
-              text => "%\n",
-          },
-      ],
-  ];
-
-  parse_ok( $text, $expect, 'emphasis markup surrounded by brackets' );
 
 =head1 DESCRIPTION
 
-This module provides some helper functions for testing Markdent at a
-higher-level. In particular, it helps generate parse trees or HTML output from
-a parse.
-
-=head1 FUNCTIONS
-
-This class exports the following functions:
-
-=head2 parse_ok( $markdown, $tree, $description )
-
-This function takes some Markdown text, an expected output tree, and a
-description of the test.
-
-The tree is generated by using L<Markdent::Handler::MinimalTree>, and then
-using L<Tree::Simple::Visitor::ToNestedArray> to covert the tree to a data
-structure.
-
-You can use the C<tree_from_handler> function to get the tree. You may want to
-use L<Data::Dumper> to examine a few trees to understand exactly what this
-looks like.
-
-You can also pass an optional hash reference as the first parameter to this
-function. This hash reference will be used as parameters when creating the
-L<Markdent::Parser> object.
-
-This hash reference can also include a "handler_class" parameter, which you
-can use to override the default of L<Markdent::Handler::MinimalTree>.
-
-If you set the C<MARKDENT_TEST_VERBOSE> environment variable to a true value,
-then this function will use Data::Dumper to output the tree with
-C<Test::More::diag()>.
-
-=head2 html_output_ok( $markdown, $html, $description )
-
-This function takes some Markdown text, the expected HTML output, and a
-description of the test.
-
-Internally, this function uses L<HTML::Tidy> to tidy both the
-Markdent-generated HTML and the HTML you pass in. This ensures that the test
-is comparing the HTML on a I<semantic> level.
-
-The comparison itself is done using C<eq_or_diff> from L<Test::Differences>.
-
-You can also pass an optional hash reference as the first parameter to this
-function. This hash reference will be used as parameters when creating the
-L<Markdent::Parser> object.
-
-If you set the C<MARKDENT_TEST_VERBOSE> environment variable to a true value,
-then this function will output the generated html (before tidying) with
-C<Test::More::diag()>.
-
-=head2 tree_from_handler($handler)
-
-Given a L<Markdent::Handler::MinimalTree> object, this function returns a data
-structure built using L<Tree::Simple::Visitor::ToNestedArray>.
+There are no user-facing parts in here.
 
 =cut
