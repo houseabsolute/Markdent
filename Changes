@@ -1,6 +1,8 @@
 {{$NEXT}}
 
-- HTML output now uses the HTML5 doctype.
+- HTML output now uses the HTML5 doctype. In addition, table cell alignment is
+  set using a style tag in generated HTML, rather than the deprecated-in-HTML5
+  "align" attribute.
 
 - The Markdent::Handler::HTMLStream::Document and Markdent::Simple::Document
   classes now accept optional charset and language parameters.
