@@ -23,7 +23,6 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.006",
   "NAME" => "Markdent",
   "PREREQ_PM" => {
-    "Class::Load" => 0,
     "Digest::SHA1" => 0,
     "Exporter" => 0,
     "File::Slurp" => 0,
@@ -31,6 +30,7 @@ my %WriteMakefileArgs = (
     "HTML::Stream" => 0,
     "IO::Handle" => 0,
     "List::AllUtils" => 0,
+    "Module::Runtime" => 0,
     "Moose" => "0.92",
     "Moose::Meta::Class" => 0,
     "Moose::Role" => 0,
@@ -67,7 +67,7 @@ my %WriteMakefileArgs = (
     "Tree::Simple::Visitor::ToNestedArray" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.24",
+  "VERSION" => "0.25",
   "test" => {
     "TESTS" => "t/*.t t/Handler/*.t t/Handler/HTMLStream/*.t t/Simple/*.t t/markup/github/*.t t/markup/multi-dialect/*.t t/markup/standard/*.t t/markup/theory/*.t"
   }
@@ -75,7 +75,6 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "Class::Load" => 0,
   "Data::Dumper" => 0,
   "Digest::SHA1" => 0,
   "Exporter" => 0,
@@ -91,6 +90,7 @@ my %FallbackPrereqs = (
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
   "List::AllUtils" => 0,
+  "Module::Runtime" => 0,
   "Moose" => "0.92",
   "Moose::Meta::Class" => 0,
   "Moose::Role" => 0,

@@ -1,4 +1,3 @@
-requires "Class::Load" => "0";
 requires "Digest::SHA1" => "0";
 requires "Exporter" => "0";
 requires "File::Slurp" => "0";
@@ -6,6 +5,7 @@ requires "Getopt::Long::Descriptive" => "0";
 requires "HTML::Stream" => "0";
 requires "IO::Handle" => "0";
 requires "List::AllUtils" => "0";
+requires "Module::Runtime" => "0";
 requires "Moose" => "0.92";
 requires "Moose::Meta::Class" => "0";
 requires "Moose::Role" => "0";

@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.25   2015-01-04
+
 - HTML output now uses the HTML5 doctype. In addition, table cell alignment is
   set using a style tag in generated HTML, rather than the deprecated-in-HTML5
   "align" attribute.

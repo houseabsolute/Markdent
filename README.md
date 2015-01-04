@@ -4,7 +4,7 @@ Markdent - An event-based Markdown parser toolkit
 
 # VERSION
 
-version 0.24
+version 0.25
 
 # SYNOPSIS
 
