@@ -1,0 +1,3 @@
+[submodule "commonmark"]
+	path = commonmark
+	url = git@github.com:jgm/CommonMark.git
