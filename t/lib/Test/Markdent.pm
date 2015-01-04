@@ -8,15 +8,15 @@ use Test::Deep;
 use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
-my $CanTestHTML = do {
-    local $@;
+BEGIN {
     eval {
-        require Test::HTML::Differences;
-        Test::HTML::Differences->import('eq_or_diff_html');
-        require WebService::Validator::HTML::W3C;
-        1;
+        require HTML::Differences;
+        HTML::Differences->import('html_text_diff');
     };
-};
+    eval {
+        require WebService::Validator::HTML::W3C;
+    }
+}
 
 use Markdent::Handler::HTMLStream::Document;
 use Markdent::Handler::HTMLStream::Fragment;
@@ -77,7 +77,7 @@ sub html_fragment_ok {
 
     return unless _can_test_html();
 
-    subtest(
+    return subtest(
         $desc,
         sub {
             my $got_html = _html_for(
@@ -93,7 +93,9 @@ sub html_fragment_ok {
 
             local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-            eq_or_diff_html( $got_html, $expect_html );
+            my $diff = html_text_diff( $got_html, $expect_html );
+            ok( !$diff, $desc )
+                or diag($diff);
         }
     );
 }
@@ -106,7 +108,7 @@ sub html_document_ok {
 
     return unless _can_test_html();
 
-    subtest(
+    return subtest(
         $desc,
         sub {
             my $got_html = _html_for(
@@ -134,19 +136,19 @@ EOF
 
             _html_validates_ok($got_html);
 
-            s/\n+$/\n/ for $got_html, $real_expect_html;
-
             local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-            eq_or_diff_html( $got_html, $real_expect_html );
+            my $diff = html_text_diff( $got_html, $real_expect_html );
+            ok( !$diff, $desc )
+                or diag($diff);
         }
     );
 }
 
 sub _html_for {
-    my $class    = shift;
-    my $dialects = shift || {};
-    my $markdown = shift;
+    my $class     = shift;
+    my $dialects  = shift || {};
+    my $markdown  = shift;
     my $handler_p = shift || {};
 
     my $got_html = q{};
@@ -170,6 +172,14 @@ sub _html_for {
 sub _html_validates_ok {
     my $got_html    = shift;
     my $is_fragment = shift;
+
+    unless ( WebService::Validator::HTML::W3C->can('new') ) {
+    SKIP: {
+            skip 1,
+                'HTML validation tests require WebService::Validator::HTML::W3C';
+        }
+        return;
+    }
 
     if ($is_fragment) {
         $got_html = <<"EOF";
@@ -207,12 +217,10 @@ EOF
 }
 
 sub _can_test_html {
-    return 1 if $CanTestHTML;
+    return 1 if HTML::Differences->can('html_text_diff');
 
 SKIP: {
-        skip
-            'This test requires Test::HTML::Differences and WebService::Validator::HTML::W3C',
-            1;
+        skip 'This test requires HTML::Differences', 1;
     }
 
     return 0;
