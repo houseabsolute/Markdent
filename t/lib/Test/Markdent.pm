@@ -175,16 +175,18 @@ sub _html_validates_ok {
 
     unless ( $ENV{RELEASE_TESTING} ) {
     SKIP: {
-            skip 1,
-                'HTML validation tests with W3C service are only done for release testing';
+            skip
+                'HTML validation tests with W3C service are only done for release testing',
+                1;
         }
         return;
     }
 
     unless ( WebService::Validator::HTML::W3C->can('new') ) {
     SKIP: {
-            skip 1,
-                'HTML validation tests require WebService::Validator::HTML::W3C';
+            skip
+                'HTML validation tests require WebService::Validator::HTML::W3C',
+                1;
         }
         return;
     }
