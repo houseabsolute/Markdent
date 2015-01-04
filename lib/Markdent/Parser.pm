@@ -4,11 +4,11 @@ use strict;
 use warnings;
 use namespace::autoclean 0.09;
 
-use Class::Load qw( load_optional_class );
 use Markdent::Parser::BlockParser;
 use Markdent::Parser::SpanParser;
 use Markdent::Types
     qw( ArrayRef HashRef BlockParserClass BlockParserDialectRole SpanParserClass SpanParserDialectRole Str );
+use Module::Runtime qw( require_module );
 use Moose::Meta::Class;
 use MooseX::Params::Validate qw( validated_list );
 use Try::Tiny;
@@ -133,8 +133,7 @@ sub _set_classes_for_dialects {
 
             my $role = $self->_role_name_for_dialect( $dialect, $thing );
 
-            load_optional_class($role)
-                or next;
+            require_module($role);
 
             my $specified_class = $args->{ $thing . '_class' };
 

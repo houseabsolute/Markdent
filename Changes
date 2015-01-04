@@ -10,6 +10,8 @@
 - The HTML output for table cells was broken. Cells always ended with </th>
   even for body cells. Reported by Polina Shubina. GitHub PR #2.
 
+- Replaced Class::Load with Module::Runtime.
+
 
 0.24   2014-01-25
 
