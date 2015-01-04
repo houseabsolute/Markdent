@@ -6,7 +6,6 @@ Debian_CPANTS.txt
 MANIFEST
 META.yml
 Makefile
-Makefile.PL
 Makefile.old
 Markdent-*
 \#*\#
