@@ -110,7 +110,7 @@ sub parse_document {
         # an ending delimiter.
         ${$text} =~ s{
                  ( $BlockStart )
-                 (<hr\ */?>)
+                 (<hr.*\ */?>)
                 }
                 { ( $1 || q{} ) . $self->_hash_and_save_html($2) }egxm;
 
