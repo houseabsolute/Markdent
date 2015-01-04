@@ -38,10 +38,8 @@ on 'test' => sub {
   requires "IPC::Open3" => "0";
   requires "Test::Deep" => "0";
   requires "Test::Fatal" => "0";
-  requires "Test::HTML::Differences" => "0";
   requires "Test::More" => "0.88";
   requires "Tree::Simple::Visitor::ToNestedArray" => "0";
-  requires "WebService::Validator::HTML::W3C" => "0";
   requires "lib" => "0";
   requires "perl" => "5.006";
 };
@@ -55,10 +53,11 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "HTML::Differences" => "0";
+  requires "Pod::Coverage::Moose" => "0.02";
   requires "Test::CPAN::Changes" => "0.19";
-  requires "Test::EOL" => "0";
-  requires "Test::More" => "0";
-  requires "Test::NoTabs" => "0";
   requires "Test::Pod" => "1.41";
+  requires "Test::Pod::Coverage" => "1.04";
   requires "Test::Spelling" => "0.12";
+  requires "WebService::Validator::HTML::W3C" => "0";
 };
