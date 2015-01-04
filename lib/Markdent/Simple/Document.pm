@@ -96,7 +96,7 @@ tag.
 =item * dialects => [...]
 
 This can either be a single string or an array ref of strings containing the
-class names of dialects. Thsi parameters is optional.
+class names of dialects. This parameter is optional.
 
 =back
 
