@@ -173,6 +173,14 @@ sub _html_validates_ok {
     my $got_html    = shift;
     my $is_fragment = shift;
 
+    unless ( $ENV{RELEASE_TESTING} ) {
+    SKIP: {
+            skip 1,
+                'HTML validation tests with W3C service are only done for release testing';
+        }
+        return;
+    }
+
     unless ( WebService::Validator::HTML::W3C->can('new') ) {
     SKIP: {
             skip 1,
