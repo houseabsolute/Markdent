@@ -16,5 +16,5 @@
 -npro
 -nsfs
 --opening-hash-brace-right
---no-outdent-long-comments 
+--no-outdent-long-comments
 -wbb="% + - * / x != == >= <= =~ !~ < > | & >= < = **= += *= &= <<= &&= -= /= |= >>= ||= .= %= ^= x="
