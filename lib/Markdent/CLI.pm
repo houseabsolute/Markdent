@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use Class::Load qw( load_optional_class );
 use File::Slurp qw( read_file );
 
 # We need to make this a prereq so we have --help
