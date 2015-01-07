@@ -697,7 +697,7 @@ sub _match_html_entity {
     my $text = shift;
 
     return unless ${$text} =~ / \G
-                                &(\S+);
+                                &(\S+?);
                               /xgcs;
 
     my $event = $self->_make_event( HTMLEntity => entity => $1 );
