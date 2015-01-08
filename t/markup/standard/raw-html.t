@@ -436,7 +436,7 @@ EOF
 
 {
     my $text = <<'EOF';
-Using pair of &laquo;entities&raquo; and &THORN; and &sup2;
+Using pair of &laquo;entities&raquo; and &THORN; and &sup2;&#37;
 EOF
 
     my $expect = [
@@ -464,6 +464,9 @@ EOF
                 text => " and "
             },
             {   entity => "sup2",
+                type   => "html_entity"
+            },
+            {   entity => "#37",
                 type   => "html_entity"
             },
             {   text => "\n",
