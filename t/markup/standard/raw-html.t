@@ -434,4 +434,51 @@ EOF
     parse_ok( $text, $expect, 'html comments, standalone and inline' );
 }
 
+{
+    my $text = <<'EOF';
+Using pair of &laquo;entities&raquo; and &THORN; and &sup2;&#37;
+EOF
+
+    my $expect = [
+        { 
+            type => "paragraph" 
+        },
+        [   
+            {   
+                text => "Using pair of ",
+                type => "text",
+            }, {   
+                type   => "html_entity",
+                entity => "laquo",
+            }, {   
+                type => "text",
+                text => "entities",
+            }, {   
+                entity => "raquo",
+                type   => "html_entity",
+            }, {   
+                type => "text",
+                text => " and ",
+            }, {   
+                entity => "THORN",
+                type   => "html_entity",
+            }, {   
+                type => "text",
+                text => " and ",
+            }, {   
+                entity => "sup2",
+                type   => "html_entity",
+            }, {   
+                entity => "#37",
+                type   => "html_entity",
+            }, {   
+                text => "\n",
+                type => "text",
+            },
+        ],
+    ];
+
+    parse_ok( $text, $expect, 'two wrapped html entities' );
+}
+
 done_testing();
