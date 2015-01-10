@@ -29,7 +29,7 @@ sub _match_fenced_code_block {
     return unless ${$text} =~ / \G
                                 $BlockStart
                                 ```
-                                ([\w-]+)?        # optional language name
+                                \s?\{?\.?([\w-]+)?\}?\s*        # optional language name
                                 \n
                                 (                # code block content
                                   (?:.|\n)+?
