@@ -78,6 +78,7 @@ my %trustme = (
 );
 
 my %skip = map { $_ => 1 } qw(
+    Markdent::CheckedOutput
     Markdent::CLI
     Markdent::Regexes
     Markdent::Types
