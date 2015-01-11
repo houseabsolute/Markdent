@@ -3,6 +3,8 @@ package Markdent::CheckedOutput;
 use strict;
 use warnings;
 
+our $VERSION = '0.26';
+
 sub new {
     my $class  = shift;
     my $output = shift;
