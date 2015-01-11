@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use Markdent::Types qw( TableCellAlignment PosInt Bool );
 
 use Moose;

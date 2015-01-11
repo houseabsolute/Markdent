@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use MooseX::Params::Validate qw( validated_list validated_hash );
 use Markdent::Types qw(
     HeaderLevel Str Bool HashRef

@@ -3,6 +3,8 @@ package Markdent;
 use strict;
 use warnings;
 
+our $VERSION = '0.26';
+
 1;
 
 # ABSTRACT: An event-based Markdown parser toolkit

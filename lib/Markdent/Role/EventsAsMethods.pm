@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use Scalar::Util qw( blessed );
 
 use Moose::Role;

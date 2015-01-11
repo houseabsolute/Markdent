@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use File::Slurp qw( read_file );
 
 # We need to make this a prereq so we have --help

@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use Markdent::Handler::HTMLStream::Document;
 use Markdent::Types qw( ArrayRef Str );
 use MooseX::Params::Validate qw( validated_list );

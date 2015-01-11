@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use Moose::Role;
 
 with 'Markdent::Role::Dialect::SpanParser';

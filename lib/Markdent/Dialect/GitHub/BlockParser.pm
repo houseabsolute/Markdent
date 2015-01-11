@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use List::AllUtils qw( insert_after_string );
 use Markdent::Event::CodeBlock;
 use Markdent::Regexes qw( $BlockStart );

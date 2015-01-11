@@ -3,6 +3,8 @@ package Markdent::Role::Dialect::SpanParser;
 use strict;
 use warnings;
 
+our $VERSION = '0.26';
+
 use Moose::Role;
 
 1;

@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.26';
+
 use Markdent::Types qw( ArrayRef EventObject );
 use MooseX::Params::Validate qw( pos_validated_list );
 
