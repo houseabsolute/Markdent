@@ -7,6 +7,7 @@ use namespace::autoclean;
 our $VERSION = '0.26';
 
 use HTML::Stream;
+use Markdent::CheckedOutput;
 use Markdent::Types qw(
     HeaderLevel Str Bool HashRef
     TableCellAlignment PosInt
@@ -423,28 +424,7 @@ sub _wrapped_output {
     my $output = $self->_output();
     return $output if blessed $output && !$output->isa('IO::Handle');
 
-    return _CheckedOutput->new($output);
-}
-
-package _CheckedOutput;
-
-use strict;
-use warnings;
-
-sub new {
-    my $class  = shift;
-    my $output = shift;
-
-    return bless \$output, $class;
-}
-
-sub print {
-    my $self = shift;
-
-    # We don't need warnings from IO::* about printing to closed handles when
-    # we'll die in that case anyway.
-    no warnings 'io';
-    print { ${$self} } @_ or die "Cannot write to handle: $!";
+    return Markdent::CheckedOutput->new($output);
 }
 
 1;

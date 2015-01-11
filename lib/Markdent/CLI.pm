@@ -13,6 +13,7 @@ use Getopt::Long::Descriptive;
 use Markdent::Simple::Document;
 use Markdent::Simple::Fragment;
 use Markdent::Types qw( ArrayRef Bool ExistingFile Str );
+use MooseX::Getopt::OptionTypeMap;
 
 use Moose;
 
@@ -102,7 +103,9 @@ sub run {
         %p,
     );
 
+    ## no critic (InputOutput::RequireCheckedSyscalls)
     print $html;
+    ## use critic;
 
     exit 0;
 }

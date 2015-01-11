@@ -130,7 +130,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
+    parse_ok(
+        $text, $expect,
         'blockquote contains headers, blockquote and list (from Dingus examples)'
     );
 }

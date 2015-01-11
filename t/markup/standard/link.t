@@ -83,7 +83,7 @@ EOF
             }, {
                 type           => 'link',
                 uri            => 'http://www.example.com',
-                title          => "A title",
+                title          => 'A title',
                 is_implicit_id => 0,
             },
             [
@@ -117,7 +117,7 @@ EOF
             }, {
                 type           => 'link',
                 uri            => 'http://www.example.com',
-                title          => "A title",
+                title          => 'A title',
                 is_implicit_id => 0,
             },
             [
@@ -132,8 +132,10 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect,
-        'text with an inline link (has title and tab before title)' );
+    parse_ok(
+        $text, $expect,
+        'text with an inline link (has title and tab before title)'
+    );
 }
 
 {
@@ -346,7 +348,7 @@ EOF
                     },
                 ], {
                     type => 'text',
-                    text => " markup] and brackets",
+                    text => ' markup] and brackets',
                 },
             ], {
                 type => 'text',
@@ -355,8 +357,10 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect,
-        'text with a link, link text has markup and nested brackets' );
+    parse_ok(
+        $text, $expect,
+        'text with a link, link text has markup and nested brackets'
+    );
 }
 
 {
@@ -393,8 +397,10 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect,
-        'text with a link by id, implicit id contains markup' );
+    parse_ok(
+        $text, $expect,
+        'text with a link by id, implicit id contains markup'
+    );
 }
 
 {
@@ -481,8 +487,10 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect,
-        'tricky use parens with an inline link that has a title' );
+    parse_ok(
+        $text, $expect,
+        'tricky use parens with an inline link that has a title'
+    );
 }
 
 {
@@ -556,8 +564,10 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect,
-        'Link by reference with a bad id is treated as text' );
+    parse_ok(
+        $text, $expect,
+        'Link by reference with a bad id is treated as text'
+    );
 }
 
 {
@@ -576,7 +586,7 @@ EOF
         [
             {
                 type => 'text',
-                text => "Here's one where the ",
+                text => q{Here's one where the },
             }, {
                 type           => 'link',
                 uri            => '/url/',
@@ -597,7 +607,7 @@ EOF
         [
             {
                 type => 'text',
-                text => "Here's another where the ",
+                text => q{Here's another where the },
             }, {
                 type           => 'link',
                 uri            => '/url/',

@@ -53,8 +53,10 @@ EOF
         },
     ];
 
-    parse_ok( $text, $expect,
-        'two pre lines, second has 2-space indentation' );
+    parse_ok(
+        $text, $expect,
+        'two pre lines, second has 2-space indentation'
+    );
 }
 
 {
@@ -107,8 +109,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'preformatted text with empty lines followed by regular paragraph' );
+    parse_ok(
+        $text, $expect,
+        'preformatted text with empty lines followed by regular paragraph'
+    );
 }
 
 done_testing();

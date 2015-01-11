@@ -223,8 +223,10 @@ EOF
         ]
     ];
 
-    parse_ok( $text, $expect,
-        'Image by reference with a bad id is treated as text' );
+    parse_ok(
+        $text, $expect,
+        'Image by reference with a bad id is treated as text'
+    );
 }
 
 done_testing();

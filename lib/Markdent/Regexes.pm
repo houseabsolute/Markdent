@@ -24,6 +24,7 @@ our %EXPORT_TAGS = (
 
 our @EXPORT_OK = uniq( map { @{$_} } values %EXPORT_TAGS );
 
+## no critic (Variables::ProhibitPackageVars)
 our $HorizontalWS = qr/(?: \p{SpaceSeparator} | \t )/x;
 our $EmptyLine    = qr/(?: ^ $HorizontalWS* \n ) /xm;
 our $EmptyLines   = qr/ (?: $EmptyLine )+ /xm;
@@ -32,5 +33,6 @@ our $BlockStart = qr/(?: \A | $EmptyLines )/xm;
 our $BlockEnd   = qr/(?=(?: $EmptyLines | \z ) )/xm;
 
 our $HTMLComment = qr{<!--(.+?)-->}s;
+## use critic
 
 1;

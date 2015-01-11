@@ -9,7 +9,7 @@ our $VERSION = '0.26';
 use Moose;
 use MooseX::StrictConstructor;
 
-with 'Markdent::Role::Event';
+with 'Markdent::Role::Event' => { event_class => __PACKAGE__ };
 
 __PACKAGE__->meta()->make_immutable();
 

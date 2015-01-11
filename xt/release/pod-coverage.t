@@ -5,13 +5,15 @@ use warnings;
 
 use Test::More;
 
-eval "use Test::Pod::Coverage 1.04";
-plan skip_all => "Test::Pod::Coverage 1.04 required for testing POD coverage"
+## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
+eval 'use Test::Pod::Coverage 1.04';
+plan skip_all => 'Test::Pod::Coverage 1.04 required for testing POD coverage'
     if $@;
 
-eval "use Pod::Coverage::Moose 0.02";
-plan skip_all => "Pod::Coverage::Moose 0.02 required for testing POD coverage"
+eval 'use Pod::Coverage::Moose 0.02';
+plan skip_all => 'Pod::Coverage::Moose 0.02 required for testing POD coverage'
     if $@;
+## use critic
 
 my @handler_events = qw(
     auto_link

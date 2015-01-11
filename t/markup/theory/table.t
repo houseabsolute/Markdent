@@ -2216,10 +2216,7 @@ EOF
                         { 'type' => 'paragraph' },
                         [
                             {
-                                'text' => 'l1
-l2
-l3
-',
+                                'text' => "l1\nl2\nl3\n",
                                 'type' => 'text'
                             }
                         ]

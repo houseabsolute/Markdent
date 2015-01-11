@@ -1050,8 +1050,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'drunk and lazily numbered ordered lists, nested' );
+    parse_ok(
+        $text, $expect,
+        'drunk and lazily numbered ordered lists, nested'
+    );
 }
 
 done_testing();

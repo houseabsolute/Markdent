@@ -200,6 +200,7 @@ sub _possible_block_matches {
     return @look_for;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_hashed_html {
     my $self = shift;
     my $text = shift;
@@ -443,6 +444,43 @@ sub _match_blockquote {
 
     return 1;
 }
+## use critic
+
+sub _split_chunks_on_regex {
+    my $self  = shift;
+    my $text  = shift;
+    my $regex = shift;
+
+    my @chunks;
+    my @chunk;
+    my $in_regex = 0;
+
+    for my $line ( split /\n/, $text ) {
+        my $new_chunk;
+
+        if ( $in_regex && $line !~ $regex ) {
+            $in_regex  = 0;
+            $new_chunk = 1;
+        }
+        elsif ( $line =~ $regex && !$in_regex ) {
+            $in_regex  = 1;
+            $new_chunk = 1;
+        }
+
+        if ($new_chunk) {
+            push @chunks, join q{}, map { $_ . "\n" } @chunk
+                if @chunk;
+            @chunk = ();
+        }
+
+        push @chunk, $line;
+    }
+
+    push @chunks, join q{}, map { $_ . "\n" } @chunk
+        if @chunk;
+
+    return @chunks;
+}
 
 my $PreLine = qr/ ^
                   (?:
@@ -456,6 +494,7 @@ my $PreLine = qr/ ^
                   \n
                 /xm;
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_preformatted {
     my $self = shift;
     my $text = shift;
@@ -486,6 +525,7 @@ sub _match_preformatted {
 
     return 1;
 }
+## use critic
 
 my $Bullet = qr/ (?:
                    \p{SpaceSeparator}{0,3}
@@ -520,6 +560,7 @@ sub _list_re {
     return $list;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_list {
     my $self = shift;
     my $text = shift;
@@ -572,6 +613,7 @@ sub _match_list {
 
     return 1;
 }
+## use critic
 
 sub _split_list_items {
     my $self = shift;
@@ -581,7 +623,9 @@ sub _split_list_items {
     my @chunk;
 
     for my $line ( split /\n/, $list ) {
+        ## no critic (RegularExpressions::ProhibitCaptureWithoutTest)
         if ( $line =~ /^$Bullet/ && @chunk ) {
+            ## use critic
             push @items, join q{}, map { $_ . "\n" } @chunk;
 
             @chunk = ();
@@ -605,8 +649,10 @@ sub _handle_list_items {
     for my $item (@items) {
         $item =~ s/^$Bullet//;
 
+        ## no critic (RegularExpressions::ProhibitCaptureWithoutTest)
         my $bullet
             = $type eq 'OrderedList' ? ( $ordinal_list_num++ ) . q{.} : $1;
+        ## use critic
 
         $self->_send_event( StartListItem => bullet => $bullet );
 
@@ -656,6 +702,8 @@ sub _handle_list_items {
 # newlines. These lines stop when we see a blockquote or indented list
 # bullet. This match is only done inside a list, and lets us distinguish
 # between list items which contain paragraphs and those which don't.
+#
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_list_item {
     my $self = shift;
     my $text = shift;
@@ -740,42 +788,7 @@ sub _match_paragraph {
 
     return 1;
 }
-
-sub _split_chunks_on_regex {
-    my $self  = shift;
-    my $text  = shift;
-    my $regex = shift;
-
-    my @chunks;
-    my @chunk;
-    my $in_regex = 0;
-
-    for my $line ( split /\n/, $text ) {
-        my $new_chunk;
-
-        if ( $in_regex && $line !~ $regex ) {
-            $in_regex  = 0;
-            $new_chunk = 1;
-        }
-        elsif ( $line =~ $regex && !$in_regex ) {
-            $in_regex  = 1;
-            $new_chunk = 1;
-        }
-
-        if ($new_chunk) {
-            push @chunks, join q{}, map { $_ . "\n" } @chunk
-                if @chunk;
-            @chunk = ();
-        }
-
-        push @chunk, $line;
-    }
-
-    push @chunks, join q{}, map { $_ . "\n" } @chunk
-        if @chunk;
-
-    return @chunks;
-}
+## use critic
 
 __PACKAGE__->meta()->make_immutable();
 

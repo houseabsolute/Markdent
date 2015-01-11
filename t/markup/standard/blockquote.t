@@ -129,8 +129,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'three-line blockquote, middle line is 2nd level' );
+    parse_ok(
+        $text, $expect,
+        'three-line blockquote, middle line is 2nd level'
+    );
 }
 {
     my $tab = "\t";
@@ -178,8 +180,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'three-line blockquote with tabs, middle line is 2nd level' );
+    parse_ok(
+        $text, $expect,
+        'three-line blockquote with tabs, middle line is 2nd level'
+    );
 }
 
 {
@@ -227,7 +231,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
+    parse_ok(
+        $text, $expect,
         'two-line blockquote, ends at 2nd level, followed by plain paragraph'
     );
 }
@@ -264,8 +269,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'two-line blockquote, first line has an atx-style header' );
+    parse_ok(
+        $text, $expect,
+        'two-line blockquote, first line has an atx-style header'
+    );
 }
 
 {
@@ -313,7 +320,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
+    parse_ok(
+        $text, $expect,
         'two-line blockquote, ends at 2nd level, followed by plain paragraph'
     );
 }
@@ -361,8 +369,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'two-line blockquote with markup spanning lines' );
+    parse_ok(
+        $text, $expect,
+        'two-line blockquote with markup spanning lines'
+    );
 }
 
 {
@@ -387,8 +397,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'three-line blockquote but middle line has no leading >' );
+    parse_ok(
+        $text, $expect,
+        'three-line blockquote but middle line has no leading >'
+    );
 }
 
 {
@@ -421,7 +433,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
+    parse_ok(
+        $text, $expect,
         'three-line blockquote but there is a paragraph break after >-less line'
     );
 }
@@ -464,8 +477,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'three-paragraph blockquote with empty line between each para' );
+    parse_ok(
+        $text, $expect,
+        'three-paragraph blockquote with empty line between each para'
+    );
 }
 
 {
@@ -515,7 +530,8 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
+    parse_ok(
+        $text, $expect,
         'three-paragraph blockquote with empty line between each para, followed by a regular paragraph'
     );
 }

@@ -19,12 +19,14 @@ sub _build_emphasis_start_delimiter_re {
     return qr/(?:\*|(?<=\W)_|(?<=^)_)/;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _emphasis_end_delimiter_re {
     my $self  = shift;
     my $delim = shift;
 
     return $delim eq '*' ? qr/\Q$delim\E/ : qr/\Q$delim\E(?=$|\W)/;
 }
+## use critic
 
 around _possible_span_matches => sub {
     my $orig = shift;
@@ -42,11 +44,12 @@ around _possible_span_matches => sub {
     );
 };
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_bare_link {
     my $self = shift;
     my $text = shift;
 
-    return unless ${$text} =~ m[ \G
+    return unless ${$text} =~ m{ \G
                                  (?:
                                      (?<=^)
                                      |
@@ -57,7 +60,7 @@ sub _match_bare_link {
                                    ://
                                    \S+
                                  )
-                               ]xgc;
+                               }xgc;
 
     my $link = $self->_make_event( AutoLink => uri => $1 );
 
@@ -65,6 +68,7 @@ sub _match_bare_link {
 
     return 1;
 }
+## use critic
 
 around _text_end_res => sub {
     my $orig = shift;

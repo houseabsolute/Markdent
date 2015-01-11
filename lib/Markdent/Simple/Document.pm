@@ -44,6 +44,8 @@ sub markdown_to_html {
     );
 }
 
+__PACKAGE__->meta()->make_immutable();
+
 1;
 
 # ABSTRACT: Convert Markdown to an HTML Document

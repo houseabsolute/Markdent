@@ -17,11 +17,11 @@ has delimiter => (
     required => 1,
 );
 
-with 'Markdent::Role::Event';
-
-with 'Markdent::Role::BalancedEvent' => { compare => ['delimiter'] };
-
-with 'Markdent::Role::EventAsText';
+with(
+    'Markdent::Role::Event'         => { event_class => __PACKAGE__ },
+    'Markdent::Role::BalancedEvent' => { compare     => ['delimiter'] },
+    'Markdent::Role::EventAsText',
+);
 
 sub as_text { $_[0]->delimiter() }
 

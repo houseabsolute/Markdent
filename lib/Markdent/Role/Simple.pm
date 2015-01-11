@@ -24,6 +24,7 @@ around markdown_to_html => sub {
     return $self->$orig(%p);
 };
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _parse_markdown {
     my $self          = shift;
     my $markdown      = shift;
@@ -32,6 +33,8 @@ sub _parse_markdown {
     my $handler_p     = shift;
 
     my $capture = q{};
+
+    ## no critic (InputOutput::RequireBriefOpen)
     open my $fh, '>', \$capture
         or die $!;
 
@@ -44,6 +47,9 @@ sub _parse_markdown {
         = Markdent::Parser->new( dialects => $dialects, handler => $handler );
 
     $parser->parse( markdown => $markdown );
+
+    close $fh
+        or die $!;
 
     return $capture;
 }

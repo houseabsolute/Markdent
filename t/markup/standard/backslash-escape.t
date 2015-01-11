@@ -96,8 +96,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect,
-        'backslashed backslash, backtick and greater-than' );
+    parse_ok(
+        $text, $expect,
+        'backslashed backslash, backtick and greater-than'
+    );
 }
 
 {

@@ -35,14 +35,12 @@ role {
         return 1 unless @compare;
 
         return all { $self->$_() eq $other->$_() } @compare;
-
-        return 0;
     };
 };
 
 1;
 
-# ABSTRACT: A parameterized role for events which can check if they match balance another event
+# ABSTRACT: A parameterized role for events which can check if they balance another event
 
 __END__
 

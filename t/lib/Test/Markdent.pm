@@ -9,22 +9,24 @@ use Test::More;
 use Tree::Simple::Visitor::ToNestedArray;
 
 BEGIN {
+    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
     eval {
         require HTML::Differences;
         HTML::Differences->import('html_text_diff');
     };
-    eval {
-        require WebService::Validator::HTML::W3C;
-    }
+    eval { require WebService::Validator::HTML::W3C; };
+    ## use critic
 }
 
 use Markdent::Handler::HTMLStream::Document;
 use Markdent::Handler::HTMLStream::Fragment;
 use Markdent::Handler::MinimalTree;
 use Markdent::Parser;
+use Test::Builder;
 
 use Exporter qw( import );
 
+## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT = qw(
     tree_from_handler
     parse_ok
@@ -32,6 +34,7 @@ our @EXPORT = qw(
     html_document_ok
     test_all_html
 );
+## use critic
 
 sub parse_ok {
     my $parser_p    = ref $_[0] ? shift : {};
@@ -152,6 +155,8 @@ sub _html_for {
     my $handler_p = shift || {};
 
     my $got_html = q{};
+
+    ## no critic (InputOutput::RequireBriefOpen)
     open my $fh, '>', \$got_html
         or die $!;
 
@@ -165,6 +170,9 @@ sub _html_for {
         handler => $streamer,
     );
     $parser->parse( markdown => $markdown );
+
+    close $fh
+        or die $!;
 
     return $got_html;
 }
@@ -465,6 +473,8 @@ EOF
         );
     }
 }
+
+1;
 
 # ABSTRACT: High level test functions for Markdent
 

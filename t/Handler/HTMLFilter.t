@@ -7,6 +7,7 @@ use Test::Deep;
 
 use Markdent::Handler::HTMLFilter;
 use Markdent::Handler::MinimalTree;
+use Markdent::Parser;
 
 use lib 't/lib';
 

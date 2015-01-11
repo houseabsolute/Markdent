@@ -351,7 +351,7 @@ EOF
                 {
                     type => 'text',
                     text =>
-                        "Inside code we do not match <em>html</em> &amp; entities",
+                        'Inside code we do not match <em>html</em> &amp; entities',
                 },
             ], {
                 type => 'text',
@@ -444,38 +444,38 @@ Using pair of &laquo;entities&raquo; and &THORN; and &sup2;&#37;
 EOF
 
     my $expect = [
-        { type => "paragraph" },
+        { type => 'paragraph' },
         [
             {
-                text => "Using pair of ",
-                type => "text",
+                text => 'Using pair of ',
+                type => 'text',
             }, {
-                type   => "html_entity",
-                entity => "laquo",
+                type   => 'html_entity',
+                entity => 'laquo',
             }, {
-                type => "text",
-                text => "entities",
+                type => 'text',
+                text => 'entities',
             }, {
-                entity => "raquo",
-                type   => "html_entity",
+                entity => 'raquo',
+                type   => 'html_entity',
             }, {
-                type => "text",
-                text => " and ",
+                type => 'text',
+                text => ' and ',
             }, {
-                entity => "THORN",
-                type   => "html_entity",
+                entity => 'THORN',
+                type   => 'html_entity',
             }, {
-                type => "text",
-                text => " and ",
+                type => 'text',
+                text => ' and ',
             }, {
-                entity => "sup2",
-                type   => "html_entity",
+                entity => 'sup2',
+                type   => 'html_entity',
             }, {
-                entity => "#37",
-                type   => "html_entity",
+                entity => '#37',
+                type   => 'html_entity',
             }, {
                 text => "\n",
-                type => "text",
+                type => 'text',
             },
         ],
     ];

@@ -8,6 +8,7 @@ use File::Slurp qw( read_file );
 
 use Markdent::Handler::CaptureEvents;
 use Markdent::Handler::MinimalTree;
+use Markdent::Parser;
 
 use lib 't/lib';
 

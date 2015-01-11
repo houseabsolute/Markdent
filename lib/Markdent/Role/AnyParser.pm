@@ -16,11 +16,13 @@ has handler => (
     required => 1,
 );
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _send_event {
     my $self = shift;
 
     $self->handler()->handle_event( $self->_make_event(@_) );
 }
+## use critic
 
 sub _make_event {
     my $self  = shift;
@@ -31,6 +33,7 @@ sub _make_event {
     return $real_class->new(@_);
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _detab_text {
     my $self = shift;
     my $text = shift;
@@ -57,6 +60,7 @@ sub _debug_look_for {
 
     $self->_print_debug($msg);
 }
+## use critic
 
 1;
 

@@ -8,32 +8,36 @@ our $VERSION = '0.26';
 
 use MooseX::Role::Parameterized;
 
+parameter event_class => (
+    is       => 'ro',
+    isa      => 'Str',
+    required => 1,
+);
+
 role {
-    shift;
-    my %extra = @_;
+    my $p = shift;
 
-    my $class = $extra{consumer}->name();
-
-    my ( $type, $name ) = $class =~ /::(Start|End)?(\w+)$/;
+    my $class = $p->event_class();
+    my ( $action, $event ) = $class =~ /::(Start|End)?(\w+)$/;
 
     # It's easier to hack this in rather than trying to find a general
     # case for upper-case abbreviations in class names.
-    $name =~ s/HTML/html/;
+    $event =~ s/HTML/html/;
 
-    $name =~ s/(^|.)([A-Z])/$1 ? "$1\L_$2" : "\L$2"/ge;
+    $event =~ s/(^|.)([A-Z])/$1 ? "$1\L_$2" : "\L$2"/ge;
 
-    my $event_name = join q{_}, map {lc} grep {defined} $type, $name;
+    my $event_name = join q{_}, map {lc} grep {defined} $action, $event;
     method event_name => sub {$event_name};
 
-    method name => sub {$name};
+    method name => sub {$event};
 
-    my $is_start = ( $type || q{} ) eq 'Start';
+    my $is_start = ( $action || q{} ) eq 'Start';
     method is_start => sub {$is_start};
 
-    my $is_end = ( $type || q{} ) eq 'End';
+    my $is_end = ( $action || q{} ) eq 'End';
     method is_end => sub {$is_end};
 
-    my $is_inline = !defined $type;
+    my $is_inline = !defined $action;
     method is_inline => sub {$is_inline};
 
     my @required;
@@ -63,6 +67,13 @@ role {
         }
     }
 
+    _make_kv_pairs_for_attribute_method( \@required, \@optional );
+};
+
+sub _make_kv_pairs_for_attribute_method {
+    my @required = @{ shift() };
+    my @optional = @{ shift() };
+
     method kv_pairs_for_attributes => sub {
         my $event = shift;
 
@@ -84,7 +95,7 @@ role {
 
         return %p;
     };
-};
+}
 
 sub debug_dump {
     my $self = shift;

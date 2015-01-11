@@ -322,6 +322,7 @@ sub _build_line_break_re {
     return qr/\p{SpaceSeparator}{2}\n/;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_escape {
     my $self = shift;
     my $text = shift;
@@ -401,6 +402,7 @@ sub _match_emphasis_end {
 
     return 1;
 }
+## use critic
 
 sub _emphasis_end_delimiter_re {
     my $self  = shift;
@@ -409,6 +411,7 @@ sub _emphasis_end_delimiter_re {
     return qr/\Q$delim\E/;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_code_start {
     my $self = shift;
     my $text = shift;
@@ -576,6 +579,7 @@ sub _match_image {
 
     return 1;
 }
+## use critic
 
 sub _link_match_results {
     my $self          = shift;
@@ -610,6 +614,7 @@ sub _link_match_results {
     return ( $text, \%attr );
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_html_comment {
     my $self = shift;
     my $text = shift;
@@ -647,7 +652,7 @@ sub _match_html_tag {
     else {
         $tag =~ s/^<|>$//g;
 
-        my ( $name, $attr ) = split /\s+/, $tag, 2;
+        my ( $tag_name, $attr ) = split /\s+/, $tag, 2;
 
         $attr =~ s{/\s*$}{}
             if defined $attr;
@@ -656,25 +661,25 @@ sub _match_html_tag {
         if ( defined $attr && $attr =~ /\S/ ) {
             for my $attr ( split /\s+/, $attr ) {
                 if ( $attr =~ /=/ ) {
-                    my ( $name, $val ) = split /=/, $attr;
+                    my ( $attr_name, $val ) = split /=/, $attr;
 
                     $val =~ s/^([\"\'])(.+)\1$/$2/g;
 
-                    $attr{$name} = $val;
+                    $attr{$attr_name} = $val;
                 }
                 else {
 
                     # A value-less attribute like in
                     # <option value="1" selected>
-                    $attr{$name} = undef;
+                    $attr{$attr} = undef;
                 }
             }
         }
 
-        if ( $InlineTags{$name} ) {
+        if ( $InlineTags{$tag_name} ) {
             $event = $self->_make_event(
                 HTMLTag => (
-                    tag        => $name,
+                    tag        => $tag_name,
                     attributes => \%attr,
                 ),
             );
@@ -682,7 +687,7 @@ sub _match_html_tag {
         else {
             $event = $self->_make_event(
                 StartHTMLTag => (
-                    tag        => $name,
+                    tag        => $tag_name,
                     attributes => \%attr,
                 ),
             );
@@ -766,6 +771,7 @@ sub _match_plain_text {
 
     return 1;
 }
+## use critic
 
 sub _text_end_res {
     my $self = shift;

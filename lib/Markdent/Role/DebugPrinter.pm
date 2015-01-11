@@ -19,6 +19,7 @@ has debug => (
 my $HR1 = q{=} x 70;
 my $HR2 = q{-} x 70;
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _debug_parse_result {
     my $self  = shift;
     my $text  = shift;
@@ -34,6 +35,7 @@ sub _debug_parse_result {
 
     $self->_print_debug($msg);
 }
+## use critic
 
 sub _print_debug {
     warn $HR1 . "\n" . ( ref $_[0] ) . "\n" . $_[1] . "\n";

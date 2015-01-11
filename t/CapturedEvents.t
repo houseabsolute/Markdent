@@ -12,6 +12,7 @@ use Markdent::CapturedEvents;
 use Markdent::Event::StartDocument;
 use Markdent::Event::EndDocument;
 use Markdent::Event::Text;
+use Markdent::Handler::MinimalTree;
 
 my @events = (
     Markdent::Event::StartDocument->new(),

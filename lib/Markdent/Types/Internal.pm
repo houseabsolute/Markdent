@@ -71,8 +71,8 @@ subtype NonEmptyArrayRef,
 subtype OutputStream,
     as Item,
     where {
-        FileHandle->check($_)
-            || ( Object->check($_) && $_->can('print') );
+        FileHandle()->check($_)
+            || ( Object()->check($_) && $_->can('print') );
     },
     message { 'The output stream must be a Perl file handle or an object with a print method' };
 

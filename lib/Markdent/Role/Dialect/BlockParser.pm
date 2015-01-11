@@ -2,6 +2,7 @@ package Markdent::Role::Dialect::BlockParser;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 our $VERSION = '0.26';
 

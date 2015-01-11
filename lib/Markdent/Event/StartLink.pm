@@ -35,9 +35,10 @@ has is_implicit_id => (
     default => 0,
 );
 
-with 'Markdent::Role::Event';
-
-with 'Markdent::Role::BalancedEvent';
+with(
+    'Markdent::Role::Event' => { event_class => __PACKAGE__ },
+    'Markdent::Role::BalancedEvent',
+);
 
 __PACKAGE__->meta()->make_immutable();
 

@@ -24,6 +24,7 @@ around _possible_block_matches => sub {
     return @look_for;
 };
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_fenced_code_block {
     my $self = shift;
     my $text = shift;
@@ -58,6 +59,7 @@ sub _match_fenced_code_block {
 
     return 1;
 }
+## use critic
 
 1;
 

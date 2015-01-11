@@ -63,8 +63,8 @@ EOF
     ];
 
     parse_ok(
-        $text, $expect, 'two spaces at end of paragraph line forces a
-        line break but one space does not'
+        $text, $expect,
+        'two spaces at end of paragraph line forces a line break but one space does not',
     );
 }
 

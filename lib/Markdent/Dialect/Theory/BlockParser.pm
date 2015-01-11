@@ -110,6 +110,7 @@ my $TableHeader = qr{ $TableRow
                       $HeaderMarkerLine
                     }xm;
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_table {
     my $self = shift;
     my $text = shift;
@@ -193,6 +194,7 @@ sub _match_table {
 
     return 1;
 }
+## use critic
 
 sub _parse_rows {
     my $self     = shift;
@@ -213,7 +215,7 @@ sub _parse_rows {
 
                 # If the $TableRow regex is correct, this shouldn't be
                 # possible.
-                die "Continuation of a row before we've seen a row start?!"
+                die q{Continuation of a row before we've seen a row start?!}
                     unless @rows;
 
                 my $cells = $self->_cells_from_line( $line, ':' );
@@ -332,7 +334,7 @@ sub _alignment_for_cell {
     return 'right'
         if $cell =~ /^\p{SpaceSeparator}{2,}/;
 
-    return undef;
+    return;
 }
 
 sub _normalize_cell_count_and_alignments {
@@ -424,6 +426,8 @@ sub _events_for_rows {
 
 # A table cell's contents can be a single line _not_ terminated by a
 # newline. If that's the case, it won't match as a paragraph.
+#
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_table_cell {
     my $self = shift;
     my $text = shift;
@@ -445,6 +449,7 @@ sub _match_table_cell {
 
     $self->_span_parser()->parse_block($1);
 }
+## use critic
 
 1;
 
