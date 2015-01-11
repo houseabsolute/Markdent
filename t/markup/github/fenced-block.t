@@ -8,8 +8,11 @@ use lib 't/lib';
 use Test::Markdent;
 
 {
-    my $code = 'now in a code block
-    preserve the formatting';
+    my $code = <<'EOF';
+now in a code block
+    preserve the formatting
+EOF
+    chomp $code;
 
     my $text = <<"EOF";
 Some plain text.
@@ -51,9 +54,12 @@ EOF
 }
 
 {
+    my $code = <<'EOF';
+now in a code block
+    preserve the formatting
+EOF
+    chomp $code;
 
-    my $code = 'now in a code block
-    preserve the formatting';
     my @text;
 
     #  Code block as per GitHub standard
@@ -67,8 +73,8 @@ $code
 
 More plain text.
 EOF
-    #  End code block
 
+    #  End code block
 
     #  Code block as per Pandoc v1.12.3.3
     #
@@ -81,8 +87,8 @@ $code
 
 More plain text.
 EOF
-    #  End code block
 
+    #  End code block
 
     #  Code block as per Pandoc v1.13.2
     #
@@ -95,8 +101,8 @@ $code
 
 More plain text.
 EOF
-    #  End code block
 
+    #  End code block
 
     #  Code block with trailing space after Perl language declaration
     #
@@ -109,6 +115,7 @@ $code
 
 More plain text.
 EOF
+
     #  End code block
 
     foreach my $text (@text) {
