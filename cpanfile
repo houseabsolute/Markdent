@@ -56,8 +56,11 @@ on 'develop' => sub {
   requires "HTML::Differences" => "0";
   requires "Pod::Coverage::Moose" => "0.02";
   requires "Test::CPAN::Changes" => "0.19";
+  requires "Test::Code::TidyAll" => "0.24";
+  requires "Test::More" => "0.88";
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.04";
   requires "Test::Spelling" => "0.12";
+  requires "Test::Version" => "1";
   requires "WebService::Validator::HTML::W3C" => "0";
 };

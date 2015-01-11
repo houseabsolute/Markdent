@@ -4,7 +4,7 @@ Markdent - An event-based Markdown parser toolkit
 
 # VERSION
 
-version 0.25
+version 0.26
 
 # SYNOPSIS
 
@@ -68,9 +68,10 @@ the button on this page:
 
 Dave Rolsky <autarch@urth.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-Jason McIntosh <jmac@appleseed-sc.com>
+- Jason McIntosh <jmac@appleseed-sc.com>
+- Polina Shubina <925043@mai.com>
 
 # COPYRIGHT AND LICENSE
 
