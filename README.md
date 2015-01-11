@@ -70,6 +70,7 @@ Dave Rolsky <autarch@urth.org>
 
 # CONTRIBUTORS
 
+- Andrew Speer <andrew.speer@isolutions.com.au>
 - Jason McIntosh <jmac@appleseed-sc.com>
 - Polina Shubina <925043@mai.com>
 
