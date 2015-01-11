@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The parsing of HTML entities was too greedy, so that something like
+  "&lt;word&gt;" would be parsed a sigle eneity, "lt;word&gt", which is
+  clearly wrong. Fixed by Polina Shubina. GitHub PR #3.
+
+
 0.25   2015-01-04
 
 - HTML output now uses the HTML5 doctype. In addition, table cell alignment is
