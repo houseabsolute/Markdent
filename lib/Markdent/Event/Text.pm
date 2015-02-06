@@ -35,7 +35,7 @@ __PACKAGE__->meta()->make_immutable();
 
 1;
 
-# ABSTRACT: An event for plaint text
+# ABSTRACT: An event for plain text
 
 __END__
 

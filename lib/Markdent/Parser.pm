@@ -237,7 +237,7 @@ __END__
       handler => $handler,
   );
 
-  $parse->parse( markdown => $markdown );
+  $parser->parse( markdown => $markdown );
 
 =head1 DESCRIPTION
 
