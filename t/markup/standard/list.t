@@ -1056,4 +1056,72 @@ EOF
     );
 }
 
+{
+    my $text = <<'EOF';
+1. first
+2. second
+
+* the next
+* list
+EOF
+
+    my $expect = [
+        {
+            type => 'ordered_list',
+        },
+        [
+            {
+                type   => 'list_item',
+                bullet => '1.',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "first\n",
+                }
+            ],
+            {
+                type   => 'list_item',
+                bullet => '2.',
+            },
+            [
+                {
+                    type => "text",
+                    text => "second\n",
+                }
+            ],
+        ],
+        {
+            type => 'unordered_list',
+        },
+        [
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
+            [
+                {
+                    type => 'text',
+                    text => "the next\n",
+                }
+            ],
+            {
+                type   => 'list_item',
+                bullet => '*',
+            },
+            [
+                {
+                    type => "text",
+                    text => "list\n",
+                }
+            ],
+        ]
+    ];
+
+    parse_ok(
+        $text, $expect,
+        'different types list go one by one'
+    );
+}
+
 done_testing();
