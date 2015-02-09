@@ -70,6 +70,15 @@ has _list_item_is_paragraph => (
     },
 );
 
+has _list_bullet_type => (
+    traits => [ 'String' ],
+    is => 'rw',
+    isa => 'Str',
+    default => "",
+    init_arg => undef,
+    writer => "_set_list_bullet_type",
+);
+
 sub parse_document {
     my $self = shift;
     my $text = shift;
@@ -189,7 +198,8 @@ sub _possible_block_matches {
         two_line_header
         blockquote
         preformatted
-        list
+        ordered_list
+        unordered_list
     );
 
     push @look_for, 'list_item'
@@ -538,6 +548,38 @@ my $Bullet = qr/ (?:
                  $HorizontalWS+
                /xm;
 
+
+sub _bullet_re {
+    my ( $self ) = @_;
+
+    my $re;
+    my $type = $self->_list_bullet_type || "";
+    if ( $type eq "ordered" ) {
+        $re = qr/\d+\./;
+    }
+    elsif ( $type eq "unordered" ) {
+        $re = qr/[\+\*\-]/;
+    }
+    else {
+        $re = qr/
+           [\+\*\-] # unordered list bullet
+           |
+           \d+\. # ordered list number
+         /xm;
+    }
+
+    my $bullet = qr/ (?:
+           \p{SpaceSeparator}{0,3}
+           (
+             $re # bullet type
+           )
+         )
+         $HorizontalWS+
+         /xm;
+    return $bullet;
+}
+
+
 sub _list_re {
     my $self = shift;
 
@@ -550,14 +592,32 @@ sub _list_re {
         $block_start = qr/ $BlockStart /xm;
     }
 
+    my $bullet = $self->_bullet_re;
+
     my $list = qr/ $block_start
                    (
-                     $Bullet
+                     $bullet
                      (?: .* \n )+?
                    )
                  /xm;
 
     return $list;
+}
+
+sub _match_ordered_list {
+    my $self = shift;
+    my $text = shift;
+
+    $self->_set_list_bullet_type("ordered");
+    return $self->_match_list( $text );
+}
+
+sub _match_unordered_list {
+    my $self = shift;
+    my $text = shift;
+
+    $self->_set_list_bullet_type("unordered");
+    return $self->_match_list( $text );
 }
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
@@ -566,6 +626,7 @@ sub _match_list {
     my $text = shift;
 
     my $list_re = $self->_list_re();
+    my $bullet_re = $self->_bullet_re(); # get bullet regexp for certain list type - ordered or unordered
 
     return unless ${$text} =~ / \G
                                 $list_re
@@ -580,7 +641,7 @@ sub _match_list {
                                       \S               # ... or followed by content in column 1
                                     )
                                     (?!                # ... which is not
-                                      $Bullet          # ... a bullet
+                                      $bullet_re          # ... a bullet
                                     )
                                   )
                                   |

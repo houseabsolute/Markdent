@@ -19,7 +19,7 @@ around _possible_block_matches => sub {
     my $self = shift;
 
     my @look_for = $self->$orig();
-    insert_after_string 'list', 'fenced_code_block', @look_for;
+    insert_after_string 'unordered_list', 'fenced_code_block', @look_for;
 
     return @look_for;
 };

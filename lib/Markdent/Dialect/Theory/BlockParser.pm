@@ -45,10 +45,10 @@ around _possible_block_matches => sub {
     return @look_for if $self->_list_level();
 
     if ( $self->_in_table() ) {
-        insert_after_string 'list', 'table_cell', @look_for;
+        insert_after_string 'unordered_list', 'table_cell', @look_for;
     }
     else {
-        insert_after_string 'list', 'table', @look_for;
+        insert_after_string 'unordered_list', 'table', @look_for;
     }
 
     return @look_for;
