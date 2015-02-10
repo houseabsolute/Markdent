@@ -74,9 +74,9 @@ has _list_bullet_type => (
     traits => [ 'String' ],
     is => 'rw',
     isa => 'Str',
-    default => "",
+    default => q{},
     init_arg => undef,
-    writer => "_set_list_bullet_type",
+    writer => '_set_list_bullet_type',
 );
 
 sub parse_document {
@@ -553,11 +553,11 @@ sub _bullet_re {
     my ( $self ) = @_;
 
     my $re;
-    my $type = $self->_list_bullet_type || "";
-    if ( $type eq "ordered" ) {
+    my $type = $self->_list_bullet_type || q{};
+    if ( $type eq 'ordered' ) {
         $re = qr/\d+\./;
     }
-    elsif ( $type eq "unordered" ) {
+    elsif ( $type eq 'unordered' ) {
         $re = qr/[\+\*\-]/;
     }
     else {
@@ -604,11 +604,12 @@ sub _list_re {
     return $list;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_ordered_list {
     my $self = shift;
     my $text = shift;
 
-    $self->_set_list_bullet_type("ordered");
+    $self->_set_list_bullet_type('ordered');
     return $self->_match_list( $text );
 }
 
@@ -616,11 +617,10 @@ sub _match_unordered_list {
     my $self = shift;
     my $text = shift;
 
-    $self->_set_list_bullet_type("unordered");
+    $self->_set_list_bullet_type('unordered');
     return $self->_match_list( $text );
 }
 
-## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_list {
     my $self = shift;
     my $text = shift;

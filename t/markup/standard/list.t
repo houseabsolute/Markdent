@@ -1086,7 +1086,7 @@ EOF
             },
             [
                 {
-                    type => "text",
+                    type => 'text',
                     text => "second\n",
                 }
             ],
@@ -1111,7 +1111,7 @@ EOF
             },
             [
                 {
-                    type => "text",
+                    type => 'text',
                     text => "list\n",
                 }
             ],
