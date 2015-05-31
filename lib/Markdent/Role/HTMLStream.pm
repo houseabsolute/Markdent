@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 our $VERSION = '0.26';
 
-use HTML::Stream;
+use HTML::Entities qw( encode_entities );
 use Markdent::CheckedOutput;
 use Markdent::Types qw(
     HeaderLevel Str Bool HashRef
@@ -28,13 +28,30 @@ has _output => (
     init_arg => 'output',
 );
 
-has _stream => (
+has _encodable_entities => (
     is       => 'ro',
-    isa      => 'HTML::Stream',
-    init_arg => undef,
-    lazy     => 1,
-    default  => sub { HTML::Stream->new( $_[0]->_wrapped_output() ) },
+    isa      => Str,
+    default  => q{<>&"\x00-\x09\x11\x12\x14-\x1f},
+    init_arg => 'encodable_entities',
 );
+
+override BUILDARGS => sub {
+    my $self = shift;
+
+    my $args = super();
+
+    my $output = $args->{output};
+
+    # This will blow up soon if there's no output.
+    return $args unless $output;
+
+    # If the user supplied a non IO::Handle object we won't wrap it.
+    return $args if blessed $output && !$output->isa('IO::Handle');
+
+    $args->{output} = Markdent::CheckedOutput->new($output);
+
+    return $args;
+};
 
 sub start_header {
     my $self = shift;
@@ -43,9 +60,7 @@ sub start_header {
         level => { isa => HeaderLevel },
     );
 
-    my $tag = 'h' . $level;
-
-    $self->_stream()->tag($tag);
+    $self->_stream_start_tag( 'h' . $level );
 }
 
 sub end_header {
@@ -55,57 +70,55 @@ sub end_header {
         level => { isa => HeaderLevel },
     );
 
-    my $tag = '_h' . $level;
-
-    $self->_stream()->tag($tag);
+    $self->_stream_end_tag( 'h' . $level );
 }
 
 sub start_blockquote {
     my $self = shift;
 
-    $self->_stream()->tag('blockquote');
+    $self->_stream_start_tag('blockquote');
 }
 
 sub end_blockquote {
     my $self = shift;
 
-    $self->_stream()->tag('_blockquote');
+    $self->_stream_end_tag('blockquote');
 }
 
 sub start_unordered_list {
     my $self = shift;
 
-    $self->_stream()->tag('ul');
+    $self->_stream_start_tag('ul');
 }
 
 sub end_unordered_list {
     my $self = shift;
 
-    $self->_stream()->tag('_ul');
+    $self->_stream_end_tag('ul');
 }
 
 sub start_ordered_list {
     my $self = shift;
 
-    $self->_stream()->tag('ol');
+    $self->_stream_start_tag('ol');
 }
 
 sub end_ordered_list {
     my $self = shift;
 
-    $self->_stream()->tag('_ol');
+    $self->_stream_end_tag('ol');
 }
 
 sub start_list_item {
     my $self = shift;
 
-    $self->_stream()->tag('li');
+    $self->_stream_start_tag('li');
 }
 
 sub end_list_item {
     my $self = shift;
 
-    $self->_stream()->tag('_li');
+    $self->_stream_end_tag('li');
 }
 
 sub code_block {
@@ -116,38 +129,38 @@ sub code_block {
         language => { isa => Str, optional => 1 },
     );
 
-    $self->_stream()->tag('pre');
+    $self->_stream_start_tag('pre');
 
-    my @class = $language ? ( class => 'language-' . $language ) : ();
-    $self->_stream()->tag( 'code', @class );
+    my %class = $language ? ( class => 'language-' . $language ) : ();
+    $self->_stream_start_tag( 'code', \%class );
 
-    $self->_stream()->text($code);
+    $self->_stream_text($code);
 
-    $self->_stream()->tag('_code');
-    $self->_stream()->tag('_pre');
+    $self->_stream_end_tag('code');
+    $self->_stream_end_tag('pre');
 }
 
 sub preformatted {
     my $self = shift;
     my ($text) = validated_list( \@_, text => { isa => Str }, );
 
-    $self->_stream()->tag('pre');
-    $self->_stream()->tag('code');
-    $self->_stream()->text($text);
-    $self->_stream()->tag('_code');
-    $self->_stream()->tag('_pre');
+    $self->_stream_start_tag('pre');
+    $self->_stream_start_tag('code');
+    $self->_stream_text($text);
+    $self->_stream_end_tag('code');
+    $self->_stream_end_tag('pre');
 }
 
 sub start_paragraph {
     my $self = shift;
 
-    $self->_stream()->tag('p');
+    $self->_stream_start_tag('p');
 }
 
 sub end_paragraph {
     my $self = shift;
 
-    $self->_stream()->tag('_p');
+    $self->_stream_end_tag('p');
 }
 
 sub start_table {
@@ -157,55 +170,55 @@ sub start_table {
         caption => { isa => Str, optional => 1 },
     );
 
-    $self->_stream()->tag('table');
+    $self->_stream_start_tag('table');
 
     if ( defined $caption && length $caption ) {
-        $self->_stream()->tag('caption');
-        $self->_stream()->text($caption);
-        $self->_stream()->tag('_caption');
+        $self->_stream_start_tag('caption');
+        $self->_stream_text($caption);
+        $self->_stream_end_tag('caption');
     }
 }
 
 sub end_table {
     my $self = shift;
 
-    $self->_stream()->tag('_table');
+    $self->_stream_end_tag('table');
 }
 
 sub start_table_header {
     my $self = shift;
 
-    $self->_stream()->tag('thead');
+    $self->_stream_start_tag('thead');
 }
 
 sub end_table_header {
     my $self = shift;
 
-    $self->_stream()->tag('_thead');
+    $self->_stream_end_tag('thead');
 }
 
 sub start_table_body {
     my $self = shift;
 
-    $self->_stream()->tag('tbody');
+    $self->_stream_start_tag('tbody');
 }
 
 sub end_table_body {
     my $self = shift;
 
-    $self->_stream()->tag('_tbody');
+    $self->_stream_end_tag('tbody');
 }
 
 sub start_table_row {
     my $self = shift;
 
-    $self->_stream()->tag('tr');
+    $self->_stream_start_tag('tr');
 }
 
 sub end_table_row {
     my $self = shift;
 
-    $self->_stream()->tag('_tr');
+    $self->_stream_end_tag('tr');
 }
 
 sub start_table_cell {
@@ -226,7 +239,7 @@ sub start_table_cell {
     $attr{colspan} = $colspan
         if $colspan != 1;
 
-    $self->_stream()->tag( $tag, %attr );
+    $self->_stream_start_tag( $tag, \%attr );
 }
 
 sub end_table_cell {
@@ -236,43 +249,43 @@ sub end_table_cell {
         is_header_cell => { isa => Bool },
     );
 
-    $self->_stream()->tag( $is_header ? '_th' : '_td' );
+    $self->_stream_end_tag( $is_header ? 'th' : 'td' );
 }
 
 sub start_emphasis {
     my $self = shift;
 
-    $self->_stream()->tag('em');
+    $self->_stream_start_tag('em');
 }
 
 sub end_emphasis {
     my $self = shift;
 
-    $self->_stream()->tag('_em');
+    $self->_stream_end_tag('em');
 }
 
 sub start_strong {
     my $self = shift;
 
-    $self->_stream()->tag('strong');
+    $self->_stream_start_tag('strong');
 }
 
 sub end_strong {
     my $self = shift;
 
-    $self->_stream()->tag('_strong');
+    $self->_stream_end_tag('strong');
 }
 
 sub start_code {
     my $self = shift;
 
-    $self->_stream()->tag('code');
+    $self->_stream_start_tag('code');
 }
 
 sub end_code {
     my $self = shift;
 
-    $self->_stream()->tag('_code');
+    $self->_stream_end_tag('code');
 }
 
 sub auto_link {
@@ -282,9 +295,9 @@ sub auto_link {
         uri => { isa => Str, optional => 1 },
     );
 
-    $self->_stream()->tag( 'a', href => $uri );
-    $self->_stream()->text($uri);
-    $self->_stream()->tag('_a');
+    $self->_stream_start_tag( 'a', { href => $uri } );
+    $self->_stream_text($uri);
+    $self->_stream_end_tag('a');
 }
 
 sub start_link {
@@ -299,29 +312,31 @@ sub start_link {
 
     delete @p{ grep { !defined $p{$_} } keys %p };
 
-    $self->_stream()->tag(
-        'a', href => $p{uri},
-        exists $p{title} ? ( title => $p{title} ) : (),
+    $self->_stream_start_tag(
+        'a', {
+            href => $p{uri},
+            exists $p{title} ? ( title => $p{title} ) : (),
+        },
     );
 }
 
 sub end_link {
     my $self = shift;
 
-    $self->_stream()->tag('_a');
+    $self->_stream_end_tag('a');
 }
 
 sub line_break {
     my $self = shift;
 
-    $self->_stream()->tag('br');
+    $self->_stream_start_tag('br');
 }
 
 sub text {
     my $self = shift;
     my ($text) = validated_list( \@_, text => { isa => Str }, );
 
-    $self->_stream()->text($text);
+    $self->_stream_text($text);
 }
 
 sub start_html_tag {
@@ -332,7 +347,7 @@ sub start_html_tag {
         attributes => { isa => HashRef },
     );
 
-    $self->_stream()->tag( $tag, %{$attributes} );
+    $self->_stream_start_tag( $tag, $attributes );
 }
 
 sub html_comment_block {
@@ -342,8 +357,7 @@ sub html_comment_block {
         text => { isa => Str },
     );
 
-    # HTML::Stream->comment() adds extra whitespace for no good reason.
-    $self->_output()->print( '<!--' . $text . '-->' . "\n" );
+    $self->_stream_raw( '<!--' . $text . '-->' . "\n" );
 }
 
 sub html_comment {
@@ -353,8 +367,7 @@ sub html_comment {
         text => { isa => Str },
     );
 
-    # HTML::Stream->comment() adds extra whitespace for no good reason.
-    $self->_output()->print( '<!--' . $text . '-->' );
+    $self->_stream_raw( '<!--' . $text . '-->' );
 }
 
 sub html_tag {
@@ -365,7 +378,7 @@ sub html_tag {
         attributes => { isa => HashRef },
     );
 
-    $self->_stream()->tag( $tag, %{$attributes} );
+    $self->_stream_start_tag( $tag, $attributes );
 }
 
 sub end_html_tag {
@@ -375,14 +388,14 @@ sub end_html_tag {
         tag => { isa => Str },
     );
 
-    $self->_stream()->tag( q{_} . $tag );
+    $self->_stream_end_tag($tag);
 }
 
 sub html_entity {
     my $self = shift;
     my ($entity) = validated_list( \@_, entity => { isa => Str }, );
 
-    $self->_stream()->ent($entity);
+    $self->_stream_raw( '&' . $entity . ';' );
 }
 
 sub html_block {
@@ -405,26 +418,83 @@ sub image {
 
     delete @p{ grep { !defined $p{$_} } keys %p };
 
-    $self->_stream()->tag(
-        'img', src => $p{uri},
-        ( exists $p{alt_text} ? ( alt   => $p{alt_text} ) : () ),
-        ( exists $p{title}    ? ( title => $p{title} )    : () ),
+    $self->_stream_start_tag(
+        'img', {
+            src => $p{uri},
+            ( exists $p{alt_text} ? ( alt   => $p{alt_text} ) : () ),
+            ( exists $p{title}    ? ( title => $p{title} )    : () ),
+        },
     );
 }
 
 sub horizontal_rule {
     my $self = shift;
 
-    $self->_stream()->tag('hr');
+    $self->_stream_start_tag('hr');
 }
 
-sub _wrapped_output {
+sub _stream_start_tag {
+    my $self = shift;
+    my $tag  = shift;
+    my $attr = shift;
+
+    $self->_output->print(
+              '<'
+            . $tag
+            . (
+            keys %{$attr}
+            ? q{ } . $self->_attributes($attr)
+            : q{}
+            )
+            . '>'
+    );
+}
+
+sub _stream_end_tag {
+    my $self = shift;
+    my $tag  = shift;
+
+    $self->_output->print( '</' . $tag . '>' );
+}
+
+sub _stream_text {
     my $self = shift;
 
-    my $output = $self->_output();
-    return $output if blessed $output && !$output->isa('IO::Handle');
+    $self->_output->print(
+        encode_entities(
+            shift,
+            $self->_encodable_entities,
+        )
+    );
+}
 
-    return Markdent::CheckedOutput->new($output);
+sub _stream_raw {
+    my $self = shift;
+
+    $self->_output->print(shift);
+}
+
+sub _attributes {
+    my $self = shift;
+    my $attr = shift;
+
+    return join q{ },
+        map { $self->_attribute( $_, $attr->{$_} ) } keys %{$attr};
+}
+
+sub _attribute {
+    my $self  = shift;
+    my $key   = shift;
+    my $value = shift;
+
+    return $key unless defined $value;
+
+    return join '=', $key,
+        q{"}
+        . encode_entities(
+        $value,
+        $self->_encodable_entities,
+        ) . q{"};
 }
 
 1;

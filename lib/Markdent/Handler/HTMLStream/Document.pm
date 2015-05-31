@@ -38,26 +38,27 @@ EOF
 sub start_document {
     my $self = shift;
 
-    $self->_output()->print($Doctype);
-    $self->_stream()->tag(
-        'html',
-        $self->_has_language() ? ( lang => $self->language() ) : (),
+    $self->_stream_raw($Doctype);
+    $self->_stream_start_tag(
+        'html', {
+            $self->_has_language() ? ( lang => $self->language() ) : (),
+        },
     );
-    $self->_stream()->tag('head');
-    $self->_stream()->tag( 'meta', charset => $self->charset() )
+    $self->_stream_start_tag('head');
+    $self->_stream_start_tag( 'meta', { charset => $self->charset() } )
         if $self->_has_charset();
-    $self->_stream()->tag('title');
-    $self->_stream()->text( $self->title() );
-    $self->_stream()->tag('_title');
-    $self->_stream()->tag('_head');
-    $self->_stream()->tag('body');
+    $self->_stream_start_tag('title');
+    $self->_stream_text( $self->title() );
+    $self->_stream_end_tag('title');
+    $self->_stream_end_tag('head');
+    $self->_stream_start_tag('body');
 }
 
 sub end_document {
     my $self = shift;
 
-    $self->_stream()->tag('_body');
-    $self->_stream()->tag('_html');
+    $self->_stream_end_tag('body');
+    $self->_stream_end_tag('html');
 }
 
 __PACKAGE__->meta()->make_immutable();
