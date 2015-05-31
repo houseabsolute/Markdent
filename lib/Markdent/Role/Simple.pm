@@ -6,6 +6,7 @@ use namespace::autoclean;
 
 our $VERSION = '0.26';
 
+use Encode qw( decode );
 use Markdent::Parser;
 
 use Moose::Role;
@@ -35,7 +36,7 @@ sub _parse_markdown {
     my $capture = q{};
 
     ## no critic (InputOutput::RequireBriefOpen)
-    open my $fh, '>', \$capture
+    open my $fh, '>:encoding(UTF-8)', \$capture
         or die $!;
 
     my $handler = $handler_class->new(
@@ -51,7 +52,7 @@ sub _parse_markdown {
     close $fh
         or die $!;
 
-    return $capture;
+    return decode( 'UTF-8', $capture );
 }
 
 1;
