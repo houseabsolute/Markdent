@@ -7,6 +7,7 @@ use namespace::autoclean;
 our $VERSION = '0.26';
 
 use Digest::SHA1 qw( sha1_hex );
+use Encode qw( encode );
 use Markdent::Event::StartDocument;
 use Markdent::Event::EndDocument;
 use Markdent::Event::StartBlockquote;
@@ -124,7 +125,7 @@ sub _hash_and_save_html {
     my $self = shift;
     my $html = shift;
 
-    my $sha1 = lc sha1_hex($html);
+    my $sha1 = lc sha1_hex( encode( 'UTF-8', $html ) );
 
     $self->_save_html_block( $sha1 => $html );
 
