@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- A change in 0.25 broke the ability to have a dialect with just a block
+  parser or span parser rather than both. Reported by Polina Shubina. GitHub
+  issue #7.
+
 - The parsing of HTML entities was too greedy, so that something like
   "&lt;word&gt;" would be parsed a sigle eneity, "lt;word&gt", which is
   clearly wrong. Fixed by Polina Shubina. GitHub PR #3.

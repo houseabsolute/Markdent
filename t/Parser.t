@@ -74,13 +74,26 @@ my $handler = Markdent::Handler::MinimalTree->new();
     ok(
         $parser->_block_parser()->meta()
             ->does_role('Example::Dialect::BlockParser'),
-        '$parser->_block_parser() with dialects = Theory'
+        '$parser->_block_parser() with dialects = Example::Dialect'
     );
 
     ok(
         $parser->_span_parser()->meta()
             ->does_role('Example::Dialect::SpanParser'),
-        '$parser->_span_parser() with dialects = Theory'
+        '$parser->_span_parser() with dialects = Example::Dialect'
+    );
+}
+
+{
+    my $parser = Markdent::Parser->new(
+        dialects => ['Example::Dialect2'],
+        handler  => $handler,
+    );
+
+    ok(
+        $parser->_span_parser()->meta()
+            ->does_role('Example::Dialect2::SpanParser'),
+        '$parser->_span_parser() with dialects = Example::Dialect2 - only provides a SpanParser class'
     );
 }
 

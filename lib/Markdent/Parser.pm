@@ -135,7 +135,14 @@ sub _set_classes_for_dialects {
 
             my $role = $self->_role_name_for_dialect( $dialect, $thing );
 
-            require_module($role);
+            my $found = try {
+                require_module($role);
+            }
+            catch {
+                die $_ unless $_ =~ /Can't locate/;
+                0;
+            };
+            next unless $found;
 
             my $specified_class = $args->{ $thing . '_class' };
 
