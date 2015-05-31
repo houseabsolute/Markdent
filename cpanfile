@@ -1,8 +1,9 @@
 requires "Digest::SHA1" => "0";
+requires "Encode" => "0";
 requires "Exporter" => "0";
 requires "File::Slurp" => "0";
 requires "Getopt::Long::Descriptive" => "0";
-requires "HTML::Stream" => "0";
+requires "HTML::Entities" => "0";
 requires "IO::Handle" => "0";
 requires "List::AllUtils" => "0";
 requires "Module::Runtime" => "0";
@@ -35,15 +36,14 @@ on 'test' => sub {
   requires "File::Spec" => "0";
   requires "File::Temp" => "0";
   requires "IO::File" => "0";
-  requires "IO::Handle" => "0";
-  requires "IPC::Open3" => "0";
   requires "Test::Builder" => "0";
   requires "Test::Deep" => "0";
   requires "Test::Fatal" => "0";
-  requires "Test::More" => "0.88";
+  requires "Test::More" => "0.96";
+  requires "Test::Requires" => "0";
   requires "Tree::Simple::Visitor::ToNestedArray" => "0";
   requires "lib" => "0";
-  requires "perl" => "5.006";
+  requires "utf8" => "0";
 };
 
 on 'test' => sub {
@@ -55,7 +55,13 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll" => "0.24";
+  requires "File::Spec" => "0";
   requires "HTML::Differences" => "0";
+  requires "IO::Handle" => "0";
+  requires "IPC::Open3" => "0";
+  requires "Perl::Critic" => "1.123";
+  requires "Perl::Tidy" => "20140711";
   requires "Pod::Coverage::Moose" => "0.02";
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::Code::TidyAll" => "0.24";

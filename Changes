@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.26   2015-05-31
+
 - Fixes for Unicode characters when generating HTML. The Markdent::Simple::*
   classes now make sure that the scalar it returns containing HTML contains
   characters, not bytes. The Markdent::Handler::HTMLStream::* classes no
