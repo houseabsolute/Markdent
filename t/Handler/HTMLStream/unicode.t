@@ -10,9 +10,11 @@ use Test::Requires {
 use HTML::Differences qw( html_text_diff );
 use Markdent::Simple::Fragment;
 
+## no critic (InputOutput::RequireCheckedSyscalls)
 binmode $_, ':encoding(UTF-8)'
     for map { Test::Builder->new->$_ }
     qw( output failure_output todo_output );
+## use critic
 
 my $text = <<"EOF";
 # \x{1f600} smiley face

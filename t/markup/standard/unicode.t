@@ -8,9 +8,11 @@ use lib 't/lib';
 
 use Test::Markdent;
 
+## no critic (InputOutput::RequireCheckedSyscalls)
 binmode $_, ':encoding(UTF-8)'
     for map { Test::Builder->new->$_ }
     qw( output failure_output todo_output );
+## use critic
 
 {
     my $text = <<"EOF";
@@ -65,7 +67,10 @@ EOF
         ],
     ];
 
-    parse_ok( $text, $expect, 'span-level html containing unicode in a block' );
+    parse_ok(
+        $text, $expect,
+        'span-level html containing unicode in a block'
+    );
 }
 
 {
@@ -90,7 +95,10 @@ EOF
         },
     ];
 
-    parse_ok( $text, $expect, 'unicode in paragraph followed by html block containing unicode' );
+    parse_ok(
+        $text, $expect,
+        'unicode in paragraph followed by html block containing unicode'
+    );
 }
 
 done_testing;
