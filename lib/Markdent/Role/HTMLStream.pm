@@ -490,8 +490,7 @@ sub _attribute {
     return $key unless defined $value;
 
     return join '=', $key,
-        q{"}
-        . encode_entities(
+        q{"} . encode_entities(
         $value,
         $self->_encodable_entities,
         ) . q{"};

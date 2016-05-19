@@ -87,8 +87,7 @@ sub run {
         ? read_file( $self->file() )
         : $self->text();
 
-    my ( $class, %p )
-        = $self->_has_title()
+    my ( $class, %p ) = $self->_has_title()
         ? (
         'Markdent::Simple::Document',
         title => $self->title(),
