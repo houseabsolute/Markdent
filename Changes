@@ -6,8 +6,8 @@
   classes now make sure that the scalar it returns containing HTML contains
   characters, not bytes. The Markdent::Handler::HTMLStream::* classes no
   longer entitize non-ASCII characters. Only control characters and HTML
-  reserved character (< > & ") are encoded as HTML entities. The problems with
-  Unicode handling were reported by Polina Shubha. GitHub PR #8.
+  reserved characters (< > & ") are encoded as HTML entities. The problems
+  with Unicode handling were reported by Polina Shubha. GitHub PR #8.
 
 - HTML blocks containing Unicode characters could cause the parser to die or
   warn. Reported by Polina Shubha. GitHub PR #8.
