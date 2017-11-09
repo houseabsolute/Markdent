@@ -34,9 +34,9 @@ around _possible_span_matches => sub {
 
     my @look_for = $self->$orig();
 
+    my %open = $self->_open_start_events_for_span( 'code', 'link' );
     return @look_for
-        if $self->_open_start_event_for_span('code')
-        || $self->_open_start_event_for_span('link');
+        if keys %open;
 
     return (
         $self->$orig(),
