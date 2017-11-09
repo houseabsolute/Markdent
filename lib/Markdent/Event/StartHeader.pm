@@ -6,14 +6,14 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( HeaderLevel );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has level => (
     is       => 'ro',
-    isa      => HeaderLevel,
+    isa      => t('HeaderLevel'),
     required => 1,
 );
 

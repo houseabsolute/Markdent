@@ -3,15 +3,12 @@ package Markdent::Types;
 use strict;
 use warnings;
 
-use base 'MooseX::Types::Combine';
+use parent 'Specio::Exporter';
+
+use Markdent::Types::Internal -reexport;
+use Specio::Library::Builtins -reexport;
+use Specio::Library::Numeric -reexport;
 
 our $VERSION = '0.27';
-
-__PACKAGE__->provide_types_from(
-    qw(
-        Markdent::Types::Internal
-        MooseX::Types::Moose
-        )
-);
 
 1;

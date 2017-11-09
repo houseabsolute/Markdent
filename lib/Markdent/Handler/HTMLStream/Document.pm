@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Str );
+use Markdent::Types;
 
 use Moose;
 use MooseX::SemiAffordanceAccessor;
@@ -15,19 +15,19 @@ with 'Markdent::Role::HTMLStream';
 
 has title => (
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     required => 1,
 );
 
 has charset => (
     is        => 'ro',
-    isa       => Str,
+    isa       => t('Str'),
     predicate => '_has_charset',
 );
 
 has language => (
     is        => 'ro',
-    isa       => Str,
+    isa       => t('Str'),
     predicate => '_has_language',
 );
 

@@ -27,7 +27,7 @@ use Markdent::Event::StartLink;
 use Markdent::Event::StartStrong;
 use Markdent::Event::Text;
 use Markdent::Regexes qw( $HTMLComment );
-use Markdent::Types qw( Str ArrayRef HashRef RegexpRef EventObject );
+use Markdent::Types;
 
 use Moose;
 use MooseX::SemiAffordanceAccessor;
@@ -36,9 +36,9 @@ use MooseX::StrictConstructor;
 with 'Markdent::Role::SpanParser';
 
 has __pending_events => (
-    traits   => ['Array'],
-    is       => 'rw',
-    isa      => ArrayRef [EventObject],
+    traits => ['Array'],
+    is     => 'rw',
+    isa    => t( 'ArrayRef', of => t('EventObject') ),
     default  => sub { [] },
     init_arg => undef,
     handles  => {
@@ -51,7 +51,7 @@ has __pending_events => (
 has _span_text_buffer => (
     traits   => ['String'],
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     default  => q{},
     init_arg => undef,
     handles  => {
@@ -62,9 +62,9 @@ has _span_text_buffer => (
 );
 
 has _links_by_id => (
-    traits   => ['Hash'],
-    is       => 'ro',
-    isa      => HashRef [ArrayRef],
+    traits => ['Hash'],
+    is     => 'ro',
+    isa    => t( 'HashRef', of => t('ArrayRef') ),
     default  => sub { {} },
     init_arg => undef,
     handles  => {
@@ -75,7 +75,7 @@ has _links_by_id => (
 
 has _emphasis_start_delimiter_re => (
     is       => 'ro',
-    isa      => RegexpRef,
+    isa      => t('RegexpRef'),
     lazy     => 1,
     builder  => '_build_emphasis_start_delimiter_re',
     init_arg => undef,
@@ -83,7 +83,7 @@ has _emphasis_start_delimiter_re => (
 
 has _escape_re => (
     is       => 'ro',
-    isa      => RegexpRef,
+    isa      => t('RegexpRef'),
     lazy     => 1,
     builder  => '_build_escape_re',
     init_arg => undef,
@@ -91,7 +91,7 @@ has _escape_re => (
 
 has _line_break_re => (
     is       => 'ro',
-    isa      => RegexpRef,
+    isa      => t('RegexpRef'),
     lazy     => 1,
     builder  => '_build_line_break_re',
     init_arg => undef,
@@ -99,7 +99,7 @@ has _line_break_re => (
 
 has _escapable_chars => (
     is      => 'ro',
-    isa     => ArrayRef [Str],
+    isa     => t( 'ArrayRef', of => t('Str') ),
     lazy    => 1,
     builder => '_build_escapable_chars',
 );

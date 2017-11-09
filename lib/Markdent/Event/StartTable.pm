@@ -6,14 +6,14 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Str );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has caption => (
     is        => 'ro',
-    isa       => Str,
+    isa       => t('Str'),
     predicate => 'has_caption',
 );
 

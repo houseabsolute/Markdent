@@ -7,13 +7,14 @@ use namespace::autoclean;
 our $VERSION = '0.27';
 
 use List::AllUtils qw( all );
-use Markdent::Types qw( ArrayRef Str );
-use MooseX::Params::Validate qw( pos_validated_list );
+use Markdent::Types;
+use Params::ValidationCompiler qw( validation_for );
+use Specio::Declare;
 
 use MooseX::Role::Parameterized;
 
 parameter compare => (
-    isa => ArrayRef [Str],
+    isa => t( 'ArrayRef', of => t('Str') ),
 );
 
 role {
@@ -21,10 +22,15 @@ role {
 
     my @compare = @{ $p->compare() || [] };
 
+    my $validator = validation_for(
+        params => [
+            { type => object_does_type('Markdent::Role::Event') },
+        ],
+    );
+
     method balances_event => sub {
         my $self = shift;
-        my ($other)
-            = pos_validated_list( \@_, { does => 'Markdent::Role::Event' } );
+        my ($other) = $validator->(@_);
 
         return 0 unless $self->name() eq $other->name();
 

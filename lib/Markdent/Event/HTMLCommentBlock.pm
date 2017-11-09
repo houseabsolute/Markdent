@@ -6,14 +6,14 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Str HashRef );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has text => (
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     required => 1,
 );
 

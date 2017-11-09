@@ -27,7 +27,7 @@ use Markdent::Event::HTMLBlock;
 use Markdent::Event::HTMLCommentBlock;
 use Markdent::Event::Preformatted;
 use Markdent::Regexes qw( :block $HTMLComment );
-use Markdent::Types qw( Str Int Bool ArrayRef HashRef );
+use Markdent::Types;
 
 use Moose;
 use MooseX::SemiAffordanceAccessor;
@@ -36,9 +36,9 @@ use MooseX::StrictConstructor;
 with 'Markdent::Role::BlockParser';
 
 has __html_blocks => (
-    traits   => ['Hash'],
-    is       => 'ro',
-    isa      => HashRef [Str],
+    traits => ['Hash'],
+    is     => 'ro',
+    isa    => t( 'HashRef', of => t('Str') ),
     default  => sub { {} },
     init_arg => undef,
     handles  => {
@@ -50,7 +50,7 @@ has __html_blocks => (
 has _list_level => (
     traits   => ['Counter'],
     is       => 'rw',
-    isa      => Int,
+    isa      => t('Int'),
     default  => 0,
     init_arg => undef,
     handles  => {
@@ -62,7 +62,7 @@ has _list_level => (
 has _list_item_is_paragraph => (
     traits   => ['Bool'],
     is       => 'ro',
-    isa      => Bool,
+    isa      => t('Bool'),
     default  => 0,
     init_arg => undef,
     handles  => {

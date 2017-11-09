@@ -6,26 +6,26 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Str ArrayRef );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has text => (
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     required => 1,
 );
 
 has _converted_from => (
     is        => 'ro',
-    isa       => Str,
+    isa       => t('Str'),
     predicate => '_has_converted_from',
 );
 
 has _merged_from => (
     is        => 'ro',
-    isa       => ArrayRef [Str],
+    isa       => t( 'ArrayRef', of => t('Str') ),
     predicate => '_has_merged_from',
 );
 

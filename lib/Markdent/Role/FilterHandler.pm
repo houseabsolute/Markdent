@@ -6,6 +6,8 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
+use Specio::Declare;
+
 use Moose::Role;
 
 with 'Markdent::Role::Handler';
@@ -14,7 +16,7 @@ requires 'filter_event';
 
 has handler => (
     is       => 'ro',
-    does     => 'Markdent::Role::Handler',
+    does     => object_does_type('Markdent::Role::Handler'),
     required => 1,
 );
 

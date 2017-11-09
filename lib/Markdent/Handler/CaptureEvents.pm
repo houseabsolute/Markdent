@@ -7,6 +7,7 @@ use namespace::autoclean;
 our $VERSION = '0.27';
 
 use Markdent::CapturedEvents;
+use Specio::Declare;
 
 use Moose;
 use MooseX::StrictConstructor;
@@ -15,7 +16,7 @@ with 'Markdent::Role::Handler';
 
 has captured_events => (
     is       => 'ro',
-    isa      => 'Markdent::CapturedEvents',
+    isa      => object_isa_type('Markdent::CapturedEvents'),
     init_arg => undef,
     default  => sub { Markdent::CapturedEvents->new() },
 );

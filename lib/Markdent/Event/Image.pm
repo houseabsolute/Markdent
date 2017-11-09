@@ -6,38 +6,38 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Str Bool );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has uri => (
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     required => 1,
 );
 
 has alt_text => (
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     required => 1,
 );
 
 has title => (
     is        => 'ro',
-    isa       => Str,
+    isa       => t('Str'),
     predicate => 'has_title',
 );
 
 has id => (
     is        => 'ro',
-    isa       => Str,
+    isa       => t('Str'),
     predicate => 'has_id',
 );
 
 has is_implicit_id => (
     is      => 'ro',
-    isa     => 'Bool',
+    isa     => t('Bool'),
     default => 0,
 );
 

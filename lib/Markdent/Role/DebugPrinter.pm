@@ -6,13 +6,13 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Bool );
+use Markdent::Types;
 
 use Moose::Role;
 
 has debug => (
     is      => 'rw',
-    isa     => Bool,
+    isa     => t('Bool'),
     default => $ENV{MARKDENT_DEBUG} || 0,
 );
 

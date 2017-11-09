@@ -18,7 +18,7 @@ use Markdent::Event::EndTableRow;
 use Markdent::Event::StartTableCell;
 use Markdent::Event::EndTableCell;
 use Markdent::Regexes qw( $HorizontalWS $EmptyLine $BlockStart $BlockEnd );
-use Markdent::Types qw( Bool );
+use Markdent::Types;
 
 use Moose::Role;
 
@@ -27,7 +27,7 @@ with 'Markdent::Role::Dialect::BlockParser';
 has _in_table => (
     traits   => ['Bool'],
     is       => 'ro',
-    isa      => Bool,
+    isa      => t('Bool'),
     default  => 0,
     init_arg => undef,
     handles  => {

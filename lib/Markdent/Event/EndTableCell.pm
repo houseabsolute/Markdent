@@ -6,14 +6,14 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Bool );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has is_header_cell => (
     is      => 'ro',
-    isa     => Bool,
+    isa     => t('Bool'),
     default => 0,
 );
 

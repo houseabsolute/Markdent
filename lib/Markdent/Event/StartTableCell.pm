@@ -6,26 +6,26 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( TableCellAlignment PosInt Bool );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has alignment => (
     is       => 'ro',
-    isa      => TableCellAlignment,
+    isa      => t('TableCellAlignment'),
     required => 1,
 );
 
 has colspan => (
     is       => 'ro',
-    isa      => PosInt,
+    isa      => t('PositiveInt'),
     required => 1,
 );
 
 has is_header_cell => (
     is      => 'ro',
-    isa     => Bool,
+    isa     => t('Bool'),
     default => 0,
 );
 

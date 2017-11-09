@@ -6,13 +6,15 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
+use Specio::Declare;
+
 use Moose::Role;
 
 with 'Markdent::Role::DebugPrinter';
 
 has handler => (
     is       => 'ro',
-    does     => 'Markdent::Role::Handler',
+    does     => object_does_type('Markdent::Role::Handler'),
     required => 1,
 );
 

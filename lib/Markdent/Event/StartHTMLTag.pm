@@ -6,20 +6,20 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( Str HashRef );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has tag => (
     is       => 'ro',
-    isa      => Str,
+    isa      => t('Str'),
     required => 1,
 );
 
 has attributes => (
     is      => 'ro',
-    isa     => HashRef,
+    isa     => t('HashRef'),
     default => sub { {} },
 );
 

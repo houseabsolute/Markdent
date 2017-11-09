@@ -6,40 +6,51 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( ArrayRef EventObject );
-use MooseX::Params::Validate qw( pos_validated_list );
+use Markdent::Types;
+use Params::ValidationCompiler qw( validation_for );
+use Specio::Declare;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has _events => (
     is       => 'ro',
-    isa      => ArrayRef [EventObject],
+    isa      => t( 'ArrayRef', of => t('EventObject') ),
     init_arg => 'events',
-    default  => sub { [] },
+    default => sub { [] },
 );
 
 sub events {
     @{ $_[0]->_events() };
 }
 
-sub capture_events {
-    my $self   = shift;
-    my @events = pos_validated_list(
-        \@_,
-        ( { does => 'Markdent::Role::Event' } ) x ( @_ ? @_ : 1 ),
-        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+{
+    my $event_type = object_does_type('Markdent::Role::Event');
+    my $validator  = validation_for(
+        params => [ { type => $event_type } ],
+        slurpy => $event_type,
     );
 
-    push @{ $self->_events() }, @_;
+    sub capture_events {
+        my $self   = shift;
+        my @events = $validator->(@_);
+
+        push @{ $self->_events() }, @_;
+    }
 }
 
-sub replay_events {
-    my $self = shift;
-    my ($handler)
-        = pos_validated_list( \@_, { does => 'Markdent::Role::Handler' } );
+{
+    my $handler_type = object_does_type('Markdent::Role::Handler');
+    my $validator    = validation_for(
+        params => [ { type => $handler_type } ],
+    );
 
-    $handler->handle_event($_) for $self->events();
+    sub replay_events {
+        my $self = shift;
+        my ($handler) = $validator->(@_);
+
+        $handler->handle_event($_) for $self->events();
+    }
 }
 
 __PACKAGE__->meta()->make_immutable();

@@ -6,6 +6,8 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
+use Specio::Declare;
+
 use Moose::Role;
 
 with 'Markdent::Role::AnyParser';
@@ -14,7 +16,7 @@ requires 'parse_document';
 
 has _span_parser => (
     is       => 'ro',
-    does     => 'Markdent::Role::SpanParser',
+    does     => object_does_type('Markdent::Role::SpanParser'),
     init_arg => 'span_parser',
     required => 1,
 );

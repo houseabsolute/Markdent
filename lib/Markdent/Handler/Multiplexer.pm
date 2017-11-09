@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
-use Markdent::Types qw( NonEmptyArrayRef HandlerObject );
+use Markdent::Types;
 
 use Moose;
 use MooseX::StrictConstructor;
@@ -15,7 +15,7 @@ with 'Markdent::Role::Handler';
 
 has _handlers => (
     is       => 'ro',
-    isa      => NonEmptyArrayRef [HandlerObject],
+    isa      => t( 'ArrayRef', of => t('HandlerObject') ),
     init_arg => 'handlers',
     required => 1,
 );

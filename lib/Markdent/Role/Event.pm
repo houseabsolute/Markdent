@@ -6,11 +6,13 @@ use namespace::autoclean;
 
 our $VERSION = '0.27';
 
+use Markdent::Types;
+
 use MooseX::Role::Parameterized;
 
 parameter event_class => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => t('Str'),
     required => 1,
 );
 

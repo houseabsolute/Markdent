@@ -7,41 +7,60 @@ use namespace::autoclean;
 our $VERSION = '0.27';
 
 use Markdent::Handler::HTMLStream::Document;
-use Markdent::Types qw( ArrayRef Str );
-use MooseX::Params::Validate qw( validated_list );
+use Markdent::Types;
+use Params::ValidationCompiler qw( validation_for );
+use Specio::Declare;
 
 use Moose;
 use MooseX::StrictConstructor;
 
 with 'Markdent::Role::Simple';
 
-sub markdown_to_html {
-    my $self = shift;
-    my ( $dialects, $title, $charset, $language, $markdown )
-        = validated_list(
-        \@_,
-        dialects => {
-            isa => Str | ( ArrayRef [Str] ), default => [],
-        },
-        title    => { isa => Str },
-        charset  => { isa => Str, optional => 1 },
-        language => { isa => Str, optional => 1 },
-        markdown => { isa => Str },
+{
+    my $validator = validation_for(
+        params => [
+            dialects => {
+                type => union(
+                    of => [
+                        t('Str'),
+                        t( 'ArrayRef', of => t('Str') )
+                    ]
+                ),
+                default => sub { [] },
+            },
+            title   => { type => t('Str') },
+            charset => {
+                type     => t('Str'),
+                optional => 1,
+            },
+            language => {
+                type     => t('Str'),
+                optional => 1,
+            },
+            markdown => { type => t('Str') },
+        ],
+        named_to_list => 1,
+    );
+
+    sub markdown_to_html {
+        my $self = shift;
+        my ( $dialects, $title, $charset, $language, $markdown )
+            = $validator->(@_);
+
+        my $handler_class = 'Markdent::Handler::HTMLStream::Document';
+        my %handler_p     = (
+            title => $title,
+            ( $charset  ? ( charset  => $charset )  : () ),
+            ( $language ? ( language => $language ) : () ),
         );
 
-    my $handler_class = 'Markdent::Handler::HTMLStream::Document';
-    my %handler_p     = (
-        title => $title,
-        ( $charset  ? ( charset  => $charset )  : () ),
-        ( $language ? ( language => $language ) : () ),
-    );
-
-    return $self->_parse_markdown(
-        $markdown,
-        $dialects,
-        $handler_class,
-        \%handler_p
-    );
+        return $self->_parse_markdown(
+            $markdown,
+            $dialects,
+            $handler_class,
+            \%handler_p
+        );
+    }
 }
 
 __PACKAGE__->meta()->make_immutable();
