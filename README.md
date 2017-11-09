@@ -64,10 +64,13 @@ or through the web interface at [http://rt.cpan.org](http://rt.cpan.org).  I wil
 notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
-Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=Markdent)
-(or [bug-markdent@rt.cpan.org](mailto:bug-markdent@rt.cpan.org)).
+Bugs may be submitted at [http://rt.cpan.org/Public/Dist/Display.html?Name=Markdent](http://rt.cpan.org/Public/Dist/Display.html?Name=Markdent) or via email to [bug-markdent@rt.cpan.org](mailto:bug-markdent@rt.cpan.org).
 
-I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
+
+# SOURCE
+
+The source code repository for Markdent can be found at [https://github.com/houseabsolute/Markdent](https://github.com/houseabsolute/Markdent).
 
 # DONATIONS
 
@@ -97,9 +100,12 @@ Dave Rolsky <autarch@urth.org>
 - Polina Shubina <925043@mai.com>
 - Tom Hukins <tom@eborcom.com>
 
-# COPYRIGHT AND LICENCE
+# COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Dave Rolsky.
+This software is copyright (c) 2017 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+The full text of the license can be found in the
+`LICENSE` file included with this distribution.

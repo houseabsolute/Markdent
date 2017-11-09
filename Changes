@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.27   2017-11-09
+
 - Replaced MooseX::Params::Validate and MooseX::Types with
   Params::ValidationCompiler and Specio. There are also some other internals
   changes to improve performance in this release. Prompted by fREW
