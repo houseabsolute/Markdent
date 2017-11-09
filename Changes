@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Replaced MooseX::Params::Validate and MooseX::Types with
+  Params::ValidationCompiler and Specio. There are also some other internals
+  changes to improve performance in this release. Prompted by fREW
+  Schmidt. GitHub #9.
+
+
 0.26   2015-05-31
 
 - Fixes for Unicode characters when generating HTML. The Markdent::Simple::*
