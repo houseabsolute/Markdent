@@ -249,10 +249,11 @@ sub _look_for_strong_and_emphasis {
     if ( $start{strong} && $start{emphasis} ) {
         my $last_saw;
         for my $event ( $self->_pending_events() ) {
-            if ( $event->event_name() eq 'start_strong' ) {
+            my $event_name = $event->event_name;
+            if ( $event_name eq 'start_strong' ) {
                 $last_saw = 'strong';
             }
-            elsif ( $event->event_name() eq 'start_emphasis' ) {
+            elsif ( $event_name eq 'start_emphasis' ) {
                 $last_saw = 'emphasis';
             }
         }
@@ -288,11 +289,12 @@ sub _open_start_event_for_span {
 
     my $in;
     for my $event ( $self->_pending_events() ) {
+        my $event_name = $event->event_name;
         $in = $event
-            if $event->event_name eq 'start_' . $type;
+            if $event_name eq 'start_' . $type;
 
         undef $in
-            if $event->event_name eq 'end_' . $type;
+            if $event_name eq 'end_' . $type;
     }
 
     return $in;
