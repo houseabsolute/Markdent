@@ -7,7 +7,7 @@ use warnings;
 # The first version that completely worked with newer versions of Specio.
 use Moose 2.1802 ();
 
-our $VERSION = '0.28';
+our $VERSION = '0.29';
 
 1;
 
