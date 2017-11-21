@@ -1,3 +1,4 @@
+## no critic (Moose::RequireMakeImmutable)
 package Markdent;
 
 use strict;
