@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.28   2017-11-21
+
 - Require Moose 2.1802 for full compatibility with Specio.
 
 
