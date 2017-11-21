@@ -25,10 +25,9 @@ sub events {
 }
 
 {
-    my $event_type = object_does_type('Markdent::Role::Event');
-    my $validator  = validation_for(
-        params => [ { type => $event_type } ],
-        slurpy => $event_type,
+    my $validator = validation_for(
+        params => [ { type => t('EventObject') } ],
+        slurpy => t('EventObject'),
     );
 
     sub capture_events {
@@ -40,9 +39,8 @@ sub events {
 }
 
 {
-    my $handler_type = object_does_type('Markdent::Role::Handler');
-    my $validator    = validation_for(
-        params => [ { type => $handler_type } ],
+    my $validator = validation_for(
+        params => [ { type => t('HandlerObject') } ],
     );
 
     sub replay_events {

@@ -24,7 +24,7 @@ role {
 
     my $validator = validation_for(
         params => [
-            { type => object_does_type('Markdent::Role::Event') },
+            { type => t('EventObject') },
         ],
     );
 
