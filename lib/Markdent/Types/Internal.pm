@@ -46,11 +46,9 @@ declare(
     },
 );
 
-declare(
+object_does_type(
     'EventObject',
-    parent => t('Object'),
-    inline =>
-        sub {"$_[1]->can('does') && $_[1]->does('Markdent::Role::Event')"},
+    role => 'Markdent::Role::Event',
 );
 
 declare(
@@ -59,11 +57,9 @@ declare(
     inline => sub {"-f $_[1]"},
 );
 
-declare(
+object_does_type(
     'HandlerObject',
-    parent => t('Object'),
-    inline =>
-        sub {"$_[1]->can('does') && $_[1]->does('Markdent::Role::Handler')"},
+    role => 'Markdent::Role::Handler',
 );
 
 declare(
