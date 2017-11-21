@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Require Moose 2.1802 for full compatibility with Specio.
+
+
 0.27   2017-11-09
 
 - Replaced MooseX::Params::Validate and MooseX::Types with
