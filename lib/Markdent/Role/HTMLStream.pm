@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.29';
+our $VERSION = '0.30';
 
 use HTML::Entities qw( encode_entities );
 use Markdent::CheckedOutput;

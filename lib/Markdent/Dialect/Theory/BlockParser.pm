@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.29';
+our $VERSION = '0.30';
 
 use List::AllUtils qw( insert_after_string sum );
 use Markdent::Event::StartTable;
