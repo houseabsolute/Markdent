@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.29   2017-12-31
+
 - Make the GitHub dialect look for fenced code blocks before other types of
   markup. Otherwise this could parse the _inside_ of a fenced code block as
   containing some sort of block-level markup like a two-line list. Reported by
