@@ -150,4 +150,33 @@ EOF
     }
 }
 
+{
+    my $code = <<'EOF';
+---
+test
+---
+EOF
+
+    my $text = <<"EOF";
+```
+$code
+```
+EOF
+
+    my $expect = [
+        {
+            type     => 'code_block',
+            code     => $code,
+            language => undef,
+        },
+    ];
+
+    parse_ok(
+        { dialects => 'GitHub' },
+        $text,
+        $expect,
+        'fenced code block with dashes in it - dashes are not treated as two-line header'
+    );
+}
+
 done_testing();

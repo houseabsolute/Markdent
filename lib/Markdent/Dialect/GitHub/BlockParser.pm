@@ -6,9 +6,8 @@ use namespace::autoclean;
 
 our $VERSION = '0.29';
 
-use List::AllUtils qw( insert_after_string );
 use Markdent::Event::CodeBlock;
-use Markdent::Regexes qw( $BlockStart );
+use Markdent::Regexes qw( $BlockStart $HorizontalWS );
 
 use Moose::Role;
 
@@ -19,7 +18,7 @@ around _possible_block_matches => sub {
     my $self = shift;
 
     my @look_for = $self->$orig();
-    insert_after_string 'list', 'fenced_code_block', @look_for;
+    unshift @look_for, 'fenced_code_block';
 
     return @look_for;
 };
@@ -32,7 +31,7 @@ sub _match_fenced_code_block {
     return unless ${$text} =~ / \G
                                 $BlockStart
                                 ```
-                                \s?\{?\.?([\w-]+)?\}?\s*        # optional language name
+                                $HorizontalWS?\{?\.?([\w-]+)?\}?$HorizontalWS*   # optional language name
                                 \n
                                 (                # code block content
                                   (?:.|\n)+?
