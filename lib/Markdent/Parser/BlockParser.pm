@@ -434,7 +434,7 @@ sub _match_blockquote {
         $self->_split_chunks_on_regex(
             $bq, qr/^>(?: \p{SpaceSeparator} | \t )*\S/xm
         )
-        ) {
+    ) {
 
         $self->_parse_text( \$chunk );
     }

@@ -92,7 +92,7 @@ sub BUILD {
         grep {defined}
         map  { $_->init_arg() }
         $self->_span_parser_class()->meta()->get_all_attributes()
-        ) {
+    ) {
 
         $sp_args{$key} = $args->{$key}
             if exists $args->{$key};
@@ -107,7 +107,7 @@ sub BUILD {
         grep {defined}
         map  { $_->init_arg() }
         $self->_block_parser_class()->meta()->get_all_attributes()
-        ) {
+    ) {
 
         $bp_args{$key} = $args->{$key}
             if exists $args->{$key};
