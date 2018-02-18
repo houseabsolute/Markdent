@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
 use Encode qw( decode );
 use Markdent::Parser;
