@@ -11,7 +11,7 @@ use Markdent::Parser::SpanParser;
 use Markdent::Types;
 use Module::Runtime qw( require_module );
 use Moose::Meta::Class;
-use Params::ValidationCompiler qw( validation_for );
+use Params::ValidationCompiler 0.14 qw( validation_for );
 use Specio::Declare;
 use Try::Tiny;
 
