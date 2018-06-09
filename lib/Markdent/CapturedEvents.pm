@@ -34,7 +34,7 @@ sub events {
         my $self   = shift;
         my @events = $validator->(@_);
 
-        push @{ $self->_events() }, @_;
+        push @{ $self->_events() }, @events;
     }
 }
 

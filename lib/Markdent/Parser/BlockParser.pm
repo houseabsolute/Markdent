@@ -137,7 +137,6 @@ sub _parse_text {
     my $text = shift;
 
     my $last_pos;
-    my $x = 1;
 PARSE:
     while (1) {
         if ( $self->debug() && pos ${$text} ) {
