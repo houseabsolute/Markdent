@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.31';
+our $VERSION = '0.32';
 
 use Markdent::Handler::HTMLStream::Fragment;
 use Markdent::Parser;
