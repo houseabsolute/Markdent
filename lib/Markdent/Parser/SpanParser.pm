@@ -36,9 +36,9 @@ use MooseX::StrictConstructor;
 with 'Markdent::Role::SpanParser';
 
 has __pending_events => (
-    traits => ['Array'],
-    is     => 'rw',
-    isa    => t( 'ArrayRef', of => t('EventObject') ),
+    traits   => ['Array'],
+    is       => 'rw',
+    isa      => t( 'ArrayRef', of => t('EventObject') ),
     default  => sub { [] },
     init_arg => undef,
     handles  => {
@@ -62,9 +62,9 @@ has _span_text_buffer => (
 );
 
 has _links_by_id => (
-    traits => ['Hash'],
-    is     => 'ro',
-    isa    => t( 'HashRef', of => t('ArrayRef') ),
+    traits   => ['Hash'],
+    is       => 'ro',
+    isa      => t( 'HashRef', of => t('ArrayRef') ),
     default  => sub { {} },
     init_arg => undef,
     handles  => {

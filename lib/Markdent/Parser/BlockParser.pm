@@ -36,9 +36,9 @@ use MooseX::StrictConstructor;
 with 'Markdent::Role::BlockParser';
 
 has __html_blocks => (
-    traits => ['Hash'],
-    is     => 'ro',
-    isa    => t( 'HashRef', of => t('Str') ),
+    traits   => ['Hash'],
+    is       => 'ro',
+    isa      => t( 'HashRef', of => t('Str') ),
     default  => sub { {} },
     init_arg => undef,
     handles  => {

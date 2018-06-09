@@ -17,7 +17,7 @@ has _events => (
     is       => 'ro',
     isa      => t( 'ArrayRef', of => t('EventObject') ),
     init_arg => 'events',
-    default => sub { [] },
+    default  => sub { [] },
 );
 
 sub events {
