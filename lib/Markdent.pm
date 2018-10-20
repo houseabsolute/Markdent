@@ -43,11 +43,6 @@ use better battle-tested tools like L<Text::Markdown>.
 See L<Markdent::Manual> for more details on how Markdent works and how you can
 use it.
 
-=head1 ALPHA WARNING
-
-This code is still quite new. While the Markdown to HTML conversion seems to
-work fine, the internals are subject to change.
-
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-markdent@rt.cpan.org>,
