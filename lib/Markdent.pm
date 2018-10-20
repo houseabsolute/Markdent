@@ -43,6 +43,68 @@ use better battle-tested tools like L<Text::Markdown>.
 See L<Markdent::Manual> for more details on how Markdent works and how you can
 use it.
 
+=head1 QUICK MARKDOWN TO HTML CONVERSION
+
+If you just want to do some quick Markdown to HTML conversion use either the
+L<Markdent::Simple::Document> or L<Markdent::Simple::Fragment> class.
+
+This distribution also ships with a command line tool called
+L<markdent-html>. See that tool's documentation for details on how to use it.
+
+=head1 PROCESSING PIPELINES
+
+If you want to create a Markdown processing pipeline, start by looking at the
+various handler classes:
+
+=over 4
+
+=item * L<Markdent::Handler::HTMLStream::Document>
+
+=item * L<Markdent::Handler::HTMLStream::Fragment>
+
+=item * L<Markdent::Handler::HTMLStream::Multiplexer>
+
+=item * L<Markdent::Handler::HTMLStream::HTMLFilter>
+
+=item * L<Markdent::Handler::HTMLStream::CaptureEvents>
+
+=back
+
+You will probably also want to write your own handler class as part of the
+pipeline. This will need to implement the L<Markdent::Role::Handler> role.
+
+To do that you'll need to review the many C<Markdent::Event::*> classes. Each
+event represents something seen by the parse, such as a piece of the start or
+end of a piece of block (paragraph, header) or span markup (strong, link) or
+some text.
+
+The start of a pipeline will generally be either the L<Markdent::Parser> or
+L<Markdent::CapturedEvents> class.
+
+=head1 CUSTOM DIALECTS
+
+You may also want to implement a custom dialect to add some additional
+features to the parser. Your parser classes will need to consume either the
+L<Markdent::Role::Dialect::BlockParser> or the
+L<Markdent::Role::Dialect::SpanParser> role. The best way to understand how a
+dialect is implemented is to look at one of the existing dialect classes:
+
+=over 4
+
+=item * L<Markdent::Dialect::GitHub::BlockParser>
+
+=item * L<Markdent::Dialect::GitHub::SpanParser>
+
+=item * L<Markdent::Dialect::Theory::BlockParser>
+
+=item * L<Markdent::Dialect::Theory::SpanParser>
+
+=back
+
+You'll also need to dig into the core L<Markdent::Parser::BlockParser> and
+L<Markdent::Parser::SpanParser> classes in order to see h ow these dialects
+interact with the core parser.
+
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-markdent@rt.cpan.org>,

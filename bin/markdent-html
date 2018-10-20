@@ -8,3 +8,54 @@ our $VERSION = '0.32';
 use Markdent::CLI;
 
 Markdent::CLI->new_with_options()->run();
+
+# PODNAME: markdent-html
+
+# ABSTRACT: Turn Markdown into HTML with Markdent
+
+__END__
+
+=head1 SYNOPSIS
+
+    $> markdent-html --file ./path/to/text.md
+
+=head1 DESCRIPTION
+
+This tool turns Markdown into HTML using L<Markdent>.
+
+=head1 OPTIONS
+
+This tool accepts the following command line options:
+
+=head2 --file
+
+The file containing the Markdown to process. You must provide this or
+C<--text>, but not both.
+
+=head2 --text
+
+The Markdown text to process. You must provide this or C<--file>, but not
+both.
+
+=head2 --title
+
+If you pass then the output will be a full HTML document containing this as
+the C<< <title> >> tag.
+
+=head2 --charset
+
+If you pass with a C<--title> it will be used to populate a C<< <meta
+charset="..."> >> tag for the document.
+
+=head2 --language
+
+If you pass with a C<--title> it will be used to set the C<lang> attribute for
+the document's C<< <html> >> tag.
+
+=head2 --dialects
+
+You can add one or more dialects to the standard parser with this option. This
+can either be a full class name like C<Markdent::Dialect::GitHub> or just a
+short name like C<GitHub>.
+
+
