@@ -40,7 +40,8 @@ both.
 =head2 --title
 
 If you pass then the output will be a full HTML document containing this as
-the C<< <title> >> tag.
+the C<< <title> >> tag. If this isn't passed then the output will be a HTML
+fragment with no C<< <html> >> or C<< <body> >> tags.
 
 =head2 --charset
 
