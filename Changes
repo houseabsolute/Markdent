@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.32   2018-10-20
+
 - Added more documentation to Markdent.pm containing pointers to various
   classes in the distribution. Also added POD documentation to the
   markdent-html script that ships with this distro.
