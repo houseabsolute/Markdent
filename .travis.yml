@@ -1,14 +1,28 @@
 ---
-sudo: false
+os:
+  - linux
+  - osx
+  - windows
+matrix:
+  include:
+    - os: linux
+      sudo: false
+      language: perl
+    - os: osx
+      sudo: false
+      language: perl
+    - os: windows
+      sudo: false
+      language: perl
 addons:
   apt:
     packages:
       - aspell
       - aspell-en
-language: perl
 perl:
   - blead
   - dev
+  - '5.28'
   - '5.26'
   - '5.24'
   - '5.22'
@@ -18,6 +32,7 @@ perl:
   - '5.14'
   - '5.12'
   - '5.10'
+  - '5.8'
 cache:
   directories:
     - $HOME/perl5
@@ -26,13 +41,28 @@ matrix:
     - perl: blead
   include:
     - env: COVERAGE=1
-      perl: '5.26'
+      perl: '5.28'
 env:
   global:
     - AUTHOR_TESTING=1
     - RELEASE_TESTING=1
 before_install:
-  - eval $(curl https://travis-perl.github.io/init) --auto --always-upgrade-modules
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - source ~/travis-perl-helpers/init
+  - build-perl
+  - perl -V
+  - build-dist
+  - cd $BUILD_DIR
+install:
+  - cpan-install Linux::Inotify2
+  - cpan-install --deps
+  - cpan-install --coverage
+before_script:
+  - coverage-setup
+script:
+  - prove -l -j$(test-jobs) $(test-files)
+after_success:
+  - coverage-report
 ### __app_cisetup__
 # ---
 # force_threaded_perls: 0
