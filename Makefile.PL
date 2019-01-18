@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.010",
   "NAME" => "Markdent",
   "PREREQ_PM" => {
-    "Digest::SHA1" => 0,
+    "Digest::SHA" => 0,
     "Encode" => 0,
     "Exporter" => 0,
     "File::Slurper" => 0,
@@ -78,7 +78,7 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Data::Dumper" => 0,
-  "Digest::SHA1" => 0,
+  "Digest::SHA" => 0,
   "Encode" => 0,
   "Exporter" => 0,
   "ExtUtils::MakeMaker" => 0,
