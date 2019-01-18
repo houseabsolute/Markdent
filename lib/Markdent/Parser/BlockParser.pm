@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 our $VERSION = '0.33';
 
-use Digest::SHA1 qw( sha1_hex );
+use Digest::SHA qw( sha1_hex );
 use Encode qw( encode );
 use Markdent::Event::StartDocument;
 use Markdent::Event::EndDocument;
