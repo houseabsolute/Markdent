@@ -102,7 +102,7 @@ dialect is implemented is to look at one of the existing dialect classes:
 =back
 
 You'll also need to dig into the core L<Markdent::Parser::BlockParser> and
-L<Markdent::Parser::SpanParser> classes in order to see h ow these dialects
+L<Markdent::Parser::SpanParser> classes in order to see how these dialects
 interact with the core parser.
 
 =head1 BUGS
