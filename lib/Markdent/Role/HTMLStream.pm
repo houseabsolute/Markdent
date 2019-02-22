@@ -623,7 +623,8 @@ sub _attributes {
     my $attr = shift;
 
     return join q{ },
-        map { $self->_attribute( $_, $attr->{$_} ) } keys %{$attr};
+        map { $self->_attribute( $_, $attr->{$_} ) }
+        sort { $a cmp $b } keys %{$attr};
 }
 
 sub _attribute {
