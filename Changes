@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.34   2019-03-30
+
 - When Markdent processes raw HTML in Markdown text it will now emit that HTML
   with its attributes in sorted order, so `<a rel="thing" href="foo">` becomes
   `<a href="foo" rel="thing">`. Previously the attributes were emitted in a
