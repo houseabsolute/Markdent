@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.35   2019-11-09
+
 - Fix entirely broken HTML attribute parsing. Any attribute with a space in
   its value like `alt="Some text"` would cause the parser to go
   haywire. Reported by Shlomi Fish. GH #21.
