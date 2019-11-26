@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.36   2019-11-26
+
 - Fix somewhat broken HTML parsing. The change in 0.35 caused the parser to
   die if it encountered an empty attribute like in `<button
   ... disabled>`. This broke Markdown::Pod. Fixes
