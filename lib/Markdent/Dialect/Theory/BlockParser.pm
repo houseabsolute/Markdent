@@ -64,7 +64,7 @@ my $TableCaption = qr{ ^
                      }xm;
 
 # The use of (?> ... ) in the various regexes below forces the regex engine
-# not to backtrack once it matches the relevant subsection. Using there where
+# not to backtrack once it matches the relevant subsection. Using this where
 # possible _hugely_ speeds up matching, and seems to be safe. At least, the
 # tests pass.
 
