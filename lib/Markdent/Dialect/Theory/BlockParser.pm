@@ -100,8 +100,8 @@ my $TableRow = qr{ (?>$PipeRow)        # must have at least one starting row
                      (?:
                        $ColonRow
                        \n
-                     )*
-                   )                   # ... can have 0+ continuation lines
+                     )*                # ... can have 0+ continuation lines
+                   )
                  }xm;
 
 my $HeaderMarkerLine = qr/^[\-\+=]+\n/xm;
