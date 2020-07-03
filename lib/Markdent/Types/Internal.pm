@@ -54,7 +54,7 @@ object_does_type(
 declare(
     'ExistingFile',
     parent => t('Str'),
-    inline => sub {"-f $_[1]"},
+    inline => sub {"$_[1] eq '-' || -f $_[1]"},
 );
 
 object_does_type(

@@ -32,6 +32,8 @@ This tool accepts the following command line options:
 The file containing the Markdown to process. You must provide this or
 C<--text>, but not both.
 
+Pass C<-> to read from C<STDIN>.
+
 =head2 --text
 
 The Markdown text to process. You must provide this or C<--file>, but not

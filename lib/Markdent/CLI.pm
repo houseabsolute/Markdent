@@ -28,7 +28,7 @@ has file => (
     isa       => => t('ExistingFile'),
     predicate => 'has_file',
     documentation =>
-        'A Markdown file to parse and turn into HTML. Conflicts with --text.',
+        'A Markdown file (or - for STDIN) to parse and turn into HTML. Conflicts with --text.',
 );
 
 has text => (
@@ -82,9 +82,12 @@ sub BUILD {
 sub run {
     my $self = shift;
 
+    ## no critic (InputOutput::ProhibitExplicitStdin)
     my $markdown
         = $self->has_file()
-        ? read_text( $self->file() )
+        ? $self->file() eq '-'
+            ? do { local $/ = undef; <STDIN> }
+            : read_text( $self->file() )
         : $self->text();
 
     my ( $class, %p ) = $self->_has_title()
