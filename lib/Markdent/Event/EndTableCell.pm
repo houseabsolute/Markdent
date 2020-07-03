@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.37';
+our $VERSION = '0.38';
 
 use Markdent::Types;
 

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.37';
+our $VERSION = '0.38';
 
 use Digest::SHA qw( sha1_hex );
 use Encode qw( encode );

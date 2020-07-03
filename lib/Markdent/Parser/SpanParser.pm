@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 use re 'eval';
 
-our $VERSION = '0.37';
+our $VERSION = '0.38';
 
 use List::AllUtils qw( uniq );
 use Markdent::Event::AutoLink;
