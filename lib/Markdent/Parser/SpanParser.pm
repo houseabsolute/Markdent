@@ -26,7 +26,7 @@ use Markdent::Event::StartHTMLTag;
 use Markdent::Event::StartLink;
 use Markdent::Event::StartStrong;
 use Markdent::Event::Text;
-use Markdent::Regexes qw( $HTMLComment );
+use Markdent::Regexes qw( $HorizontalWS $HTMLComment );
 use Markdent::Types;
 
 use Moose;
@@ -142,7 +142,7 @@ sub _parse_uri_and_title {
 
     $text =~ s/^\s+|\s+$//g;
 
-    my ( $uri, $title ) = split /(?:\p{SpaceSeparator}|\t)+/, $text, 2;
+    my ( $uri, $title ) = split /$HorizontalWS+/, $text, 2;
 
     $uri = q{}
         unless defined $uri;

@@ -11,7 +11,8 @@ use base 'Exporter';
 
 our %EXPORT_TAGS = (
     block => [
-        qw( $HorizontalWS
+        qw(
+            $HorizontalWS
             $EmptyLine
             $EmptyLines
             $BlockStart
