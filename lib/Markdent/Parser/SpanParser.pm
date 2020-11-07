@@ -285,7 +285,7 @@ sub _look_for_strong_and_emphasis {
 sub _open_start_events_for_span {
     my $self         = shift;
     my %wanted_start = map { 'start_' . $_ => $_ } @_;
-    my %wanted_end   = map { 'end_' . $_ => $_ } @_;
+    my %wanted_end   = map { 'end_' . $_   => $_ } @_;
 
     my %open;
     for my $event ( $self->_pending_events() ) {

@@ -24,17 +24,17 @@ MooseX::Getopt::OptionTypeMap->add_option_type_to_map(
 );
 
 has file => (
-    is        => 'ro',
-    isa       => => t('ExistingFile'),
-    predicate => 'has_file',
+    is            => 'ro',
+    isa           => => t('ExistingFile'),
+    predicate     => 'has_file',
     documentation =>
         'A Markdown file (or - for STDIN) to parse and turn into HTML. Conflicts with --text.',
 );
 
 has text => (
-    is        => 'ro',
-    isa       => => t('Str'),
-    predicate => 'has_text',
+    is            => 'ro',
+    isa           => => t('Str'),
+    predicate     => 'has_text',
     documentation =>
         'Markdown text to parse and turn into HTML. Conflicts with --file.',
 );
