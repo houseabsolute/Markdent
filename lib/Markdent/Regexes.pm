@@ -3,7 +3,7 @@ package Markdent::Regexes;
 use strict;
 use warnings;
 
-our $VERSION = '0.38';
+our $VERSION = '0.39';
 
 use List::AllUtils qw( uniq );
 
