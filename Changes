@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.38   2020-11-07
+
 - Fix a bug where a line starting with a tab in the middle of a paragraph
   caused the Standard dialect parser to error out. Reported by André
   Walker. GH #25.
