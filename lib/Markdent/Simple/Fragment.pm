@@ -81,9 +81,20 @@ Creates a new Markdent::Simple::Fragment object.
 
 =head2 $mdf->markdown_to_html( markdown => $markdown )
 
-This method turns Markdown into HTML.
+This method turns Markdown into HTML. It accepts the following parameters:
 
-You can also provide an optional "dialects" parameter.
+=over 4
+
+=item * markdown
+
+This is the markdown to pass. This argument is required.
+
+=item * dialects
+
+This can either be a single string or an array ref of strings containing the
+class names of dialects. This parameter is optional.
+
+=back
 
 =head1 ROLES
 
