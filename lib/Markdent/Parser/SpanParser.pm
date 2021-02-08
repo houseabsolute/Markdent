@@ -307,7 +307,7 @@ sub _build_emphasis_start_delimiter_re {
 }
 
 sub _build_escapable_chars {
-    return [ qw( \ ` * _ { } [ ] ( ) + - . ! < > ), '#' ];
+    return [ qw( \ ` * _ { } [ ] ( ) + - . ! < > ~ ), '#' ];
 }
 
 sub _build_escape_re {

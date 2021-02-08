@@ -326,6 +326,18 @@ sub end_strong {
     $self->_stream_end_tag('strong');
 }
 
+sub start_strikethrough {
+    my $self = shift;
+
+    $self->_stream_start_tag('del');
+}
+
+sub end_strikethrough {
+    my $self = shift;
+
+    $self->_stream_end_tag('del');
+}
+
 sub start_code {
     my $self = shift;
 

@@ -7,7 +7,9 @@ use namespace::autoclean;
 our $VERSION = '0.39';
 
 use Markdent::Event::AutoLink;
+use Markdent::Event::EndStrikethrough;
 use Markdent::Event::LineBreak;
+use Markdent::Event::StartStrikethrough;
 
 use Moose::Role;
 
@@ -35,14 +37,32 @@ around _possible_span_matches => sub {
     my @look_for = $self->$orig();
 
     my %open = $self->_open_start_events_for_span( 'code', 'link' );
-    return @look_for
-        if keys %open;
+    if (!$open{code}) {
 
-    return (
-        $self->$orig(),
-        'bare_link',
-    );
+        push @look_for, $self->_look_for_strikethrough();
+    }
+
+    if (!$open{link}) {
+        push @look_for, 'bare_link';
+    }
+
+    return @look_for;
 };
+
+sub _look_for_strikethrough {
+    my $self = shift;
+
+    my %open = $self->_open_start_events_for_span( 'strikethrough' );
+
+    if ( $open{strikethrough} ) {
+        return (
+            [ 'strikethrough_end', $open{strikethrough}->delimiter() ]
+        );
+    }
+
+    return ( 'strikethrough_start' );
+}
+
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _match_bare_link {
@@ -68,6 +88,36 @@ sub _match_bare_link {
 
     return 1;
 }
+
+sub _match_strikethrough_start {
+    my $self = shift;
+    my $text = shift;
+
+    my ($delim) = $self->_match_delimiter_start( $text, qr/\~\~/)
+        or return;
+
+    my $event = $self->_make_event( StartStrikethrough => delimiter => $delim );
+
+    $self->_markup_event($event);
+
+    return 1;
+}
+
+sub _match_strikethrough_end {
+    my $self  = shift;
+    my $text  = shift;
+    my $delim = shift;
+
+    $self->_match_delimiter_end( $text, qr/\Q$delim\E/ )
+        or return;
+
+    my $event = $self->_make_event( EndStrikethrough => delimiter => $delim );
+
+    $self->_markup_event($event);
+
+    return 1;
+}
+
 ## use critic
 
 around _text_end_res => sub {
@@ -77,6 +127,7 @@ around _text_end_res => sub {
     return (
         $self->$orig(),
         qr{https?://},
+        qr/\~\~/,
     );
 };
 

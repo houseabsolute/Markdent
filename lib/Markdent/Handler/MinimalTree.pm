@@ -321,6 +321,18 @@ sub end_strong {
     $self->_set_current_up_one_level();
 }
 
+sub start_strikethrough {
+    my $self = shift;
+
+    $self->_start_markup_node('strikethrough');
+}
+
+sub end_strikethrough {
+    my $self = shift;
+
+    $self->_set_current_up_one_level();
+}
+
 sub start_code {
     my $self = shift;
 
