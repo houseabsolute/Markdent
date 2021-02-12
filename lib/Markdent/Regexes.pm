@@ -17,7 +17,7 @@ our %EXPORT_TAGS = (
             $EmptyLines
             $BlockStart
             $BlockEnd
-            ),
+        ),
     ],
     span  => [],
     other => [qw( $HTMLComment )],

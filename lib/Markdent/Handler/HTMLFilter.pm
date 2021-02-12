@@ -26,7 +26,7 @@ sub filter_event {
         HTMLTag
         StartHTMLTag
         EndHTMLTag
-    );
+        );
 
     $self->handler()->handle_event($event);
 
