@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.39   2021-02-12
+
 - Add support for strikethrough (~~) in the GitHub dialect. Implemented by
   Konrad Bucheli. Fixes GH #16. GH #27.
 
