@@ -64,6 +64,8 @@ my @handler_events = qw(
     start_table_row
 
     code_block
+    start_strikethrough
+    end_strikethrough
 );
 
 my %trustme = (
