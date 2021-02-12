@@ -21,7 +21,7 @@ has _events => (
 );
 
 sub events {
-    @{ $_[0]->_events() };
+    @{ $_[0]->_events };
 }
 
 {
@@ -34,7 +34,7 @@ sub events {
         my $self   = shift;
         my @events = $validator->(@_);
 
-        push @{ $self->_events() }, @events;
+        push @{ $self->_events }, @events;
     }
 }
 
@@ -47,11 +47,11 @@ sub events {
         my $self = shift;
         my ($handler) = $validator->(@_);
 
-        $handler->handle_event($_) for $self->events();
+        $handler->handle_event($_) for $self->events;
     }
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -74,7 +74,7 @@ This class provides the following methods:
 
 Creates a new Markdent::CapturedEvents object.
 
-=head2 $captured->events()
+=head2 $captured->events
 
 Returns the captured events as an array.
 

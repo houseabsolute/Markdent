@@ -19,7 +19,7 @@ parameter event_class => (
 role {
     my $p = shift;
 
-    my $class = $p->event_class();
+    my $class = $p->event_class;
     my ( $action, $event ) = $class =~ /::(Start|End)?(\w+)$/;
 
     # It's easier to hack this in rather than trying to find a general
@@ -45,26 +45,26 @@ role {
     my @required;
     my @optional;
 
-    for my $attr ( grep { $_->name() !~ /^_/ }
-        $class->meta()->get_all_attributes() ) {
+    for my $attr ( grep { $_->name !~ /^_/ }
+        $class->meta->get_all_attributes ) {
 
-        my $name = $attr->name();
+        my $name = $attr->name;
 
-        if ( $attr->is_required() ) {
-            push @required, [ $name, $attr->get_read_method() ];
+        if ( $attr->is_required ) {
+            push @required, [ $name, $attr->get_read_method ];
         }
         else {
             die
                 "All optional attributes for an event must have a predicate or default value ($class - $name)"
-                unless $attr->has_predicate()
-                || $attr->has_default()
-                || $attr->has_builder();
+                unless $attr->has_predicate
+                || $attr->has_default
+                || $attr->has_builder;
 
             push @optional,
                 [
                 $name,
-                $attr->get_read_method(),
-                $attr->predicate()
+                $attr->get_read_method,
+                $attr->predicate
                 ];
         }
     }
@@ -102,13 +102,13 @@ sub _make_kv_pairs_for_attribute_method {
 sub debug_dump {
     my $self = shift;
 
-    my $dump = '  - ' . $self->event_name() . "\n";
+    my $dump = '  - ' . $self->event_name . "\n";
 
-    for my $attr ( sort { $a->name() cmp $b->name() }
-        $self->meta()->get_all_attributes() ) {
-        my $name   = $attr->name();
-        my $reader = $attr->get_read_method();
-        my $pred   = $attr->predicate();
+    for my $attr ( sort { $a->name cmp $b->name }
+        $self->meta->get_all_attributes ) {
+        my $name   = $attr->name;
+        my $reader = $attr->get_read_method;
+        my $pred   = $attr->predicate;
 
         next if $pred && !$self->$pred();
 
@@ -172,26 +172,26 @@ each class that consumes it.
 
 This role provides the following methods:
 
-=head2 $event->is_start()
+=head2 $event->is_start
 
-=head2 $event->is_end()
+=head2 $event->is_end
 
-=head2 $event->is_inline()
+=head2 $event->is_inline
 
 These all returns booleans indicating whether the event is of the specified
 type.
 
-=head2 $event->event_name()
+=head2 $event->event_name
 
 This returns a name like "start_blockquote", "end_strong", or "text".
 
-=head2 $event->kv_pairs_for_attributes()
+=head2 $event->kv_pairs_for_attributes
 
 This returns a hash representing the data stored in the object's
 attributes. If an attribute is not required and has not been set, it will not
 be present in the hash.
 
-=head2 $event->debug_dump()
+=head2 $event->debug_dump
 
 Returns a string representation of the event suitable for debugging output.
 

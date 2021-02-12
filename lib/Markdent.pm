@@ -22,7 +22,7 @@ __END__
 
     use Markdent::Simple::Document;
 
-    my $parser = Markdent::Simple::Document->new();
+    my $parser = Markdent::Simple::Document->new;
     my $html   = $parser->markdown_to_html(
         title    => 'My Document',
         markdown => $markdown,

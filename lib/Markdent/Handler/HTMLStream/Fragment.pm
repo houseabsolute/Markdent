@@ -14,7 +14,7 @@ with 'Markdent::Role::HTMLStream';
 sub start_document { }
 sub end_document   { }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 

@@ -63,7 +63,7 @@ with 'Markdent::Role::Simple';
     }
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -77,7 +77,7 @@ __END__
 
     use Markdent::Simple::Document;
 
-    my $mds  = Markdent::Simple::Document->new();
+    my $mds  = Markdent::Simple::Document->new;
     my $html = $mds->markdown_to_html(
         title    => 'My Document',
         markdown => $markdown,
@@ -92,7 +92,7 @@ complete HTML document.
 
 This class provides the following methods:
 
-=head2 Markdent::Simple::Document->new()
+=head2 Markdent::Simple::Document->new
 
 Creates a new Markdent::Simple::Document object.
 

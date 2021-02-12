@@ -22,7 +22,7 @@ has handler => (
 sub _send_event {
     my $self = shift;
 
-    $self->handler()->handle_event( $self->_make_event(@_) );
+    $self->handler->handle_event( $self->_make_event(@_) );
 }
 ## use critic
 
@@ -53,7 +53,7 @@ sub _detab_text {
 sub _debug_look_for {
     my $self = shift;
 
-    return unless $self->debug();
+    return unless $self->debug;
 
     my @look_debug = map { ref $_ ? "$_->[0] ($_->[1])" : $_ } @_;
 

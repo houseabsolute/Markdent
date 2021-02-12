@@ -21,10 +21,10 @@ has _handlers => (
 );
 
 sub handle_event {
-    $_->handle_event( $_[1] ) for @{ $_[0]->_handlers() };
+    $_->handle_event( $_[1] ) for @{ $_[0]->_handlers };
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 

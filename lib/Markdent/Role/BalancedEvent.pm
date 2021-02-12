@@ -20,7 +20,7 @@ parameter compare => (
 role {
     my $p = shift;
 
-    my @compare = @{ $p->compare() || [] };
+    my @compare = @{ $p->compare || [] };
 
     my $validator = validation_for(
         params => [
@@ -32,11 +32,11 @@ role {
         my $self = shift;
         my ($other) = $validator->(@_);
 
-        return 0 unless $self->name() eq $other->name();
+        return 0 unless $self->name eq $other->name;
 
         return 0
-            unless ( $self->is_start() && $other->is_end() )
-            || ( $self->is_end() && $other->is_start() );
+            unless ( $self->is_start && $other->is_end )
+            || ( $self->is_end && $other->is_start );
 
         return 1 unless @compare;
 

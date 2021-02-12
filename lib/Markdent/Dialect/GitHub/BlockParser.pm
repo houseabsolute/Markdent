@@ -48,7 +48,7 @@ sub _match_fenced_code_block {
         $code,
         'code block',
         ( $lang ? [ language => $lang ] : () ),
-    ) if $self->debug();
+    ) if $self->debug;
 
     $self->_send_event(
         'CodeBlock',

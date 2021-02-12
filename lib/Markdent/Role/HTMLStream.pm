@@ -540,7 +540,7 @@ sub line_break {
         my $self = shift;
         my ($html) = $validator->(@_);
 
-        $self->_output()->print($html);
+        $self->_output->print($html);
     }
 }
 
@@ -669,7 +669,7 @@ generate a stream of HTML output based on those events.
 =head1 REQUIRED METHODS
 
 This role requires that consuming classes implement two methods, C<<
-$handler->start_document() >> and C<< $handler->end_document() >>.
+$handler->start_document >> and C<< $handler->end_document >>.
 
 =head1 ROLES
 

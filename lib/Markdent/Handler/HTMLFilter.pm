@@ -28,12 +28,12 @@ sub filter_event {
         EndHTMLTag
         );
 
-    $self->handler()->handle_event($event);
+    $self->handler->handle_event($event);
 
     return;
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -62,7 +62,7 @@ for HTML entities.
 
 This class provides the following methods:
 
-=head2 Markdent::Handler::HTMLFilter->new()
+=head2 Markdent::Handler::HTMLFilter->new
 
 This method creates a new handler.
 

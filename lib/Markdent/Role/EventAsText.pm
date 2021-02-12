@@ -26,7 +26,7 @@ An event with an as_text method will do this role.
 
 =over 4
 
-=item * $handler->as_text()
+=item * $handler->as_text
 
 =back
 

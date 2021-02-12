@@ -41,14 +41,14 @@ sub start_document {
     $self->_stream_raw($Doctype);
     $self->_stream_start_tag(
         'html', {
-            $self->_has_language() ? ( lang => $self->language() ) : (),
+            $self->_has_language ? ( lang => $self->language ) : (),
         },
     );
     $self->_stream_start_tag('head');
-    $self->_stream_start_tag( 'meta', { charset => $self->charset() } )
-        if $self->_has_charset();
+    $self->_stream_start_tag( 'meta', { charset => $self->charset } )
+        if $self->_has_charset;
     $self->_stream_start_tag('title');
-    $self->_stream_text( $self->title() );
+    $self->_stream_text( $self->title );
     $self->_stream_end_tag('title');
     $self->_stream_end_tag('head');
     $self->_stream_start_tag('body');
@@ -61,7 +61,7 @@ sub end_document {
     $self->_stream_end_tag('html');
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 

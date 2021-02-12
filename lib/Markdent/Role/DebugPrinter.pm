@@ -73,7 +73,7 @@ This method takes a text string, a parse result string (like "preformatted" or
 "code_start"), and an optional array reference of extra key/value pairs.
 
 All of this will be concatenated together in a pretty(-ish) way and passed to
-C<< $object->_print_debug() >>.
+C<< $object->_print_debug >>.
 
 =head2 $object->_print_debug($text)
 

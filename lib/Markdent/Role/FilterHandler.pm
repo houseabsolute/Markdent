@@ -26,7 +26,7 @@ sub handle_event {
 
     my $new_event = $self->filter_event($event);
 
-    $self->handler()->handle_event($new_event)
+    $self->handler->handle_event($new_event)
         if $new_event;
 }
 

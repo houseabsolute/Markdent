@@ -19,7 +19,7 @@ has caption => (
 
 with 'Markdent::Role::Event' => { event_class => __PACKAGE__ };
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 

@@ -18,14 +18,14 @@ has captured_events => (
     is       => 'ro',
     isa      => object_isa_type('Markdent::CapturedEvents'),
     init_arg => undef,
-    default  => sub { Markdent::CapturedEvents->new() },
+    default  => sub { Markdent::CapturedEvents->new },
 );
 
 sub handle_event {
-    $_[0]->captured_events()->capture_events( $_[1] );
+    $_[0]->captured_events->capture_events( $_[1] );
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -45,11 +45,11 @@ parsing at an intermediate stage.
 
 This class provides the following methods:
 
-=head2 Markdent::Handler::CapturedEvents->new()
+=head2 Markdent::Handler::CapturedEvents->new
 
 This method creates a new handler.
 
-=head2 $mhce->captured_events()
+=head2 $mhce->captured_events
 
 Returns a L<Markdent::CapturedEvents> object containing all the events seen by
 this handler so far.

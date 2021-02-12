@@ -23,9 +23,9 @@ with(
     'Markdent::Role::EventAsText',
 );
 
-sub as_text { $_[0]->delimiter() }
+sub as_text { $_[0]->delimiter }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -51,7 +51,7 @@ The delimiter for the strong span.
 
 This class has the following methods:
 
-=head2 $event->as_text()
+=head2 $event->as_text
 
 Returns the event's delimiter.
 

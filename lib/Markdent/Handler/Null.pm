@@ -15,7 +15,7 @@ sub handle_event {
     return;
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -33,7 +33,7 @@ This class implements an event receiver which ignores all events.
 
 This class provides the following methods:
 
-=head2 Markdent::Handler::Null->new()
+=head2 Markdent::Handler::Null->new
 
 This method creates a new handler.
 

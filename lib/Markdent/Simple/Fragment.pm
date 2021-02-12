@@ -48,7 +48,7 @@ with 'Markdent::Role::Simple';
     }
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -62,7 +62,7 @@ __END__
 
     use Markdent::Simple::Fragment;
 
-    my $mds  = Markdent::Simple::Fragment->new();
+    my $mds  = Markdent::Simple::Fragment->new;
     my $html = $mds->markdown_to_html(
         markdown => $markdown,
     );
@@ -75,7 +75,7 @@ This class provides a very simple interface for converting Markdown to an HTML f
 
 This class provides the following methods:
 
-=head2 Markdent::Simple::Fragment->new()
+=head2 Markdent::Simple::Fragment->new
 
 Creates a new Markdent::Simple::Fragment object.
 
