@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean 0.09;
 
-our $VERSION = '0.39';
+our $VERSION = '0.40';
 
 use Markdent::Parser::BlockParser;
 use Markdent::Parser::SpanParser;
