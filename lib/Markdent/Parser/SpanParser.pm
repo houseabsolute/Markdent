@@ -470,9 +470,19 @@ sub _match_auto_link {
     my $self = shift;
     my $text = shift;
 
-    return unless ${$text} =~ /\G <( (?:https?|mailto|ftp): [^>]+ ) >/xgc;
+    my $uri;
 
-    my $link = $self->_make_event( AutoLink => uri => $1 );
+    if ( ${$text} =~ /\G <( (?:https?|mailto|ftp): [^>]+ ) >/xgc ) {
+        $uri = $1;
+    }
+    elsif ( ${$text} =~ /\G <( [^>]+ \@ [^>]+ ) >/xgc ) {
+        $uri = "mailto:$1";
+    }
+    else {
+        return;
+    }
+
+    my $link = $self->_make_event( AutoLink => uri => $uri );
 
     $self->_markup_event($link);
 
