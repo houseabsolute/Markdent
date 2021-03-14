@@ -469,10 +469,20 @@ sub _match_delimiter_end {
 sub _match_auto_link {
     my $self = shift;
     my $text = shift;
+    
+    my $uri;
 
-    return unless ${$text} =~ /\G <( (?:https?|mailto|ftp): [^>]+ ) >/xgc;
+    if (${$text} =~ /\G <( (?:https?|mailto|ftp): [^>]+ ) >/xgc) {
+        $uri = $1;
+    }
+    elsif (${$text} =~ /\G <( [^>]+ \@ [^>]+ ) >/xgc) {
+        $uri = "mailto:$1";
+    }
+    else {
+        return;
+    }
 
-    my $link = $self->_make_event( AutoLink => uri => $1 );
+    my $link = $self->_make_event( AutoLink => uri => $uri );
 
     $self->_markup_event($link);
 
