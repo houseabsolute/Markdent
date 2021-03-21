@@ -49,8 +49,8 @@ The tag that is starting.
 
 =head2 attributes
 
-A hash reference of attributes as key/value pairs. An attribute without a
-value will have a value of C<undef> in the hash reference.
+A hash reference of attributes as key/value pairs. An attribute without a value
+will have a value of C<undef> in the hash reference.
 
 =head1 ROLES
 

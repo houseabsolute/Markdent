@@ -187,9 +187,9 @@ This returns a name like "start_blockquote", "end_strong", or "text".
 
 =head2 $event->kv_pairs_for_attributes
 
-This returns a hash representing the data stored in the object's
-attributes. If an attribute is not required and has not been set, it will not
-be present in the hash.
+This returns a hash representing the data stored in the object's attributes. If
+an attribute is not required and has not been set, it will not be present in
+the hash.
 
 =head2 $event->debug_dump
 

@@ -72,8 +72,8 @@ The link's id. This is optional.
 
 =head2 is_implicit_id
 
-This will be true if the link's id was not specified explicitly in the
-Markdown text.
+This will be true if the link's id was not specified explicitly in the Markdown
+text.
 
 =head1 ROLES
 

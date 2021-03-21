@@ -69,7 +69,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This class provides a very simple interface for converting Markdown to an HTML fragment.
+This class provides a very simple interface for converting Markdown to an HTML
+fragment.
 
 =head1 METHODS
 

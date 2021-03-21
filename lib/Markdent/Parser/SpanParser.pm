@@ -991,8 +991,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This class parses spans for the standard Markdown dialect (as defined by
-Daring Fireball and mdtest).
+This class parses spans for the standard Markdown dialect (as defined by Daring
+Fireball and mdtest).
 
 =head1 METHODS
 
@@ -1004,9 +1004,9 @@ Creates a new span parser object. You must provide a span parser object.
 
 =head2 $span_parser->extract_link_ids(\$markdown)
 
-This method takes a reference to a markdown string and parses it for link
-ids. These are removed from the document and stored in the span parser for
-later use.
+This method takes a reference to a markdown string and parses it for link ids.
+These are removed from the document and stored in the span parser for later
+use.
 
 =head2 $span_parser->parse_block(\$block)
 

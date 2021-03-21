@@ -51,7 +51,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This role implements behavior shared by all classes which output debugging information.
+This role implements behavior shared by all classes which output debugging
+information.
 
 =head1 ATTRIBUTES
 

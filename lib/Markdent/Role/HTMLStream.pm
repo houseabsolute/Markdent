@@ -663,8 +663,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This role implements most of the code needed for event receivers which
-generate a stream of HTML output based on those events.
+This role implements most of the code needed for event receivers which generate
+a stream of HTML output based on those events.
 
 =head1 REQUIRED METHODS
 

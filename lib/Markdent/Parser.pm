@@ -296,8 +296,8 @@ implements the L<Markdent::Role::SpanParser> role.
 
 =item * handler => $handler
 
-This can be any object which implements the L<Markdent::Role::Handler>
-role. It is required.
+This can be any object which implements the L<Markdent::Role::Handler> role. It
+is required.
 
 =back
 

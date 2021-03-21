@@ -25,8 +25,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This class represents the start of a table body. A table can have more than
-one body.
+This class represents the start of a table body. A table can have more than one
+body.
 
 =head1 ROLES
 

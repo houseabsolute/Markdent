@@ -55,8 +55,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This class implements an event filter which drops all HTML events I<except>
-for HTML entities.
+This class implements an event filter which drops all HTML events I<except> for
+HTML entities.
 
 =head1 METHODS
 

@@ -39,8 +39,7 @@ This class has the following attributes:
 
 =head2 entity
 
-The text of the entity. This omits the leading ampersand and ending
-semi-colon.
+The text of the entity. This omits the leading ampersand and ending semi-colon.
 
 =head1 ROLES
 

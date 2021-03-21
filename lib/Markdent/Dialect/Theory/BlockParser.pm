@@ -462,10 +462,9 @@ __END__
 =head1 DESCRIPTION
 
 This role adds parsing for Markdown extensions proposed by David Wheeler (aka
-Theory). See
-L<http://justatheory.com/computers/markup/markdown-table-rfc.html> and
-L<http://justatheory.com/computers/markup/modest-markdown-proposal.html> for
-details.
+Theory). See L<http://justatheory.com/computers/markup/markdown-table-rfc.html>
+and L<http://justatheory.com/computers/markup/modest-markdown-proposal.html>
+for details.
 
 For now, this role handles tables only.
 

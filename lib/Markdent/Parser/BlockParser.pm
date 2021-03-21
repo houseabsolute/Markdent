@@ -812,9 +812,9 @@ Creates a new block parser object. You must provide a span parser object.
 
 =head2 $block_parser->parse_document(\$markdown)
 
-This method takes a reference to a markdown string and parses it for
-blocks. Each block which contains text (except preformatted text) will be
-parsed for span-level markup using this object's C<span_parser>.
+This method takes a reference to a markdown string and parses it for blocks.
+Each block which contains text (except preformatted text) will be parsed for
+span-level markup using this object's C<span_parser>.
 
 =head1 ROLES
 

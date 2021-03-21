@@ -18,8 +18,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This role has no internals, it simply indicates that the role which consumes
-it is a block parser role.
+This role has no internals, it simply indicates that the role which consumes it
+is a block parser role.
 
 =head1 BUGS
 

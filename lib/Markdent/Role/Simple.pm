@@ -65,8 +65,7 @@ __END__
 
 =head1 DESCRIPTION
 
-This role implements behavior shared by all simple markdown to html
-converters.
+This role implements behavior shared by all simple markdown to html converters.
 
 =head1 REQUIRED METHODS
 
