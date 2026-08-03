@@ -9,5 +9,5 @@ jobs:
     uses: houseabsolute/workflow-perl-dzil-ci/.github/workflows/ci.yml@v0
     with:
       dist: Markdent
-      min-perl: 5.12.5
+      min-perl: 5.24
       ref: v0
