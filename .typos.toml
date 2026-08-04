@@ -8,6 +8,7 @@
 [type.typos-config]
 extend-glob = [".typos.toml"]
 [type.typos-config.extend-words]
+constist = "constist"
 entites = "entites"
 interchangable = "interchangable"
 interchangably = "interchangably"
@@ -21,6 +22,7 @@ Tidyness = "Tidyness"
 [type.mdtest-data]
 extend-glob = ["*.text", "*.xhtml", "*.html"]
 [type.mdtest-data.extend-words]
+constist = "constist"
 entites = "entites"
 interchangable = "interchangable"
 interchangably = "interchangably"
