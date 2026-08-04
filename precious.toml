@@ -79,10 +79,11 @@ ok-exit-codes = 0
 lint-failure-exit-codes = 1
 
 [commands.typos]
-type = "lint"
+type = "both"
 include = "**/*"
 exclude = [".stopwords", "t/mdtest-data/**", "t/markup/**"]
 cmd = "typos"
+tidy_flags = "--write-changes"
 invoke = "once"
 ok-exit-codes = 0
 lint-failure-exit-codes = 2
