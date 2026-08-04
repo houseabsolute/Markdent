@@ -81,7 +81,7 @@ lint-failure-exit-codes = 1
 [commands.typos]
 type = "both"
 include = "**/*"
-exclude = [".stopwords", "t/mdtest-data/**", "t/markup/**"]
+exclude = [".stopwords"]
 cmd = "typos"
 tidy_flags = "--write-changes"
 invoke = "once"

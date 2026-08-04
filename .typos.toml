@@ -1,0 +1,33 @@
+# Per-file allow lists. Scoping each word to the file that needs it keeps the
+# rest of the fixture directories spell-checked, instead of skipping them
+# wholesale.
+#
+# Globs are matched against the file name, not the directory it lives in. And
+# this file gets its own type because it quotes the words it allows.
+
+[type.typos-config]
+extend-glob = [".typos.toml"]
+[type.typos-config.extend-words]
+entites = "entites"
+interchangable = "interchangable"
+interchangably = "interchangably"
+phasis = "phasis"
+Tidyness = "Tidyness"
+
+# The Markdown test suite, copied verbatim from the canonical mdtest data.
+# Scoped by extension: t/mdtest-data is the only place these are used, and
+# "Tidyness" also has to be allowed for the file name itself, which is
+# matched against the whole path rather than the base name.
+[type.mdtest-data]
+extend-glob = ["*.text", "*.xhtml", "*.html"]
+[type.mdtest-data.extend-words]
+entites = "entites"
+interchangable = "interchangable"
+interchangably = "interchangably"
+Tidyness = "Tidyness"
+
+# Tests that emphasis markers inside words are not parsed, using "em_phasis".
+[type.em-in-words]
+extend-glob = ["**/em-in-words.t"]
+[type.em-in-words.extend-words]
+phasis = "phasis"
