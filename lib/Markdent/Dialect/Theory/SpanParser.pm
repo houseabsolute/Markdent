@@ -30,7 +30,7 @@ __END__
 
 This role is applied to a L<Markdent::Parser::SpanParser> in order to allow the
 pipe (|) and colon (:) characters to be backslash-escaped. These are used to
-mark tables, so they need to be escapeable.
+mark tables, so they need to be escapable.
 
 =head1 ROLES
 
