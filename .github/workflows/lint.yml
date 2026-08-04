@@ -1,0 +1,11 @@
+name: Lint
+
+on:
+  - pull_request
+  - push
+
+jobs:
+  lint:
+    uses: houseabsolute/workflow-perl-dzil-ci/.github/workflows/lint.yml@v0
+    with:
+      ref: v0
